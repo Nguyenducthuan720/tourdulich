@@ -18,17 +18,10 @@ export async function createFlightBooking(payload) {
   const response = await apiClient.post('/bookings/flight', payload)
   return readOne(response.data)
 }
-// Thêm hàm này vào src/api/bookingService.js
-export const getFlights = async () => {
-  // Thay thế URL bằng endpoint thực tế của bạn
-  const response = await fetch('http://localhost:5000/api/bookings/flights', {
-    headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    }
-  });
-  if (!response.ok) throw new Error('Không thể lấy danh sách chuyến bay');
-  return await response.json();
-};
+export async function getFlights() {
+  const response = await apiClient.get('/bookings/flights')
+  return response.data
+}
 
 export async function getMyBookings() {
   try {

@@ -55,6 +55,10 @@ router.post("/combo", verifyToken, async (req, res) => {
     const userId = req.user.userId;
     const { tourId, flightId, guests, passengerName, idCard, seatNumber, roomType } = req.body;
 
+    if (!tourId || !flightId || !guests || guests < 1 || !passengerName || !idCard) {
+      throw new Error("Thiếu thông tin bắt buộc để đặt combo");
+    }
+
     await transaction.begin();
 
     // 1. Kiểm tra và lấy thông tin Tour + trừ số ghế
@@ -68,13 +72,14 @@ router.post("/combo", verifyToken, async (req, res) => {
     // 2. Kiểm tra và lấy thông tin Chuyến bay + trừ số ghế
     const flightRes = await new sql.Request(transaction)
       .input("fid", flightId)
-      .query("UPDATE Flights SET AvailableSeats = AvailableSeats - 1 OUTPUT INSERTED.* WHERE FlightID = @fid AND AvailableSeats >= 1");
+      .input("guests", sql.Int, guests)
+      .query("UPDATE Flights SET AvailableSeats = AvailableSeats - @guests OUTPUT INSERTED.* WHERE FlightID = @fid AND Status = 1 AND AvailableSeats >= @guests");
 
     if (flightRes.recordset.length === 0) throw new Error("Chuyến bay đã hết chỗ!");
     const flight = flightRes.recordset[0];
 
     // 3. Tính toán tổng tiền
-    const totalAmount = (tour.Price + (roomType === 'Deluxe' ? 500000 : 0)) * guests + flight.Price;
+    const totalAmount = (tour.Price + (roomType === 'Deluxe' ? 500000 : roomType === 'Suite' ? 1500000 : 0) + flight.Price) * guests;
 
     // 4. Tạo Booking
     const bRes = await new sql.Request(transaction)
@@ -86,8 +91,8 @@ router.post("/combo", verifyToken, async (req, res) => {
     await new sql.Request(transaction).input("bid", bId).input("tid", tourId).input("q", guests).input("up", tour.Price)
       .query("INSERT INTO BookingDetails (BookingID, TourID, Quantity, UnitPrice) VALUES (@bid, @tid, @q, @up)");
 
-    await new sql.Request(transaction).input("bid", bId).input("fid", flightId).input("p", passengerName).input("id", idCard).input("s", seatNumber).input("up", flight.Price)
-      .query("INSERT INTO FlightBookings (BookingID, FlightID, PassengerName, IdCardOrPassport, SeatNumber, UnitPrice) VALUES (@bid, @fid, @p, @id, @s, @up)");
+    await new sql.Request(transaction).input("bid", bId).input("fid", flightId).input("p", passengerName).input("id", idCard).input("s", seatNumber || null).input("type", "Economy").input("up", flight.Price)
+      .query("INSERT INTO FlightBookings (BookingID, FlightID, PassengerName, IdCardOrPassport, SeatNumber, TicketType, UnitPrice) VALUES (@bid, @fid, @p, @id, @s, @type, @up)");
 
     await transaction.commit();
     res.status(201).json({ message: "Đặt combo thành công!", bookingId: bId });

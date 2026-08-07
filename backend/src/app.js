@@ -36,7 +36,6 @@ app.use("/api/admin/tours", toursRoutes);
 app.use("/api/bookings", bookingsRoutes);
 app.use("/api/admin/bookings", bookingsRoutes);
 app.use("/api/users", usersRoutes);
-app.use("/api/admin/users", usersRoutes);
 app.use("/api/ai", aiRoutes);
 
 const PORT = process.env.PORT || 5000;

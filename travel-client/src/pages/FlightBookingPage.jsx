@@ -1,73 +1,539 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { getFlights, createFlightBooking } from '../api/bookingService'
 import { useAuth } from '../context/AuthContext'
 
-function Seat({ seat, taken, selected, onSelect }) {
-  return <button type="button" disabled={taken} onClick={() => onSelect(seat)} aria-label={`Ghế ${seat}${taken ? ' đã đặt' : ''}`} className={`h-9 rounded-md text-[11px] font-bold transition ${taken ? 'cursor-not-allowed bg-slate-700 text-slate-300' : selected ? 'bg-sky-500 text-white shadow-md ring-2 ring-sky-200' : 'border border-emerald-200 bg-emerald-50 text-emerald-700 hover:-translate-y-0.5 hover:bg-emerald-200'}`}>{seat}</button>
+const AIRLINE_COLORS = {
+  'Vietnam Airlines': { bg: 'bg-blue-50', border: 'border-blue-300', text: 'text-blue-700', badge: 'bg-blue-100 text-blue-700' },
+  'Vietjet Air': { bg: 'bg-red-50', border: 'border-red-300', text: 'text-red-700', badge: 'bg-red-100 text-red-700' },
+  'Bamboo Airways': { bg: 'bg-emerald-50', border: 'border-emerald-300', text: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-700' },
+}
+const DEFAULT_COLOR = { bg: 'bg-slate-50', border: 'border-slate-300', text: 'text-slate-700', badge: 'bg-slate-100 text-slate-700' }
+
+const AIRLINE_LOGOS = {
+  'Vietnam Airlines': '🇻🇳',
+  'Vietjet Air': '✈️',
+  'Bamboo Airways': '🎋',
+  default: '🛫',
+}
+
+function getAirlineLogo(name) {
+  return AIRLINE_LOGOS[name] || AIRLINE_LOGOS.default
+}
+
+function formatTime(iso) {
+  const d = new Date(iso)
+  return d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+}
+
+function formatDate(iso) {
+  const d = new Date(iso)
+  return d.toLocaleDateString('vi-VN', { weekday: 'short', day: 'numeric', month: 'numeric' })
+}
+
+function calcDuration(dep, arr) {
+  const ms = new Date(arr) - new Date(dep)
+  const h = Math.floor(ms / 3600000)
+  const m = Math.round((ms % 3600000) / 60000)
+  return `${h}h${m > 0 ? m.toString().padStart(2, '0') : ''}`
+}
+
+const FARES = [
+  { id: 'Economy', name: 'Phổ thông', factor: 1, perks: ['7kg xách tay', 'Suất ăn tiêu chuẩn', 'Không hoàn hủy'], icon: '💺' },
+  { id: 'Premium Economy', name: 'Phổ thông đặc biệt', factor: 1.35, perks: ['12kg xách tay', 'Ưu tiên chọn ghế', 'Suất ăn nâng cấp'], icon: '🛋️' },
+  { id: 'Business', name: 'Thương gia', factor: 2.2, perks: ['12kg xách tay + 32kg ký gửi', 'Phòng chờ thương gia', 'Ưu tiên check-in'], icon: '👑' },
+]
+
+const SEAT_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F']
+const TOTAL_ROWS = 8
+
+function SeatButton({ seat, taken, selected, onSelect }) {
+  const disabled = taken
+  const aisle = seat[1] === 'C'
+
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={() => onSelect(seat)}
+      className={`h-9 w-9 rounded-md text-[11px] font-bold transition-all duration-150 ${
+        disabled
+          ? 'cursor-not-allowed border border-slate-200 bg-slate-300 text-slate-400'
+          : selected
+            ? 'bg-emerald-500 text-white shadow-md ring-2 ring-emerald-200 scale-105'
+            : 'border border-slate-200 bg-white text-slate-600 hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700'
+      } ${aisle ? 'mr-3' : ''}`}
+    >
+      {seat}
+    </button>
+  )
+}
+
+function SeatMap({ occupiedSeats, selectedSeat, onSelectSeat }) {
+  const taken = new Set((occupiedSeats || '').split(',').map(s => s.trim()).filter(Boolean))
+
+  return (
+    <div className="rounded-2xl bg-gradient-to-b from-slate-100 to-slate-50 p-5">
+      <div className="mx-auto mb-6 flex h-12 w-40 items-center justify-center rounded-t-[4rem] bg-slate-200 border-2 border-b-0 border-slate-300 text-xs font-bold tracking-widest text-slate-400">
+        BUỒNG LÁI
+      </div>
+
+      <div className="mb-2 grid grid-cols-[28px_1fr_16px_1fr] px-4 text-center text-[10px] font-bold text-slate-400">
+        <span />
+        <div className="grid grid-cols-3">
+          {['A', 'B', 'C'].map(l => <span key={l}>{l}</span>)}
+        </div>
+        <span />
+        <div className="grid grid-cols-3">
+          {['D', 'E', 'F'].map(l => <span key={l}>{l}</span>)}
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-[320px] space-y-2">
+        {Array.from({ length: TOTAL_ROWS }, (_, i) => {
+          const row = i + 1
+          return (
+            <div key={row} className="grid grid-cols-[28px_1fr_16px_1fr] items-center">
+              <span className="text-center text-xs font-bold text-slate-400">{row}</span>
+              <div className="grid grid-cols-3 gap-1">
+                {['A', 'B', 'C'].map(letter => {
+                  const seat = `${row}${letter}`
+                  return (
+                    <SeatButton
+                      key={seat}
+                      seat={seat}
+                      taken={taken.has(seat)}
+                      selected={selectedSeat === seat}
+                      onSelect={onSelectSeat}
+                    />
+                  )
+                })}
+              </div>
+              <span className="h-6 border-l-2 border-dashed border-slate-300" />
+              <div className="grid grid-cols-3 gap-1">
+                {['D', 'E', 'F'].map(letter => {
+                  const seat = `${row}${letter}`
+                  return (
+                    <SeatButton
+                      key={seat}
+                      seat={seat}
+                      taken={taken.has(seat)}
+                      selected={selectedSeat === seat}
+                      onSelect={onSelectSeat}
+                    />
+                  )
+                })}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      <div className="mt-5 flex items-center justify-center gap-5 text-xs text-slate-500">
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block h-3 w-3 rounded border border-slate-200 bg-white" /> Trống
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block h-3 w-3 rounded bg-emerald-500" /> Đang chọn
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block h-3 w-3 rounded bg-slate-300" /> Đã đặt
+        </span>
+      </div>
+    </div>
+  )
+}
+
+function EmptyState() {
+  return (
+    <div className="flex flex-col items-center justify-center py-20 text-center">
+      <div className="mb-5 text-7xl opacity-30">🛫</div>
+      <h3 className="text-lg font-bold text-slate-700">Chưa có chuyến bay nào</h3>
+      <p className="mt-1 text-sm text-slate-500 max-w-sm">
+        Hiện tại không có chuyến bay khả dụng. Vui lòng quay lại sau hoặc liên hệ tổng đài để được hỗ trợ.
+      </p>
+    </div>
+  )
 }
 
 export default function FlightBookingPage() {
   const { user } = useAuth()
   const [flights, setFlights] = useState([])
-  const [flightId, setFlightId] = useState('')
-  const [fareType, setFareType] = useState('Economy')
-  const [idCard, setIdCard] = useState('')
-  const [seatNumber, setSeatNumber] = useState('')
-  const [result, setResult] = useState(null)
+  const [loadingFlights, setLoadingFlights] = useState(true)
   const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
 
-  useEffect(() => { getFlights().then(setFlights).catch(() => setError('Không thể tải danh sách chuyến bay')) }, [])
-  const selected = flights.find(f => f.FlightID === Number(flightId))
-  const occupiedSeats = new Set((selected?.OccupiedSeats || '').split(',').filter(Boolean))
-  const fares = [
-    { id: 'Economy', name: 'Phổ thông', desc: 'Tiết kiệm, phù hợp cho chuyến đi ngắn', factor: 1, perks: ['7kg hành lý xách tay', 'Suất ăn tiêu chuẩn'] },
-    { id: 'Premium Economy', name: 'Phổ thông đặc biệt', desc: 'Thoải mái hơn với không gian ghế rộng', factor: 1.35, perks: ['10kg hành lý xách tay', 'Ưu tiên chọn ghế', 'Suất ăn nâng cấp'] },
-    { id: 'Business', name: 'Thương gia', desc: 'Trải nghiệm cao cấp, ưu tiên mọi hành trình', factor: 2.2, perks: ['12kg xách tay + 32kg ký gửi', 'Ưu tiên check-in', 'Phòng chờ thương gia'] }
-  ]
-  const selectedFare = fares.find(f => f.id === fareType) || fares[0]
-  const ticketPrice = selected ? Math.round(Number(selected.Price) * selectedFare.factor) : 0
+  const [selectedFlightId, setSelectedFlightId] = useState(null)
+  const [fareType, setFareType] = useState('Economy')
+  const [seatNumber, setSeatNumber] = useState('')
+  const [idCard, setIdCard] = useState('')
+  const [passengerPhone, setPassengerPhone] = useState('')
 
-  async function submit(e) {
-    e.preventDefault(); setError(''); setLoading(true)
-    if (!seatNumber) { setError('Vui lòng chọn một ghế còn trống'); setLoading(false); return }
-    try { setResult(await createFlightBooking({ flightId: Number(flightId), passengerName: user?.name, idCard, seatNumber, ticketType: fareType })) }
-    catch (e) { setError(e.message || 'Đặt vé thất bại') }
-    finally { setLoading(false) }
+  const [submitting, setSubmitting] = useState(false)
+  const [result, setResult] = useState(null)
+
+  const [filterDeparture, setFilterDeparture] = useState('')
+  const [filterArrival, setFilterArrival] = useState('')
+  const [sortBy, setSortBy] = useState('price')
+
+  useEffect(() => {
+    setLoadingFlights(true)
+    setError('')
+    getFlights()
+      .then(data => { setFlights(Array.isArray(data) ? data : []) })
+      .catch(() => setError('Không thể tải danh sách chuyến bay'))
+      .finally(() => setLoadingFlights(false))
+  }, [])
+
+  const departureCities = useMemo(() => [...new Set(flights.map(f => f.DepartureCity))].sort(), [flights])
+  const arrivalCities = useMemo(() => [...new Set(flights.map(f => f.ArrivalCity))].sort(), [flights])
+
+  const filteredFlights = useMemo(() => {
+    let list = [...flights]
+    if (filterDeparture) list = list.filter(f => f.DepartureCity === filterDeparture)
+    if (filterArrival) list = list.filter(f => f.ArrivalCity === filterArrival)
+    if (sortBy === 'price') list.sort((a, b) => a.Price - b.Price)
+    if (sortBy === 'time') list.sort((a, b) => new Date(a.DepartureTime) - new Date(b.DepartureTime))
+    if (sortBy === 'duration') list.sort((a, b) => (new Date(a.ArrivalTime) - new Date(a.DepartureTime)) - (new Date(b.ArrivalTime) - new Date(b.DepartureTime)))
+    return list
+  }, [flights, filterDeparture, filterArrival, sortBy])
+
+  const selectedFlight = flights.find(f => f.FlightID === selectedFlightId)
+  const selectedFare = FARES.find(f => f.id === fareType) || FARES[0]
+  const ticketPrice = selectedFlight ? Math.round(Number(selectedFlight.Price) * selectedFare.factor) : 0
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setError('')
+    if (!seatNumber) { setError('Vui lòng chọn một ghế trống'); return }
+    if (!idCard.trim()) { setError('Vui lòng nhập số CCCD/Hộ chiếu'); return }
+    setSubmitting(true)
+    try {
+      const res = await createFlightBooking({
+        flightId: selectedFlightId,
+        passengerName: user?.name,
+        idCard: idCard.trim(),
+        seatNumber,
+        ticketType: fareType,
+      })
+      setResult(res)
+    } catch (err) {
+      setError(err.message || 'Đặt vé thất bại')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   if (result) {
-    const qr = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(`TOURLUONG|VE-MAY-BAY|${result.bookingId}`)}`
-    return <main className="min-h-screen bg-slate-50 py-10"><div className="mx-auto max-w-xl rounded-2xl bg-white p-8 text-center shadow-sm">
-      <div className="mb-3 text-5xl"></div><h1 className="text-2xl font-bold text-slate-900">Thanh toán thành công</h1>
-      <p className="mt-2 text-slate-600">Mã đặt vé: <b className="font-mono text-emerald-700">{result.bookingId}</b></p>
-      <img className="mx-auto my-6 rounded-lg border p-2" src={qr} alt="Mã QR vé máy bay" />
-      <p className="text-sm text-slate-500">Đưa mã QR này cho nhân viên khi làm thủ tục.</p>
-    </div></main>
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`TOURDULICH|VE-MAY-BAY|${result.bookingId}`)}`
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-emerald-50 py-12">
+        <div className="mx-auto max-w-lg px-4">
+          <div className="rounded-2xl bg-white p-8 text-center shadow-lg shadow-slate-200/50">
+            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-3xl">✓</div>
+            <h1 className="text-2xl font-bold text-slate-900">Đặt vé thành công</h1>
+            <p className="mt-2 text-slate-600">Mã đặt vé của bạn là</p>
+            <p className="mt-1 text-3xl font-bold tracking-wider text-emerald-600">{result.bookingId}</p>
+            <img className="mx-auto my-5 rounded-xl border border-slate-200 p-2" src={qrUrl} alt="QR vé máy bay" width={200} height={200} />
+            <p className="text-sm text-slate-500">Hãy lưu mã QR này để làm thủ tục check-in</p>
+            <button onClick={() => { setResult(null); setSelectedFlightId(null); setSeatNumber(''); setIdCard(''); setPassengerPhone('') }} className="mt-6 rounded-lg bg-emerald-600 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-700">
+              Đặt vé khác
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
-  return <main className="min-h-screen bg-slate-50 py-10"><div className="mx-auto max-w-4xl px-4">
-    <h1 className="text-3xl font-bold text-slate-900">Đặt vé máy bay</h1><p className="mt-2 text-slate-600">đặt vé máy bay ngay</p>
-    <form onSubmit={submit} className="mt-8 grid gap-8 rounded-3xl bg-white p-6 shadow-xl shadow-slate-200/50 md:grid-cols-2">
-      {selected && <section className="space-y-4 md:col-span-2"><h2 className="text-xl font-bold">Chọn loại vé</h2><p className="text-sm text-slate-500">Chuyến bay {selected.AirlineName} {selected.FlightNumber} · {selected.DepartureAirport} → {selected.ArrivalAirport} · {new Date(selected.DepartureTime).toLocaleDateString('vi-VN')} · {new Date(selected.DepartureTime).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })} - {new Date(selected.ArrivalTime).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}</p><div className="grid gap-4 md:grid-cols-3">{fares.map(fare => <label key={fare.id} className={`cursor-pointer rounded-2xl border-2 p-5 transition hover:-translate-y-1 hover:shadow-lg ${fareType === fare.id ? 'border-sky-500 bg-sky-50 shadow-md' : 'border-slate-200'}`}><input type="radio" name="fare" checked={fareType === fare.id} onChange={() => setFareType(fare.id)} className="sr-only" /><h3 className="font-bold">{fare.name}</h3><p className="mt-1 text-xs text-slate-500">{fare.desc}</p><p className="mt-4 text-xl font-bold text-sky-700">{Math.round(Number(selected.Price) * fare.factor).toLocaleString()} VNĐ</p><ul className="mt-3 space-y-1 text-xs text-slate-600">{fare.perks.map(perk => <li key={perk}>✓ {perk}</li>)}</ul></label>)}</div></section>}
-      <section className="space-y-4 md:col-span-2"><h2 className="font-bold">Chọn chuyến bay</h2><div className="grid gap-3">
-        {flights.map(f => <label key={f.FlightID} className={`cursor-pointer rounded-xl border-2 p-4 ${flightId == f.FlightID ? 'border-sky-500 bg-sky-50' : 'border-slate-200'}`}>
-          <input required type="radio" name="flight" value={f.FlightID} checked={flightId == f.FlightID} onChange={e => setFlightId(e.target.value)} className="mr-3" />
-          <b>{f.AirlineName} · {f.FlightNumber}</b><span className="ml-3 text-slate-600">{f.DepartureAirport} → {f.ArrivalAirport}</span><strong className="float-right text-sky-700">{Number(f.Price).toLocaleString()} VNĐ</strong>
-        </label>)}
-      </div></section>
-      <section className="space-y-5 md:col-span-2"><div className="flex items-center justify-between"><div><h2 className="text-xl font-bold">Chọn chỗ ngồi</h2><p className="text-sm text-slate-500">Sơ đồ ghế máy bay · khoang phổ thông</p></div><div className="flex gap-3 text-xs"><span><i className="mr-1 inline-block h-3 w-3 rounded bg-emerald-100" />Trống</span><span><i className="mr-1 inline-block h-3 w-3 rounded bg-slate-700" />Đã đặt</span></div></div>
-        <div className="mx-auto max-w-lg rounded-[2rem] border border-slate-200 bg-gradient-to-b from-slate-50 to-slate-100 px-4 pb-7 pt-5 shadow-inner sm:px-8">
-          <div className="mx-auto mb-7 h-16 w-32 rounded-t-[5rem] border-2 border-b-0 border-slate-300 bg-white text-center pt-6 text-[10px] font-bold tracking-widest text-slate-400">COCKPIT</div>
-          <div className="mb-3 grid grid-cols-[24px_repeat(3,1fr)_22px_repeat(3,1fr)] gap-2 text-center text-[10px] font-bold text-slate-400"><span />{['A','B','C'].map(x => <span key={x}>{x}</span>)}<span />{['D','E','F'].map(x => <span key={x}>{x}</span>)}</div>
-          <div className="space-y-2">{Array.from({ length: 5 }, (_, row) => <div key={row} className="grid grid-cols-[24px_repeat(3,1fr)_22px_repeat(3,1fr)] items-center gap-2"><span className="text-center text-xs font-bold text-slate-400">{row + 1}</span>{['A','B','C'].map(letter => { const seat = `${row + 1}${letter}`; const taken = occupiedSeats.has(seat); return <Seat key={seat} seat={seat} taken={taken} selected={seatNumber === seat} onSelect={setSeatNumber} /> })}<span className="h-8 border-l-2 border-dashed border-slate-300" />{['D','E','F'].map(letter => { const seat = `${row + 1}${letter}`; const taken = occupiedSeats.has(seat); return <Seat key={seat} seat={seat} taken={taken} selected={seatNumber === seat} onSelect={setSeatNumber} /> })}</div>)}</div>
-          <div className="mt-7 rounded-xl bg-white p-3 text-center text-sm text-slate-500 shadow-sm">Ghế đang chọn: <b className="text-sky-600">{seatNumber || 'Chưa chọn'}</b></div>
+  return (
+    <div className="min-h-screen bg-slate-50">
+      {/* ---- TOP SEARCH BAR ---- */}
+      <div className="bg-white shadow-sm border-b border-slate-200">
+        <div className="mx-auto max-w-6xl px-4 py-4">
+          <h1 className="mb-4 text-2xl font-bold text-slate-900">Đặt vé máy bay</h1>
+          <div className="flex flex-wrap items-end gap-3">
+            <div className="w-full sm:w-auto flex-1 min-w-[160px]">
+              <label className="mb-1 block text-xs font-semibold uppercase text-slate-500">Điểm đi</label>
+              <select value={filterDeparture} onChange={e => setFilterDeparture(e.target.value)} className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+                <option value="">Tất cả</option>
+                {departureCities.map(city => <option key={city} value={city}>{city}</option>)}
+              </select>
+            </div>
+
+            <div className="flex h-9 items-center justify-center rounded-full bg-emerald-50 p-2 text-emerald-600 sm:mt-6">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+            </div>
+
+            <div className="w-full sm:w-auto flex-1 min-w-[160px]">
+              <label className="mb-1 block text-xs font-semibold uppercase text-slate-500">Điểm đến</label>
+              <select value={filterArrival} onChange={e => setFilterArrival(e.target.value)} className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+                <option value="">Tất cả</option>
+                {arrivalCities.map(city => <option key={city} value={city}>{city}</option>)}
+              </select>
+            </div>
+
+            <div className="w-full sm:w-auto min-w-[150px]">
+              <label className="mb-1 block text-xs font-semibold uppercase text-slate-500">Sắp xếp</label>
+              <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+                <option value="price">Giá thấp nhất</option>
+                <option value="time">Giờ khởi hành</option>
+                <option value="duration">Thời gian bay</option>
+              </select>
+            </div>
+          </div>
         </div>
-      </section>
-      <section className="space-y-4 md:col-span-2"><h2 className="font-bold">Thông tin hành khách</h2><p className="rounded-lg bg-emerald-50 p-3 text-sm text-emerald-800">Họ tên và email được lấy từ tài khoản: <b>{user?.name}</b> ({user?.email})</p>
-        <input required value={idCard} onChange={e => setIdCard(e.target.value)} placeholder="CCCD / Hộ chiếu" className="w-full rounded-lg border border-slate-300 px-4 py-3" />
-      </section>
-      {error && <p className="text-red-600 md:col-span-2">{error}</p>}<button disabled={loading || !selected} className="rounded-lg bg-emerald-600 px-5 py-3 font-semibold text-white disabled:opacity-50 md:col-span-2">{loading ? 'Đang xử lý...' : `Thanh toán ${selected ? ticketPrice.toLocaleString() + ' VNĐ' : ''}`}</button>
-    </form>
-  </div></main>
+      </div>
+
+      {/* ---- MAIN CONTENT ---- */}
+      <div className="mx-auto max-w-6xl px-4 py-6">
+        {error && (
+          <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700">
+            {error}
+          </div>
+        )}
+
+        {loadingFlights ? (
+          <div className="flex flex-col items-center justify-center py-24">
+            <div className="mb-4 h-10 w-10 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+            <p className="text-slate-500 font-medium">Đang tìm chuyến bay...</p>
+          </div>
+        ) : flights.length === 0 ? (
+          <EmptyState />
+        ) : (
+          <div className="grid gap-8 lg:grid-cols-3">
+            {/* ---- LEFT: FLIGHT LIST ---- */}
+            <div className="lg:col-span-2 space-y-4">
+              <p className="text-sm text-slate-500">{filteredFlights.length} chuyến bay được tìm thấy</p>
+
+              {filteredFlights.length === 0 ? (
+                <EmptyState />
+              ) : (
+                filteredFlights.map(flight => {
+                  const colors = AIRLINE_COLORS[flight.AirlineName] || DEFAULT_COLOR
+                  const isSelected = selectedFlightId === flight.FlightID
+                  const duration = calcDuration(flight.DepartureTime, flight.ArrivalTime)
+
+                  return (
+                    <div
+                      key={flight.FlightID}
+                      className={`overflow-hidden rounded-2xl border-2 bg-white shadow-sm transition-all duration-200 hover:shadow-md ${
+                        isSelected ? 'border-emerald-500 shadow-md shadow-emerald-100' : 'border-slate-100'
+                      }`}
+                    >
+                      {/* Flight card header */}
+                      <div
+                        onClick={() => setSelectedFlightId(isSelected ? null : flight.FlightID)}
+                        className="cursor-pointer p-5"
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex items-center gap-3">
+                            <span className={`inline-flex h-10 w-10 items-center justify-center rounded-full ${colors.bg} text-xl`}>
+                              {getAirlineLogo(flight.AirlineName)}
+                            </span>
+                            <div>
+                              <p className="font-bold text-slate-900">{flight.AirlineName}</p>
+                              <p className="text-xs text-slate-500">{flight.FlightNumber}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-2xl font-bold text-slate-900">{Number(flight.Price).toLocaleString()}đ</p>
+                            <p className="text-xs text-slate-500">/ khách</p>
+                          </div>
+                        </div>
+
+                        {/* Timeline */}
+                        <div className="mt-4 flex items-center gap-4">
+                          <div className="text-center">
+                            <p className="text-xl font-bold text-slate-900">{formatTime(flight.DepartureTime)}</p>
+                            <p className="text-xs text-slate-500">{flight.DepartureAirport}</p>
+                          </div>
+                          <div className="flex flex-1 flex-col items-center">
+                            <span className="text-xs font-medium text-slate-400">{duration}</span>
+                            <div className="relative mt-1 h-px w-full bg-slate-200">
+                              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 text-[10px] text-slate-300">✈</div>
+                            </div>
+                            <span className="mt-1 text-[10px] text-slate-400">Bay thẳng</span>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-xl font-bold text-slate-900">{formatTime(flight.ArrivalTime)}</p>
+                            <p className="text-xs text-slate-500">{flight.ArrivalAirport}</p>
+                          </div>
+                        </div>
+
+                        <div className="mt-3 flex items-center justify-between text-xs text-slate-500">
+                          <span>📅 {formatDate(flight.DepartureTime)}</span>
+                          <span>📍 {flight.DepartureCity} → {flight.ArrivalCity}</span>
+                          <span>🪑 Còn {flight.AvailableSeats} ghế</span>
+                        </div>
+                      </div>
+
+                      {/* Expanded panel */}
+                      {isSelected && (
+                        <div className="animate-fade-in border-t border-slate-100 bg-slate-50/50 p-5">
+                          {/* Fare class selection */}
+                          <div>
+                            <h3 className="mb-3 text-sm font-bold text-slate-700">Chọn hạng vé</h3>
+                            <div className="grid gap-3 sm:grid-cols-3">
+                              {FARES.map(fare => (
+                                <label
+                                  key={fare.id}
+                                  onClick={() => setFareType(fare.id)}
+                                  className={`cursor-pointer rounded-xl border-2 p-4 transition hover:-translate-y-0.5 ${
+                                    fareType === fare.id
+                                      ? 'border-emerald-500 bg-emerald-50 shadow-sm'
+                                      : 'border-slate-200 bg-white hover:border-emerald-200'
+                                  }`}
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-lg">{fare.icon}</span>
+                                    <span className="text-sm font-bold text-slate-800">{fare.name}</span>
+                                  </div>
+                                  <p className="mt-2 text-xl font-bold text-emerald-600">
+                                    {Math.round(Number(flight.Price) * fare.factor).toLocaleString()}đ
+                                  </p>
+                                  <ul className="mt-2 space-y-1">
+                                    {fare.perks.map(perk => (
+                                      <li key={perk} className="text-[11px] text-slate-500">✓ {perk}</li>
+                                    ))}
+                                  </ul>
+                                </label>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Seat map */}
+                          <div className="mt-5">
+                            <div className="mb-3 flex items-center justify-between">
+                              <h3 className="text-sm font-bold text-slate-700">Chọn chỗ ngồi</h3>
+                              <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">
+                                {seatNumber || 'Chưa chọn'}
+                              </span>
+                            </div>
+                            <SeatMap
+                              occupiedSeats={flight.OccupiedSeats}
+                              selectedSeat={seatNumber}
+                              onSelectSeat={setSeatNumber}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })
+              )}
+            </div>
+
+            {/* ---- RIGHT: BOOKING FORM SIDEBAR ---- */}
+            <div className="lg:col-span-1">
+              {!selectedFlight ? (
+                <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-slate-400">
+                  <p className="mb-1 text-5xl">👈</p>
+                  <p className="text-sm font-medium">Chọn một chuyến bay bên trái để bắt đầu đặt vé</p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit}>
+                  <div className="sticky top-6 space-y-6">
+                    {/* Summary card */}
+                    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                      <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 p-4 text-white">
+                        <p className="text-xs font-semibold uppercase tracking-wider opacity-80">Tóm tắt đặt vé</p>
+                      </div>
+
+                      <div className="p-5 space-y-4">
+                        <div className="flex items-center gap-3 rounded-lg bg-slate-50 p-3">
+                          <span className="text-2xl">{getAirlineLogo(selectedFlight.AirlineName)}</span>
+                          <div>
+                            <p className="text-sm font-bold text-slate-800">{selectedFlight.AirlineName}</p>
+                            <p className="text-xs text-slate-500">{selectedFlight.FlightNumber} · {selectedFlight.DepartureAirport} → {selectedFlight.ArrivalAirport}</p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between text-sm">
+                          <div>
+                            <p className="font-bold text-slate-900">{formatTime(selectedFlight.DepartureTime)}</p>
+                            <p className="text-xs text-slate-500">{selectedFlight.DepartureCity}</p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-xs text-slate-400">{calcDuration(selectedFlight.DepartureTime, selectedFlight.ArrivalTime)}</p>
+                            <span className="text-sm">→</span>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-bold text-slate-900">{formatTime(selectedFlight.ArrivalTime)}</p>
+                            <p className="text-xs text-slate-500">{selectedFlight.ArrivalCity}</p>
+                          </div>
+                        </div>
+
+                        <p className="text-xs text-slate-500">📅 {formatDate(selectedFlight.DepartureTime)}</p>
+
+                        <div className="border-t pt-4 space-y-1 text-sm">
+                          <div className="flex justify-between text-slate-600">
+                            <span>Giá vé cơ bản</span>
+                            <span>{Number(selectedFlight.Price).toLocaleString()}đ</span>
+                          </div>
+                          <div className="flex justify-between text-slate-600">
+                            <span>{selectedFare.name} (x{selectedFare.factor})</span>
+                            <span>{Math.round(Number(selectedFlight.Price) * (selectedFare.factor - 1)).toLocaleString()}đ</span>
+                          </div>
+                          {seatNumber && (
+                            <div className="flex justify-between text-slate-600">
+                              <span>Ghế {seatNumber}</span>
+                              <span className="text-emerald-600">Đã chọn</span>
+                            </div>
+                          )}
+                          <div className="flex justify-between border-t pt-3 text-base font-bold">
+                            <span>Tổng cộng</span>
+                            <span className="text-emerald-600">{ticketPrice.toLocaleString()}đ</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Passenger info */}
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                      <h3 className="mb-4 text-sm font-bold text-slate-700">Thông tin hành khách</h3>
+
+                      <div className="rounded-lg bg-emerald-50 p-3 mb-4 text-xs text-emerald-800">
+                        Hành khách: <b>{user?.name}</b> ({user?.email})
+                      </div>
+
+                      <div className="space-y-3">
+                        <div>
+                          <label className="mb-1 block text-xs font-semibold text-slate-600">CCCD / Hộ chiếu *</label>
+                          <input
+                            value={idCard}
+                            onChange={e => setIdCard(e.target.value)}
+                            placeholder="Nhập số giấy tờ"
+                            className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+                          />
+                        </div>
+                        <div>
+                          <label className="mb-1 block text-xs font-semibold text-slate-600">Số điện thoại</label>
+                          <input
+                            value={passengerPhone}
+                            onChange={e => setPassengerPhone(e.target.value)}
+                            placeholder="Nhập số điện thoại liên lạc"
+                            className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+                          />
+                        </div>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={submitting}
+                        className="mt-5 w-full rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white transition hover:bg-emerald-700 hover:shadow-lg disabled:opacity-50"
+                      >
+                        {submitting ? '⏳ Đang xử lý...' : `Thanh toán ${ticketPrice.toLocaleString()}đ`}
+                      </button>
+
+                      <p className="mt-3 text-center text-[11px] text-slate-400">
+                        🔒 Thanh toán an toàn với mã hóa SSL
+                      </p>
+                    </div>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }

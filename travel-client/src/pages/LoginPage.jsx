@@ -161,7 +161,7 @@ export default function LoginPage() {
             <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
               <p className="text-xs font-bold text-blue-900 mb-1"> Thông tin test:</p>
               <p className="text-xs text-blue-800">Email: admin@tourdulich.com</p>
-              <p className="text-xs text-blue-800">Password: admin123456</p>
+              <p className="text-xs text-blue-800">Password: admin@123456</p>
             </div>
           </div>
         </div>

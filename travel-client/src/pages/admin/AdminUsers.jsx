@@ -19,7 +19,7 @@ export default function AdminUsers() {
     try {
       setLoading(true)
       const data = await getUsers(page, 10, search)
-      setUsers(data.data)
+      setUsers(Array.isArray(data?.data) ? data.data : [])
       setTotal(data.total)
       setPages(data.pages)
     } catch (error) {

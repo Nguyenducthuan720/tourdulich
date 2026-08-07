@@ -81,6 +81,10 @@ export default function BookingPage() {
   const handleNextStep = () => {
     // Nếu chọn combo nhưng chưa chọn chuyến bay hoặc điền thiếu tên/CCCD thì chặn lại
     if (isCombo) {
+      if (totalGuests !== 1) {
+        setError('Đặt combo vé máy bay hiện hỗ trợ 1 khách mỗi booking. Vui lòng đặt riêng hoặc chọn 1 khách.');
+        return;
+      }
       if (!flightId) {
         setError('Vui lòng chọn một chuyến bay phù hợp cho gói Combo!');
         return;
@@ -265,10 +269,10 @@ export default function BookingPage() {
                   </div>
 
                   {/* 3. TÍNH NĂNG MỚI: ĐẶT KÈM VÉ MÁY BAY (COMBO) */}
-                  <div className="hidden space-y-4 pt-4 border-t">
+                  <div className="space-y-4 pt-4 border-t">
                     <label className={`flex items-center space-x-4 p-5 rounded-xl border-2 cursor-pointer transition-all ${isCombo ? 'bg-sky-100 border-sky-400 shadow-md' : 'bg-white border-sky-100 hover:border-sky-300 hover:bg-sky-50'}`}>
-                      <input 
-                        type="checkbox" disabled
+                        <input 
+                          type="checkbox"
                         className="w-6 h-6 rounded text-sky-600 focus:ring-sky-500 transition-transform hover:scale-110" 
                         checked={isCombo} 
                         onChange={(e) => {
@@ -322,7 +326,7 @@ export default function BookingPage() {
                                   </div>
                                   <div className="sm:text-right border-t sm:border-t-0 pt-3 sm:pt-0">
                                     <p className="text-sm text-slate-500 mb-1">Phụ thu vé bay</p>
-                                    <p className="font-bold text-xl text-sky-600">+{f.Price.toLocaleString()}đ</p>
+                                     <p className="font-bold text-xl text-sky-600">+{Number(f.Price).toLocaleString()}đ</p>
                                     <p className="text-xs text-slate-400 font-medium">/ khách</p>
                                   </div>
                                 </div>
@@ -354,8 +358,8 @@ export default function BookingPage() {
                           </div>
                         </div>
 
-                        <div>
-                          <label className="block text-sm font-semibold text-slate-700 mb-1">Yêu cầu mã ghế ngồi (Nếu có)</label>
+                          <div>
+                            <label className="block text-sm font-semibold text-slate-700 mb-1">Mã ghế ngồi (Tùy chọn)</label>
                           <input 
                             type="text" 
                             placeholder="VD: 14A, 14B (Tùy chọn theo tình trạng check-in lúc khởi hành)"
