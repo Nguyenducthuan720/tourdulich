@@ -11,6 +11,7 @@ import FlightBookingPage from '../pages/FlightBookingPage'
 import MyBookingsPage from '../pages/MyBookingsPage'
 import LoginPage from '../pages/LoginPage'
 import RegisterPage from '../pages/RegisterPage'
+import ProfilePage from '../pages/ProfilePage'
 import AdminDashboard from '../pages/admin/AdminDashboard'
 import AdminTours from '../pages/admin/AdminTours'
 import AdminUsers from '../pages/admin/AdminUsers'
@@ -66,6 +67,14 @@ export const router = createBrowserRouter([
       {
         path: 'flight-booking',
         element: <ProtectedRoute><FlightBookingPage /></ProtectedRoute>,
+      },
+      {
+        path: 'profile',
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
