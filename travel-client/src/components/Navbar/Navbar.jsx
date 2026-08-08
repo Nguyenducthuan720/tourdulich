@@ -8,6 +8,7 @@ const navItems = [
   { to: '/my-bookings', label: ' Lịch sử' },
   { to: '/flight-booking', label: ' Vé máy bay' },
   { to: '/profile', label: ' Hồ sơ' },
+  { to: '/about', label: ' Về chúng tôi' },
 ]
 
 export default function Navbar() {

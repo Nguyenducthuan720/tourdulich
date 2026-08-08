@@ -12,6 +12,7 @@ import MyBookingsPage from '../pages/MyBookingsPage'
 import LoginPage from '../pages/LoginPage'
 import RegisterPage from '../pages/RegisterPage'
 import ProfilePage from '../pages/ProfilePage'
+import AboutPage from '../pages/AboutPage'
 import AdminDashboard from '../pages/admin/AdminDashboard'
 import AdminTours from '../pages/admin/AdminTours'
 import AdminUsers from '../pages/admin/AdminUsers'
@@ -85,6 +86,10 @@ export const router = createBrowserRouter([
   {
     path: '/register',
     element: <RegisterPage />,
+  },
+  {
+    path: '/about',
+    element: <AboutPage />,
   },
   {
     path: '/admin',
