@@ -71,56 +71,85 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white">
-      {/* Hero Search Section */}
-      <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 py-16 shadow-lg">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="text-center mb-8">
-            <h1 className="mb-2 text-5xl font-bold text-white drop-shadow-lg">Tour Lượng</h1>
-            <p className="text-lg text-emerald-50">Khám phá những chuyến đi tuyệt - Hơn 18 tour tuyệt vời đang chờ bạn</p>
-          </div>
-          <SearchBox onSearch={handleSearch} />
+    <div className="min-h-screen bg-slate-50">
+      {/* Hero Section */}
+      <section className="relative h-[600px] overflow-hidden">
+        <div className="absolute inset-0">
+          <img 
+            src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1920&q=80" 
+            alt="Hero" 
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-slate-900/80"></div>
         </div>
-      </div>
+        
+        <div className="relative z-10 mx-auto max-w-7xl px-6 pt-32 lg:px-8">
+          <div className="max-w-3xl">
+            <p className="mb-4 inline-block rounded-full border border-amber-400/30 bg-amber-500/10 px-4 py-2 text-sm font-semibold text-amber-300 backdrop-blur-sm">
+              ✦ Premium Travel Experience
+            </p>
+            <h1 className="mb-6 text-5xl font-bold tracking-tight text-white lg:text-7xl">
+              Khám phá thế giới
+              <span className="block text-amber-400">theo cách của bạn</span>
+            </h1>
+            <p className="mb-10 text-xl text-slate-300">
+              Trải nghiệm hơn 18 tour du lịch cao cấp trong và ngoài nước. Dịch vụ đẳng cấp, giá trị đích thực.
+            </p>
+          </div>
+          
+          <div className="max-w-4xl">
+            <SearchBox onSearch={handleSearch} />
+          </div>
+        </div>
+      </section>
 
       {/* Popular Destinations */}
       {destinations.length > 0 && (
-        <div className="mx-auto max-w-7xl px-4 pt-12 pb-4">
-          <h2 className="text-3xl font-bold text-slate-900 mb-6">🎯 Điểm đến nổi bật</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {destinations.slice(0, 8).map(dest => (
+        <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+          <div className="mb-12">
+            <p className="mb-2 text-sm font-bold uppercase tracking-widest text-amber-600">Điểm đến</p>
+            <h2 className="text-4xl font-bold tracking-tight text-slate-900 lg:text-5xl">
+              Khám phá điểm đến nổi bật
+            </h2>
+          </div>
+          
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {destinations.slice(0, 8).map((dest, idx) => (
               <div 
                 key={dest.DestinationID} 
-                className="group relative rounded-xl overflow-hidden cursor-pointer aspect-square shadow-sm hover:shadow-xl transition"
+                className={`group relative cursor-pointer overflow-hidden rounded-2xl bg-slate-100 shadow-sm transition-all hover:shadow-xl ${
+                  idx === 0 ? 'md:col-span-2 md:row-span-2' : ''
+                } ${idx === 0 ? 'h-[400px]' : 'h-[200px]'}`}
                 onClick={() => handleDestinationClick(dest)}
               >
                 <img 
                   src={getImageUrl(dest.ImageURL, FALLBACK_DESTINATION_IMAGE)} 
                   alt={dest.DestinationName} 
-                  className="w-full h-full object-cover group-hover:scale-110 transition duration-500" 
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-110" 
                   onError={(e) => { e.target.onerror = null; e.target.src = getImageUrl(FALLBACK_DESTINATION_IMAGE); }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 right-4">
-                  <h3 className="text-white font-bold text-lg drop-shadow-md">{dest.DestinationName}</h3>
-                  <p className="text-white/80 text-sm line-clamp-1 drop-shadow-md">{dest.Province}</p>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className={`font-bold text-white drop-shadow-lg ${idx === 0 ? 'text-3xl' : 'text-xl'}`}>
+                    {dest.DestinationName}
+                  </h3>
+                  <p className="mt-1 text-sm text-slate-200">{dest.Province}</p>
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
       {/* Main Content */}
-      <div id="tours-section" className="mx-auto max-w-7xl px-4 py-12">
+      <section id="tours-section" className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
         {error && (
-          <div className="mb-6 rounded-lg bg-amber-50 border-l-4 border-amber-400 p-4 text-amber-800">
-            <p className="text-sm font-medium">lỗi {error}</p>
+          <div className="mb-8 rounded-2xl border-l-4 border-amber-500 bg-amber-50 p-5 text-amber-900">
+            <p className="font-semibold">⚠ {error}</p>
           </div>
         )}
 
-        {/* Layout: Filter + Tours */}
-        <div className="grid gap-6 lg:grid-cols-4 xl:grid-cols-5">
+        <div className="grid gap-8 lg:grid-cols-4">
           {/* Sidebar Filter */}
           <div className="lg:col-span-1">
             <div className="sticky top-24">
@@ -132,31 +161,34 @@ export default function HomePage() {
           </div>
 
           {/* Tours Grid */}
-          <div className="lg:col-span-3 xl:col-span-4">
+          <div className="lg:col-span-3">
             {loading ? (
-              <div className="flex items-center justify-center py-20">
+              <div className="flex items-center justify-center py-32">
                 <div className="text-center">
-                  <div className="mb-4 inline-block h-12 w-12 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600"></div>
-                  <p className="text-slate-600 font-medium">Đang tải tours...</p>
+                  <div className="mb-6 inline-block h-16 w-16 animate-spin rounded-full border-4 border-slate-200 border-t-amber-500"></div>
+                  <p className="text-lg font-semibold text-slate-600">Đang tải tours...</p>
                 </div>
               </div>
             ) : tours.length === 0 ? (
-              <div className="py-20 text-center bg-white rounded-xl border-2 border-dashed border-slate-200">
-                <div className="text-5xl mb-3">🔍</div>
-                <p className="text-lg font-semibold text-slate-600">Không tìm thấy tour nào</p>
-                <p className="text-sm text-slate-500 mt-1">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+              <div className="rounded-3xl border-2 border-dashed border-slate-200 bg-white py-32 text-center">
+                <div className="mb-4 text-6xl">🔍</div>
+                <p className="text-2xl font-bold text-slate-900">Không tìm thấy tour</p>
+                <p className="mt-2 text-slate-600">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
               </div>
             ) : (
               <>
-                <div className="mb-6 flex items-center justify-between">
-                  <h2 className="text-3xl font-bold text-slate-900">
-                     Tours Du Lịch
-                  </h2>
-                  <span className="inline-block rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-900">
+                <div className="mb-10 flex items-center justify-between">
+                  <div>
+                    <p className="mb-2 text-sm font-bold uppercase tracking-widest text-amber-600">Bộ sưu tập</p>
+                    <h2 className="text-4xl font-bold tracking-tight text-slate-900">
+                      Tours du lịch
+                    </h2>
+                  </div>
+                  <span className="rounded-full bg-slate-900 px-6 py-3 text-sm font-bold text-white">
                     {tours.length} tour
                   </span>
                 </div>
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                   {tours.map((tour) => (
                     <TourCard key={tour.id || tour.TourID} tour={tour} />
                   ))}
@@ -165,7 +197,7 @@ export default function HomePage() {
             )}
           </div>
         </div>
-      </div>
+      </section>
     </div>
   )
 }

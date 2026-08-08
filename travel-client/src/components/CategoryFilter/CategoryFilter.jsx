@@ -29,35 +29,35 @@ export default function CategoryFilter({ onCategorySelect, selectedCategory }) {
   }
 
   return (
-    <div className="rounded-xl bg-white p-6 shadow-md border border-slate-100">
-      <h3 className="mb-4 text-lg font-bold text-slate-900"> Danh mục</h3>
+    <div className="rounded-3xl bg-white p-6 shadow-lg">
+      <h3 className="mb-6 text-sm font-bold uppercase tracking-widest text-amber-600">Danh mục</h3>
       
       {loading ? (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-10 bg-slate-100 rounded animate-pulse"></div>
+            <div key={i} className="h-12 bg-slate-100 rounded-xl animate-pulse"></div>
           ))}
         </div>
       ) : (
         <div className="space-y-2">
           <button
             onClick={() => handleCategoryClick(null)}
-            className={`w-full rounded-lg px-4 py-2.5 text-sm font-medium transition text-left ${
+            className={`w-full rounded-xl px-5 py-3 text-sm font-bold transition text-left ${
               selectedCategory === null
-                ? 'bg-emerald-100 text-emerald-900 border-2 border-emerald-400'
-                : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'
+                ? 'bg-amber-500 text-white shadow-lg'
+                : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
             }`}
           >
-             Tất cả danh mục
+            Tất cả danh mục
           </button>
           {categories.map((category) => (
             <button
               key={category.CategoryID}
               onClick={() => handleCategoryClick(category.CategoryID)}
-              className={`w-full rounded-lg px-4 py-2.5 text-sm font-medium transition text-left ${
+              className={`w-full rounded-xl px-5 py-3 text-sm font-bold transition text-left ${
                 selectedCategory === category.CategoryID
-                  ? 'bg-emerald-100 text-emerald-900 border-2 border-emerald-400'
-                  : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'
+                  ? 'bg-amber-500 text-white shadow-lg'
+                  : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
               }`}
             >
               {category.CategoryName}
