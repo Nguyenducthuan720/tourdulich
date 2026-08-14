@@ -93,14 +93,14 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-cream px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl">
-          <div className="h-48 bg-slate-200 rounded-3xl animate-pulse mb-8"></div>
+          <div className="h-48 bg-ink-200 rounded-3xl animate-pulse mb-8"></div>
           <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-            <div className="h-[500px] bg-slate-200 rounded-3xl animate-pulse"></div>
+            <div className="h-[500px] bg-ink-200 rounded-3xl animate-pulse"></div>
             <div className="space-y-6">
-              <div className="h-[350px] bg-slate-200 rounded-3xl animate-pulse"></div>
-              <div className="h-[200px] bg-slate-200 rounded-3xl animate-pulse"></div>
+              <div className="h-[350px] bg-ink-200 rounded-3xl animate-pulse"></div>
+              <div className="h-[200px] bg-ink-200 rounded-3xl animate-pulse"></div>
             </div>
           </div>
         </div>
@@ -112,10 +112,10 @@ export default function ProfilePage() {
   const isAvatarImage = avatarPreview && avatarPreview.startsWith('data:')
 
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-12 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-cream px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         {/* Header Card */}
-        <div className="mb-10 rounded-3xl bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 p-8 lg:p-10 text-white shadow-2xl">
+        <div className="mb-10 rounded-3xl bg-gradient-to-r from-brand-500 via-brand-600 to-brand-700 p-8 lg:p-10 text-white shadow-2xl">
           <div className="flex flex-wrap items-center gap-6">
             {/* Avatar */}
             <div className="relative group">
@@ -138,9 +138,9 @@ export default function ProfilePage() {
             </div>
             
             <div className="flex-1">
-              <p className="text-sm font-semibold text-amber-100 mb-1">Tài khoản Tour Lượng</p>
+              <p className="text-sm font-semibold text-brand-100 mb-1">Tài khoản Tour Lượng</p>
               <h1 className="text-3xl lg:text-4xl font-bold mb-2">{profile.name || user?.name || 'Người dùng'}</h1>
-              <p className="text-amber-100">{profile.email || user?.email}</p>
+              <p className="text-brand-100">{profile.email || user?.email}</p>
             </div>
             
             <span className="rounded-full bg-white/20 backdrop-blur-sm px-5 py-2 text-sm font-bold border border-white/30">
@@ -160,59 +160,59 @@ export default function ProfilePage() {
 
         <div className="grid gap-8 lg:grid-cols-[1fr_1fr]">
           {/* Profile Form */}
-          <form onSubmit={handleProfileSubmit} className="rounded-3xl border-2 border-slate-100 bg-white p-8 shadow-lg">
+          <form onSubmit={handleProfileSubmit} className="rounded-3xl border-2 border-ink-100 bg-white p-8 shadow-lg">
             <div className="mb-8">
-              <h2 className="text-2xl font-bold text-slate-900 mb-2">Thông tin cá nhân</h2>
-              <p className="text-slate-600">Cập nhật thông tin dùng khi đặt tour và vé máy bay</p>
+              <h2 className="text-2xl font-bold text-ink-900 mb-2">Thông tin cá nhân</h2>
+              <p className="text-ink-600">Cập nhật thông tin dùng khi đặt tour và vé máy bay</p>
             </div>
             
             <div className="space-y-5">
               <label className="block">
-                <span className="mb-2 block text-sm font-bold text-slate-700 uppercase tracking-wider">Họ và tên</span>
+                <span className="mb-2 block text-sm font-bold text-ink-700 uppercase tracking-wider">Họ và tên</span>
                 <input 
                   required 
                   value={profile.name} 
                   onChange={e => updateField('name', e.target.value)} 
-                  className="w-full rounded-xl border-2 border-slate-200 px-5 py-4 outline-none focus:border-amber-500 transition"
+                  className="w-full rounded-xl border-2 border-ink-200 px-5 py-4 outline-none focus:border-brand-500 transition"
                 />
               </label>
               
               <label className="block">
-                <span className="mb-2 block text-sm font-bold text-slate-700 uppercase tracking-wider">Email</span>
+                <span className="mb-2 block text-sm font-bold text-ink-700 uppercase tracking-wider">Email</span>
                 <input 
                   required 
                   type="email" 
                   value={profile.email} 
                   onChange={e => updateField('email', e.target.value)} 
-                  className="w-full rounded-xl border-2 border-slate-200 px-5 py-4 outline-none focus:border-amber-500 transition"
+                  className="w-full rounded-xl border-2 border-ink-200 px-5 py-4 outline-none focus:border-brand-500 transition"
                 />
               </label>
               
               <label className="block">
-                <span className="mb-2 block text-sm font-bold text-slate-700 uppercase tracking-wider">Số điện thoại</span>
+                <span className="mb-2 block text-sm font-bold text-ink-700 uppercase tracking-wider">Số điện thoại</span>
                 <input 
                   value={profile.phone} 
                   onChange={e => updateField('phone', e.target.value)} 
                   placeholder="Nhập số điện thoại"
-                  className="w-full rounded-xl border-2 border-slate-200 px-5 py-4 outline-none focus:border-amber-500 transition"
+                  className="w-full rounded-xl border-2 border-ink-200 px-5 py-4 outline-none focus:border-brand-500 transition"
                 />
               </label>
               
               <label className="block">
-                <span className="mb-2 block text-sm font-bold text-slate-700 uppercase tracking-wider">Địa chỉ</span>
+                <span className="mb-2 block text-sm font-bold text-ink-700 uppercase tracking-wider">Địa chỉ</span>
                 <textarea 
                   value={profile.address} 
                   onChange={e => updateField('address', e.target.value)} 
                   rows="3" 
                   placeholder="Nhập địa chỉ"
-                  className="w-full rounded-xl border-2 border-slate-200 px-5 py-4 outline-none focus:border-amber-500 transition"
+                  className="w-full rounded-xl border-2 border-ink-200 px-5 py-4 outline-none focus:border-brand-500 transition"
                 />
               </label>
             </div>
             
             <button 
               disabled={saving} 
-              className="mt-8 w-full rounded-xl bg-amber-500 px-6 py-4 font-bold text-white transition hover:bg-amber-600 disabled:opacity-50 hover:shadow-2xl text-lg"
+              className="mt-8 w-full rounded-xl bg-brand-500 px-6 py-4 font-bold text-white transition hover:bg-brand-600 disabled:opacity-50 hover:shadow-2xl text-lg"
             >
               {saving ? 'Đang lưu...' : ' Lưu thay đổi'}
             </button>
@@ -221,27 +221,27 @@ export default function ProfilePage() {
           {/* Right Column */}
           <div className="space-y-8">
             {/* Password Form */}
-            <form onSubmit={handlePasswordSubmit} className="rounded-3xl border-2 border-slate-100 bg-white p-8 shadow-lg">
+            <form onSubmit={handlePasswordSubmit} className="rounded-3xl border-2 border-ink-100 bg-white p-8 shadow-lg">
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-slate-900 mb-2"> Bảo mật tài khoản</h2>
-                <p className="text-slate-600">Đổi mật khẩu định kỳ để bảo vệ tài khoản</p>
+                <h2 className="text-2xl font-bold text-ink-900 mb-2"> Bảo mật tài khoản</h2>
+                <p className="text-ink-600">Đổi mật khẩu định kỳ để bảo vệ tài khoản</p>
               </div>
               
               <div className="space-y-5">
                 <label className="block">
-                  <span className="mb-2 block text-sm font-bold text-slate-700">Mật khẩu hiện tại</span>
+                  <span className="mb-2 block text-sm font-bold text-ink-700">Mật khẩu hiện tại</span>
                   <input 
                     required 
                     type="password" 
                     value={passwords.currentPassword} 
                     onChange={e => updatePasswordField('currentPassword', e.target.value)} 
                     placeholder="••••••••"
-                    className="w-full rounded-xl border-2 border-slate-200 px-5 py-4 outline-none focus:border-amber-500 transition"
+                    className="w-full rounded-xl border-2 border-ink-200 px-5 py-4 outline-none focus:border-brand-500 transition"
                   />
                 </label>
                 
                 <label className="block">
-                  <span className="mb-2 block text-sm font-bold text-slate-700">Mật khẩu mới</span>
+                  <span className="mb-2 block text-sm font-bold text-ink-700">Mật khẩu mới</span>
                   <input 
                     required 
                     minLength="6" 
@@ -249,12 +249,12 @@ export default function ProfilePage() {
                     value={passwords.newPassword} 
                     onChange={e => updatePasswordField('newPassword', e.target.value)} 
                     placeholder="Ít nhất 6 ký tự"
-                    className="w-full rounded-xl border-2 border-slate-200 px-5 py-4 outline-none focus:border-amber-500 transition"
+                    className="w-full rounded-xl border-2 border-ink-200 px-5 py-4 outline-none focus:border-brand-500 transition"
                   />
                 </label>
                 
                 <label className="block">
-                  <span className="mb-2 block text-sm font-bold text-slate-700">Xác nhận mật khẩu mới</span>
+                  <span className="mb-2 block text-sm font-bold text-ink-700">Xác nhận mật khẩu mới</span>
                   <input 
                     required 
                     minLength="6" 
@@ -262,32 +262,32 @@ export default function ProfilePage() {
                     value={passwords.confirmPassword} 
                     onChange={e => updatePasswordField('confirmPassword', e.target.value)} 
                     placeholder="••••••••"
-                    className="w-full rounded-xl border-2 border-slate-200 px-5 py-4 outline-none focus:border-amber-500 transition"
+                    className="w-full rounded-xl border-2 border-ink-200 px-5 py-4 outline-none focus:border-brand-500 transition"
                   />
                 </label>
               </div>
               
               <button 
                 disabled={changingPassword} 
-                className="mt-8 w-full rounded-xl border-2 border-amber-500 px-6 py-4 font-bold text-amber-700 transition hover:bg-amber-50 disabled:opacity-50 text-lg"
+                className="mt-8 w-full rounded-xl border-2 border-brand-500 px-6 py-4 font-bold text-brand-700 transition hover:bg-brand-50 disabled:opacity-50 text-lg"
               >
                 {changingPassword ? 'Đang cập nhật...' : ' Đổi mật khẩu'}
               </button>
             </form>
 
             {/* Quick Links */}
-            <div className="rounded-3xl border-2 border-slate-100 bg-white p-8 shadow-lg">
-              <h2 className="text-xl font-bold text-slate-900 mb-5"> Quản lý chuyến đi</h2>
+            <div className="rounded-3xl border-2 border-ink-100 bg-white p-8 shadow-lg">
+              <h2 className="text-xl font-bold text-ink-900 mb-5"> Quản lý chuyến đi</h2>
               <div className="grid gap-4 sm:grid-cols-2">
                 <Link 
                   to="/my-bookings" 
-                  className="rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 p-5 text-base font-bold text-slate-700 transition hover:from-amber-50 hover:to-amber-100 hover:text-amber-700 border-2 border-slate-200 hover:border-amber-300"
+                  className="rounded-2xl bg-gradient-to-br from-ink-50 to-ink-100 p-5 text-base font-bold text-ink-700 transition hover:from-brand-50 hover:to-brand-100 hover:text-brand-700 border-2 border-ink-200 hover:border-brand-300"
                 >
                    Lịch sử đặt tour →
                 </Link>
                 <Link 
                   to="/flight-booking" 
-                  className="rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 p-5 text-base font-bold text-slate-700 transition hover:from-amber-50 hover:to-amber-100 hover:text-amber-700 border-2 border-slate-200 hover:border-amber-300"
+                  className="rounded-2xl bg-gradient-to-br from-ink-50 to-ink-100 p-5 text-base font-bold text-ink-700 transition hover:from-brand-50 hover:to-brand-100 hover:text-brand-700 border-2 border-ink-200 hover:border-brand-300"
                 >
                    Đặt vé máy bay →
                 </Link>

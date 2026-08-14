@@ -73,7 +73,7 @@ export default function AIChatbot() {
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg transition-all duration-300 hover:scale-110 hover:bg-blue-700 focus:outline-none"
+                    className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-600 text-white shadow-lg transition-all duration-300 hover:scale-110 hover:bg-brand-700 focus:outline-none"
                     title="Trò chuyện với AI tư vấn"
                 >
                     {/* Icon Robot SVG */}
@@ -85,16 +85,16 @@ export default function AIChatbot() {
 
             {/* Khung Chat AI (Khi nhấn mở) */}
             {isOpen && (
-                <div className="flex h-[550px] w-[380px] flex-col rounded-2xl bg-white shadow-2xl transition-all duration-300 border border-slate-100 sm:w-[400px]">
+                <div className="flex h-[550px] w-[380px] flex-col rounded-2xl bg-white shadow-2xl transition-all duration-300 border border-ink-100 sm:w-[400px]">
                     {/* Header Khung Chat */}
-                    <div className="flex items-center justify-between rounded-t-2xl bg-gradient-to-r from-blue-700 to-sky-600 p-4 text-white shadow-md">
+                    <div className="flex items-center justify-between rounded-t-2xl bg-gradient-to-r from-brand-600 to-brand-700 p-4 text-white shadow-md">
                         <div className="flex items-center gap-3">
                             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white bg-opacity-20 font-bold">
                                 AI
                             </div>
                             <div>
                                 <h4 className="text-sm font-bold">Trợ lý Lữ hành thông minh</h4>
-                                <div className="flex items-center gap-1.5 text-[11px] text-blue-100">
+                                <div className="flex items-center gap-1.5 text-[11px] text-brand-100">
                                     <span className="h-2 w-2 rounded-full bg-green-400 animate-ping"></span>
                                     <span>Hỗ trợ trực tuyến 24/7</span>
                                 </div>
@@ -112,7 +112,7 @@ export default function AIChatbot() {
                     </div>
 
                     {/* Vùng hiển thị nội dung tin nhắn */}
-                    <div className="flex-1 overflow-y-auto bg-slate-50 p-4 space-y-4">
+                    <div className="flex-1 overflow-y-auto bg-cream p-4 space-y-4">
                         {messages.map((msg, idx) => (
                             <div 
                                 key={idx} 
@@ -121,8 +121,8 @@ export default function AIChatbot() {
                                 <div 
                                     className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed shadow-sm ${
                                         msg.sender === 'user' 
-                                            ? 'bg-blue-600 text-white rounded-tr-none' 
-                                            : 'bg-white text-slate-800 border border-slate-100 rounded-tl-none'
+                                            ? 'bg-brand-600 text-white rounded-tr-none' 
+                                            : 'bg-white text-ink-800 border border-ink-100 rounded-tl-none'
                                     }`}
                                     style={{ whiteSpace: 'pre-line' }} // Bảo lưu định dạng xuống dòng lịch trình của AI
                                 >
@@ -134,10 +134,10 @@ export default function AIChatbot() {
                         {/* Hiệu ứng đang gõ chữ của AI */}
                         {isTyping && (
                             <div className="flex justify-start">
-                                <div className="flex items-center gap-1 bg-white border border-slate-100 rounded-2xl rounded-tl-none px-4 py-3 shadow-sm text-xs text-slate-500 font-medium">
-                                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-blue-500" style={{ animationDelay: '0ms' }}></span>
-                                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-blue-500" style={{ animationDelay: '150ms' }}></span>
-                                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-blue-500" style={{ animationDelay: '300ms' }}></span>
+                                <div className="flex items-center gap-1 bg-white border border-ink-100 rounded-2xl rounded-tl-none px-4 py-3 shadow-sm text-xs text-cream0 font-medium">
+                                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-brand-500" style={{ animationDelay: '0ms' }}></span>
+                                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-brand-500" style={{ animationDelay: '150ms' }}></span>
+                                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-brand-500" style={{ animationDelay: '300ms' }}></span>
                                     <span className="ml-1">TravelAI đang lên lịch trình...</span>
                                 </div>
                             </div>
@@ -146,19 +146,19 @@ export default function AIChatbot() {
                     </div>
 
                     {/* Form gửi tin nhắn phía dưới */}
-                    <form onSubmit={handleSend} className="border-t border-slate-100 p-3 bg-white flex gap-2 items-center">
+                    <form onSubmit={handleSend} className="border-t border-ink-100 p-3 bg-white flex gap-2 items-center">
                         <input
                             type="text"
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
                             placeholder="Hỏi về địa điểm, giá vé hoặc lịch trình..."
                             disabled={isTyping}
-                            className="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition-all focus:border-blue-500 disabled:bg-slate-50"
+                            className="flex-1 rounded-xl border border-ink-200 px-4 py-2.5 text-sm outline-none transition-all focus:border-brand-500 disabled:bg-cream"
                         />
                         <button
                             type="submit"
                             disabled={isTyping}
-                            className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-blue-700 disabled:bg-slate-300"
+                            className="rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-brand-700 disabled:bg-ink-300"
                         >
                             Gửi
                         </button>

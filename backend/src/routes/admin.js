@@ -15,6 +15,7 @@ router.get("/dashboard/stats", verifyToken, verifyAdmin, async (req, res) => {
       "SELECT COUNT(*) as total FROM Bookings",
       "SELECT SUM(TotalAmount) as total FROM Bookings WHERE Status = N'Confirmed'",
       "SELECT COUNT(*) as total FROM Reviews",
+      "SELECT ISNULL(AVG(CAST(Rating AS FLOAT)), 0) as avgRating FROM Reviews",
     ];
 
     const request = new sql.Request();
@@ -22,14 +23,61 @@ router.get("/dashboard/stats", verifyToken, verifyAdmin, async (req, res) => {
       queries.map(q => request.query(q))
     );
 
+    const totalCustomers = results[0].recordset[0].total;
+    const totalTours = results[1].recordset[0].total;
+    const totalBookings = results[2].recordset[0].total;
+    const totalRevenue = results[3].recordset[0].total || 0;
+    const totalReviews = results[4].recordset[0].total;
+    const avgRating = results[5].recordset[0].avgRating || 0;
+
+    // Build last 6 month keys (YYYY-MM) for zero-filled series
+    const months = [];
+    const now = new Date();
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      months.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`);
+    }
+
+    // User registrations over last 6 months (real CreatedAt)
+    const userTrendRows = await new sql.Request().query(
+      `SELECT FORMAT(CreatedAt, 'yyyy-MM') as month, COUNT(*) as count
+       FROM Users WHERE CreatedAt >= DATEADD(month, -5, GETDATE())
+       GROUP BY FORMAT(CreatedAt, 'yyyy-MM')`
+    );
+    const userMap = Object.fromEntries(userTrendRows.recordset.map(r => [r.month, r.count]));
+    const userTrend = months.map(m => ({ month: m, count: userMap[m] || 0 }));
+
+    // Reviews over last 6 months (real CreatedAt)
+    const reviewTrendRows = await new sql.Request().query(
+      `SELECT FORMAT(CreatedAt, 'yyyy-MM') as month, COUNT(*) as count
+       FROM Reviews WHERE CreatedAt >= DATEADD(month, -5, GETDATE())
+       GROUP BY FORMAT(CreatedAt, 'yyyy-MM')`
+    );
+    const reviewMap = Object.fromEntries(reviewTrendRows.recordset.map(r => [r.month, r.count]));
+    const reviewTrend = months.map(m => ({ month: m, count: reviewMap[m] || 0 }));
+
+    // Reviews grouped by star rating (1..5)
+    const ratingRows = await new sql.Request().query(
+      "SELECT Rating, COUNT(*) as count FROM Reviews GROUP BY Rating"
+    );
+    const ratingMap = Object.fromEntries(ratingRows.recordset.map(r => [r.Rating, r.count]));
+    const reviewsByRating = [1, 2, 3, 4, 5].map(rating => ({
+      rating,
+      count: ratingMap[rating] || 0,
+    }));
+
     res.json({
       success: true,
       data: {
-        totalCustomers: results[0].recordset[0].total,
-        totalTours: results[1].recordset[0].total,
-        totalBookings: results[2].recordset[0].total,
-        totalRevenue: results[3].recordset[0].total || 0,
-        totalReviews: results[4].recordset[0].total,
+        totalCustomers,
+        totalTours,
+        totalBookings,
+        totalRevenue,
+        totalReviews,
+        avgRating,
+        userTrend,
+        reviewTrend,
+        reviewsByRating,
       },
     });
   } catch (error) {

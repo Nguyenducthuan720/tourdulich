@@ -3,11 +3,11 @@ import { getFlights, createFlightBooking } from '../api/bookingService'
 import { useAuth } from '../context/AuthContext'
 
 const AIRLINE_COLORS = {
-  'Vietnam Airlines': { bg: 'bg-blue-50', border: 'border-blue-300', text: 'text-blue-700', badge: 'bg-blue-100 text-blue-700' },
+  'Vietnam Airlines': { bg: 'bg-brand-50', border: 'border-brand-300', text: 'text-brand-700', badge: 'bg-brand-100 text-brand-700' },
   'Vietjet Air': { bg: 'bg-red-50', border: 'border-red-300', text: 'text-red-700', badge: 'bg-red-100 text-red-700' },
-  'Bamboo Airways': { bg: 'bg-emerald-50', border: 'border-emerald-300', text: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-700' },
+  'Bamboo Airways': { bg: 'bg-brand-50', border: 'border-brand-300', text: 'text-brand-700', badge: 'bg-brand-100 text-brand-700' },
 }
-const DEFAULT_COLOR = { bg: 'bg-slate-50', border: 'border-slate-300', text: 'text-slate-700', badge: 'bg-slate-100 text-slate-700' }
+const DEFAULT_COLOR = { bg: 'bg-cream', border: 'border-ink-300', text: 'text-ink-700', badge: 'bg-ink-100 text-ink-700' }
 
 const AIRLINE_LOGOS = {
   'Vietnam Airlines': '🇻🇳',
@@ -57,10 +57,10 @@ function SeatButton({ seat, taken, selected, onSelect }) {
       onClick={() => onSelect(seat)}
       className={`h-9 w-9 rounded-md text-[11px] font-bold transition-all duration-150 ${
         disabled
-          ? 'cursor-not-allowed border border-slate-200 bg-slate-300 text-slate-400'
+          ? 'cursor-not-allowed border border-ink-200 bg-ink-300 text-ink-400'
           : selected
-            ? 'bg-emerald-500 text-white shadow-md ring-2 ring-emerald-200 scale-105'
-            : 'border border-slate-200 bg-white text-slate-600 hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700'
+            ? 'bg-brand-500 text-white shadow-md ring-2 ring-brand-200 scale-105'
+            : 'border border-ink-200 bg-white text-ink-600 hover:border-brand-400 hover:bg-brand-50 hover:text-brand-700'
       } ${aisle ? 'mr-3' : ''}`}
     >
       {seat}
@@ -72,12 +72,12 @@ function SeatMap({ occupiedSeats, selectedSeat, onSelectSeat }) {
   const taken = new Set((occupiedSeats || '').split(',').map(s => s.trim()).filter(Boolean))
 
   return (
-    <div className="rounded-2xl bg-gradient-to-b from-slate-100 to-slate-50 p-5">
-      <div className="mx-auto mb-6 flex h-12 w-40 items-center justify-center rounded-t-[4rem] bg-slate-200 border-2 border-b-0 border-slate-300 text-xs font-bold tracking-widest text-slate-400">
+    <div className="rounded-2xl bg-gradient-to-b from-ink-100 to-cream p-5">
+      <div className="mx-auto mb-6 flex h-12 w-40 items-center justify-center rounded-t-[4rem] bg-ink-200 border-2 border-b-0 border-ink-300 text-xs font-bold tracking-widest text-ink-400">
         BUỒNG LÁI
       </div>
 
-      <div className="mb-2 grid grid-cols-[28px_1fr_16px_1fr] px-4 text-center text-[10px] font-bold text-slate-400">
+      <div className="mb-2 grid grid-cols-[28px_1fr_16px_1fr] px-4 text-center text-[10px] font-bold text-ink-400">
         <span />
         <div className="grid grid-cols-3">
           {['A', 'B', 'C'].map(l => <span key={l}>{l}</span>)}
@@ -93,7 +93,7 @@ function SeatMap({ occupiedSeats, selectedSeat, onSelectSeat }) {
           const row = i + 1
           return (
             <div key={row} className="grid grid-cols-[28px_1fr_16px_1fr] items-center">
-              <span className="text-center text-xs font-bold text-slate-400">{row}</span>
+              <span className="text-center text-xs font-bold text-ink-400">{row}</span>
               <div className="grid grid-cols-3 gap-1">
                 {['A', 'B', 'C'].map(letter => {
                   const seat = `${row}${letter}`
@@ -108,7 +108,7 @@ function SeatMap({ occupiedSeats, selectedSeat, onSelectSeat }) {
                   )
                 })}
               </div>
-              <span className="h-6 border-l-2 border-dashed border-slate-300" />
+              <span className="h-6 border-l-2 border-dashed border-ink-300" />
               <div className="grid grid-cols-3 gap-1">
                 {['D', 'E', 'F'].map(letter => {
                   const seat = `${row}${letter}`
@@ -128,15 +128,15 @@ function SeatMap({ occupiedSeats, selectedSeat, onSelectSeat }) {
         })}
       </div>
 
-      <div className="mt-5 flex items-center justify-center gap-5 text-xs text-slate-500">
+      <div className="mt-5 flex items-center justify-center gap-5 text-xs text-cream0">
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded border border-slate-200 bg-white" /> Trống
+          <span className="inline-block h-3 w-3 rounded border border-ink-200 bg-white" /> Trống
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded bg-emerald-500" /> Đang chọn
+          <span className="inline-block h-3 w-3 rounded bg-brand-500" /> Đang chọn
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded bg-slate-300" /> Đã đặt
+          <span className="inline-block h-3 w-3 rounded bg-ink-300" /> Đã đặt
         </span>
       </div>
     </div>
@@ -147,8 +147,8 @@ function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center py-20 text-center">
       <div className="mb-5 text-7xl opacity-30">🛫</div>
-      <h3 className="text-lg font-bold text-slate-700">Chưa có chuyến bay nào</h3>
-      <p className="mt-1 text-sm text-slate-500 max-w-sm">
+      <h3 className="text-lg font-bold text-ink-700">Chưa có chuyến bay nào</h3>
+      <p className="mt-1 text-sm text-cream0 max-w-sm">
         Hiện tại không có chuyến bay khả dụng. Vui lòng quay lại sau hoặc liên hệ tổng đài để được hỗ trợ.
       </p>
     </div>
@@ -225,16 +225,16 @@ export default function FlightBookingPage() {
   if (result) {
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`TOURDULICH|VE-MAY-BAY|${result.bookingId}`)}`
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-emerald-50 py-12">
+      <div className="min-h-screen bg-gradient-to-br from-cream to-brand-50 py-12">
         <div className="mx-auto max-w-lg px-4">
-          <div className="rounded-2xl bg-white p-8 text-center shadow-lg shadow-slate-200/50">
-            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-3xl">✓</div>
-            <h1 className="text-2xl font-bold text-slate-900">Đặt vé thành công</h1>
-            <p className="mt-2 text-slate-600">Mã đặt vé của bạn là</p>
-            <p className="mt-1 text-3xl font-bold tracking-wider text-emerald-600">{result.bookingId}</p>
-            <img className="mx-auto my-5 rounded-xl border border-slate-200 p-2" src={qrUrl} alt="QR vé máy bay" width={200} height={200} />
-            <p className="text-sm text-slate-500">Hãy lưu mã QR này để làm thủ tục check-in</p>
-            <button onClick={() => { setResult(null); setSelectedFlightId(null); setSeatNumber(''); setIdCard(''); setPassengerPhone('') }} className="mt-6 rounded-lg bg-emerald-600 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-700">
+          <div className="rounded-2xl bg-white p-8 text-center shadow-lg shadow-ink-200/50">
+            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-brand-100 text-3xl">✓</div>
+            <h1 className="text-2xl font-bold text-ink-900">Đặt vé thành công</h1>
+            <p className="mt-2 text-ink-600">Mã đặt vé của bạn là</p>
+            <p className="mt-1 text-3xl font-bold tracking-wider text-brand-600">{result.bookingId}</p>
+            <img className="mx-auto my-5 rounded-xl border border-ink-200 p-2" src={qrUrl} alt="QR vé máy bay" width={200} height={200} />
+            <p className="text-sm text-cream0">Hãy lưu mã QR này để làm thủ tục check-in</p>
+            <button onClick={() => { setResult(null); setSelectedFlightId(null); setSeatNumber(''); setIdCard(''); setPassengerPhone('') }} className="mt-6 rounded-lg bg-brand-600 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-brand-700">
               Đặt vé khác
             </button>
           </div>
@@ -244,35 +244,35 @@ export default function FlightBookingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-cream">
       {/* ---- TOP SEARCH BAR ---- */}
-      <div className="bg-white shadow-sm border-b border-slate-200">
+      <div className="bg-white shadow-sm border-b border-ink-200">
         <div className="mx-auto max-w-6xl px-4 py-4">
-          <h1 className="mb-4 text-2xl font-bold text-slate-900">Đặt vé máy bay</h1>
+          <h1 className="mb-4 text-2xl font-bold text-ink-900">Đặt vé máy bay</h1>
           <div className="flex flex-wrap items-end gap-3">
             <div className="w-full sm:w-auto flex-1 min-w-[160px]">
-              <label className="mb-1 block text-xs font-semibold uppercase text-slate-500">Điểm đi</label>
-              <select value={filterDeparture} onChange={e => setFilterDeparture(e.target.value)} className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+              <label className="mb-1 block text-xs font-semibold uppercase text-cream0">Điểm đi</label>
+              <select value={filterDeparture} onChange={e => setFilterDeparture(e.target.value)} className="w-full rounded-lg border border-ink-300 bg-white px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100">
                 <option value="">Tất cả</option>
                 {departureCities.map(city => <option key={city} value={city}>{city}</option>)}
               </select>
             </div>
 
-            <div className="flex h-9 items-center justify-center rounded-full bg-emerald-50 p-2 text-emerald-600 sm:mt-6">
+            <div className="flex h-9 items-center justify-center rounded-full bg-brand-50 p-2 text-brand-600 sm:mt-6">
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
             </div>
 
             <div className="w-full sm:w-auto flex-1 min-w-[160px]">
-              <label className="mb-1 block text-xs font-semibold uppercase text-slate-500">Điểm đến</label>
-              <select value={filterArrival} onChange={e => setFilterArrival(e.target.value)} className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+              <label className="mb-1 block text-xs font-semibold uppercase text-cream0">Điểm đến</label>
+              <select value={filterArrival} onChange={e => setFilterArrival(e.target.value)} className="w-full rounded-lg border border-ink-300 bg-white px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100">
                 <option value="">Tất cả</option>
                 {arrivalCities.map(city => <option key={city} value={city}>{city}</option>)}
               </select>
             </div>
 
             <div className="w-full sm:w-auto min-w-[150px]">
-              <label className="mb-1 block text-xs font-semibold uppercase text-slate-500">Sắp xếp</label>
-              <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+              <label className="mb-1 block text-xs font-semibold uppercase text-cream0">Sắp xếp</label>
+              <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="w-full rounded-lg border border-ink-300 bg-white px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100">
                 <option value="price">Giá thấp nhất</option>
                 <option value="time">Giờ khởi hành</option>
                 <option value="duration">Thời gian bay</option>
@@ -292,8 +292,8 @@ export default function FlightBookingPage() {
 
         {loadingFlights ? (
           <div className="flex flex-col items-center justify-center py-24">
-            <div className="mb-4 h-10 w-10 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
-            <p className="text-slate-500 font-medium">Đang tìm chuyến bay...</p>
+            <div className="mb-4 h-10 w-10 animate-spin rounded-full border-4 border-brand-200 border-t-brand-600" />
+            <p className="text-cream0 font-medium">Đang tìm chuyến bay...</p>
           </div>
         ) : flights.length === 0 ? (
           <EmptyState />
@@ -301,7 +301,7 @@ export default function FlightBookingPage() {
           <div className="grid gap-8 lg:grid-cols-3">
             {/* ---- LEFT: FLIGHT LIST ---- */}
             <div className="lg:col-span-2 space-y-4">
-              <p className="text-sm text-slate-500">{filteredFlights.length} chuyến bay được tìm thấy</p>
+              <p className="text-sm text-cream0">{filteredFlights.length} chuyến bay được tìm thấy</p>
 
               {filteredFlights.length === 0 ? (
                 <EmptyState />
@@ -315,7 +315,7 @@ export default function FlightBookingPage() {
                     <div
                       key={flight.FlightID}
                       className={`overflow-hidden rounded-2xl border-2 bg-white shadow-sm transition-all duration-200 hover:shadow-md ${
-                        isSelected ? 'border-emerald-500 shadow-md shadow-emerald-100' : 'border-slate-100'
+                        isSelected ? 'border-brand-500 shadow-md shadow-brand-100' : 'border-ink-100'
                       }`}
                     >
                       {/* Flight card header */}
@@ -329,36 +329,36 @@ export default function FlightBookingPage() {
                               {getAirlineLogo(flight.AirlineName)}
                             </span>
                             <div>
-                              <p className="font-bold text-slate-900">{flight.AirlineName}</p>
-                              <p className="text-xs text-slate-500">{flight.FlightNumber}</p>
+                              <p className="font-bold text-ink-900">{flight.AirlineName}</p>
+                              <p className="text-xs text-cream0">{flight.FlightNumber}</p>
                             </div>
                           </div>
                           <div className="text-right">
-                            <p className="text-2xl font-bold text-slate-900">{Number(flight.Price).toLocaleString()}đ</p>
-                            <p className="text-xs text-slate-500">/ khách</p>
+                            <p className="text-2xl font-bold text-ink-900">{Number(flight.Price).toLocaleString()}đ</p>
+                            <p className="text-xs text-cream0">/ khách</p>
                           </div>
                         </div>
 
                         {/* Timeline */}
                         <div className="mt-4 flex items-center gap-4">
                           <div className="text-center">
-                            <p className="text-xl font-bold text-slate-900">{formatTime(flight.DepartureTime)}</p>
-                            <p className="text-xs text-slate-500">{flight.DepartureAirport}</p>
+                            <p className="text-xl font-bold text-ink-900">{formatTime(flight.DepartureTime)}</p>
+                            <p className="text-xs text-cream0">{flight.DepartureAirport}</p>
                           </div>
                           <div className="flex flex-1 flex-col items-center">
-                            <span className="text-xs font-medium text-slate-400">{duration}</span>
-                            <div className="relative mt-1 h-px w-full bg-slate-200">
-                              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 text-[10px] text-slate-300">✈</div>
+                            <span className="text-xs font-medium text-ink-400">{duration}</span>
+                            <div className="relative mt-1 h-px w-full bg-ink-200">
+                              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 text-[10px] text-ink-300">✈</div>
                             </div>
-                            <span className="mt-1 text-[10px] text-slate-400">Bay thẳng</span>
+                            <span className="mt-1 text-[10px] text-ink-400">Bay thẳng</span>
                           </div>
                           <div className="text-center">
-                            <p className="text-xl font-bold text-slate-900">{formatTime(flight.ArrivalTime)}</p>
-                            <p className="text-xs text-slate-500">{flight.ArrivalAirport}</p>
+                            <p className="text-xl font-bold text-ink-900">{formatTime(flight.ArrivalTime)}</p>
+                            <p className="text-xs text-cream0">{flight.ArrivalAirport}</p>
                           </div>
                         </div>
 
-                        <div className="mt-3 flex items-center justify-between text-xs text-slate-500">
+                        <div className="mt-3 flex items-center justify-between text-xs text-cream0">
                           <span>📅 {formatDate(flight.DepartureTime)}</span>
                           <span>📍 {flight.DepartureCity} → {flight.ArrivalCity}</span>
                           <span>🪑 Còn {flight.AvailableSeats} ghế</span>
@@ -367,10 +367,10 @@ export default function FlightBookingPage() {
 
                       {/* Expanded panel */}
                       {isSelected && (
-                        <div className="animate-fade-in border-t border-slate-100 bg-slate-50/50 p-5">
+                        <div className="animate-fade-in border-t border-ink-100 bg-cream/50 p-5">
                           {/* Fare class selection */}
                           <div>
-                            <h3 className="mb-3 text-sm font-bold text-slate-700">Chọn hạng vé</h3>
+                            <h3 className="mb-3 text-sm font-bold text-ink-700">Chọn hạng vé</h3>
                             <div className="grid gap-3 sm:grid-cols-3">
                               {FARES.map(fare => (
                                 <label
@@ -378,20 +378,20 @@ export default function FlightBookingPage() {
                                   onClick={() => setFareType(fare.id)}
                                   className={`cursor-pointer rounded-xl border-2 p-4 transition hover:-translate-y-0.5 ${
                                     fareType === fare.id
-                                      ? 'border-emerald-500 bg-emerald-50 shadow-sm'
-                                      : 'border-slate-200 bg-white hover:border-emerald-200'
+                                      ? 'border-brand-500 bg-brand-50 shadow-sm'
+                                      : 'border-ink-200 bg-white hover:border-brand-200'
                                   }`}
                                 >
                                   <div className="flex items-center gap-2">
                                     <span className="text-lg">{fare.icon}</span>
-                                    <span className="text-sm font-bold text-slate-800">{fare.name}</span>
+                                    <span className="text-sm font-bold text-ink-800">{fare.name}</span>
                                   </div>
-                                  <p className="mt-2 text-xl font-bold text-emerald-600">
+                                  <p className="mt-2 text-xl font-bold text-brand-600">
                                     {Math.round(Number(flight.Price) * fare.factor).toLocaleString()}đ
                                   </p>
                                   <ul className="mt-2 space-y-1">
                                     {fare.perks.map(perk => (
-                                      <li key={perk} className="text-[11px] text-slate-500">✓ {perk}</li>
+                                      <li key={perk} className="text-[11px] text-cream0">✓ {perk}</li>
                                     ))}
                                   </ul>
                                 </label>
@@ -402,8 +402,8 @@ export default function FlightBookingPage() {
                           {/* Seat map */}
                           <div className="mt-5">
                             <div className="mb-3 flex items-center justify-between">
-                              <h3 className="text-sm font-bold text-slate-700">Chọn chỗ ngồi</h3>
-                              <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">
+                              <h3 className="text-sm font-bold text-ink-700">Chọn chỗ ngồi</h3>
+                              <span className="rounded-full bg-brand-100 px-3 py-1 text-xs font-bold text-brand-700">
                                 {seatNumber || 'Chưa chọn'}
                               </span>
                             </div>
@@ -424,7 +424,7 @@ export default function FlightBookingPage() {
             {/* ---- RIGHT: BOOKING FORM SIDEBAR ---- */}
             <div className="lg:col-span-1">
               {!selectedFlight ? (
-                <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-slate-400">
+                <div className="rounded-2xl border border-dashed border-ink-300 bg-white p-8 text-center text-ink-400">
                   <p className="mb-1 text-5xl">👈</p>
                   <p className="text-sm font-medium">Chọn một chuyến bay bên trái để bắt đầu đặt vé</p>
                 </div>
@@ -432,85 +432,85 @@ export default function FlightBookingPage() {
                 <form onSubmit={handleSubmit}>
                   <div className="sticky top-6 space-y-6">
                     {/* Summary card */}
-                    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                      <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 p-4 text-white">
+                    <div className="overflow-hidden rounded-2xl border border-ink-200 bg-white shadow-sm">
+                      <div className="bg-gradient-to-r from-brand-500 to-brand-600 p-4 text-white">
                         <p className="text-xs font-semibold uppercase tracking-wider opacity-80">Tóm tắt đặt vé</p>
                       </div>
 
                       <div className="p-5 space-y-4">
-                        <div className="flex items-center gap-3 rounded-lg bg-slate-50 p-3">
+                        <div className="flex items-center gap-3 rounded-lg bg-cream p-3">
                           <span className="text-2xl">{getAirlineLogo(selectedFlight.AirlineName)}</span>
                           <div>
-                            <p className="text-sm font-bold text-slate-800">{selectedFlight.AirlineName}</p>
-                            <p className="text-xs text-slate-500">{selectedFlight.FlightNumber} · {selectedFlight.DepartureAirport} → {selectedFlight.ArrivalAirport}</p>
+                            <p className="text-sm font-bold text-ink-800">{selectedFlight.AirlineName}</p>
+                            <p className="text-xs text-cream0">{selectedFlight.FlightNumber} · {selectedFlight.DepartureAirport} → {selectedFlight.ArrivalAirport}</p>
                           </div>
                         </div>
 
                         <div className="flex items-center justify-between text-sm">
                           <div>
-                            <p className="font-bold text-slate-900">{formatTime(selectedFlight.DepartureTime)}</p>
-                            <p className="text-xs text-slate-500">{selectedFlight.DepartureCity}</p>
+                            <p className="font-bold text-ink-900">{formatTime(selectedFlight.DepartureTime)}</p>
+                            <p className="text-xs text-cream0">{selectedFlight.DepartureCity}</p>
                           </div>
                           <div className="text-center">
-                            <p className="text-xs text-slate-400">{calcDuration(selectedFlight.DepartureTime, selectedFlight.ArrivalTime)}</p>
+                            <p className="text-xs text-ink-400">{calcDuration(selectedFlight.DepartureTime, selectedFlight.ArrivalTime)}</p>
                             <span className="text-sm">→</span>
                           </div>
                           <div className="text-right">
-                            <p className="font-bold text-slate-900">{formatTime(selectedFlight.ArrivalTime)}</p>
-                            <p className="text-xs text-slate-500">{selectedFlight.ArrivalCity}</p>
+                            <p className="font-bold text-ink-900">{formatTime(selectedFlight.ArrivalTime)}</p>
+                            <p className="text-xs text-cream0">{selectedFlight.ArrivalCity}</p>
                           </div>
                         </div>
 
-                        <p className="text-xs text-slate-500">📅 {formatDate(selectedFlight.DepartureTime)}</p>
+                        <p className="text-xs text-cream0">📅 {formatDate(selectedFlight.DepartureTime)}</p>
 
                         <div className="border-t pt-4 space-y-1 text-sm">
-                          <div className="flex justify-between text-slate-600">
+                          <div className="flex justify-between text-ink-600">
                             <span>Giá vé cơ bản</span>
                             <span>{Number(selectedFlight.Price).toLocaleString()}đ</span>
                           </div>
-                          <div className="flex justify-between text-slate-600">
+                          <div className="flex justify-between text-ink-600">
                             <span>{selectedFare.name} (x{selectedFare.factor})</span>
                             <span>{Math.round(Number(selectedFlight.Price) * (selectedFare.factor - 1)).toLocaleString()}đ</span>
                           </div>
                           {seatNumber && (
-                            <div className="flex justify-between text-slate-600">
+                            <div className="flex justify-between text-ink-600">
                               <span>Ghế {seatNumber}</span>
-                              <span className="text-emerald-600">Đã chọn</span>
+                              <span className="text-brand-600">Đã chọn</span>
                             </div>
                           )}
                           <div className="flex justify-between border-t pt-3 text-base font-bold">
                             <span>Tổng cộng</span>
-                            <span className="text-emerald-600">{ticketPrice.toLocaleString()}đ</span>
+                            <span className="text-brand-600">{ticketPrice.toLocaleString()}đ</span>
                           </div>
                         </div>
                       </div>
                     </div>
 
                     {/* Passenger info */}
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                      <h3 className="mb-4 text-sm font-bold text-slate-700">Thông tin hành khách</h3>
+                    <div className="rounded-2xl border border-ink-200 bg-white p-5 shadow-sm">
+                      <h3 className="mb-4 text-sm font-bold text-ink-700">Thông tin hành khách</h3>
 
-                      <div className="rounded-lg bg-emerald-50 p-3 mb-4 text-xs text-emerald-800">
+                      <div className="rounded-lg bg-brand-50 p-3 mb-4 text-xs text-brand-800">
                         Hành khách: <b>{user?.name}</b> ({user?.email})
                       </div>
 
                       <div className="space-y-3">
                         <div>
-                          <label className="mb-1 block text-xs font-semibold text-slate-600">CCCD / Hộ chiếu *</label>
+                          <label className="mb-1 block text-xs font-semibold text-ink-600">CCCD / Hộ chiếu *</label>
                           <input
                             value={idCard}
                             onChange={e => setIdCard(e.target.value)}
                             placeholder="Nhập số giấy tờ"
-                            className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+                            className="w-full rounded-lg border border-ink-300 px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"
                           />
                         </div>
                         <div>
-                          <label className="mb-1 block text-xs font-semibold text-slate-600">Số điện thoại</label>
+                          <label className="mb-1 block text-xs font-semibold text-ink-600">Số điện thoại</label>
                           <input
                             value={passengerPhone}
                             onChange={e => setPassengerPhone(e.target.value)}
                             placeholder="Nhập số điện thoại liên lạc"
-                            className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+                            className="w-full rounded-lg border border-ink-300 px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"
                           />
                         </div>
                       </div>
@@ -518,12 +518,12 @@ export default function FlightBookingPage() {
                       <button
                         type="submit"
                         disabled={submitting}
-                        className="mt-5 w-full rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white transition hover:bg-emerald-700 hover:shadow-lg disabled:opacity-50"
+                        className="mt-5 w-full rounded-xl bg-brand-600 py-3 text-sm font-bold text-white transition hover:bg-brand-700 hover:shadow-lg disabled:opacity-50"
                       >
                         {submitting ? '⏳ Đang xử lý...' : `Thanh toán ${ticketPrice.toLocaleString()}đ`}
                       </button>
 
-                      <p className="mt-3 text-center text-[11px] text-slate-400">
+                      <p className="mt-3 text-center text-[11px] text-ink-400">
                         🔒 Thanh toán an toàn với mã hóa SSL
                       </p>
                     </div>

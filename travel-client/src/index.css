@@ -1,30 +1,243 @@
 @import "tailwindcss";
 
-body {
-  margin: 0;
-  min-width: 320px;
-  background: #f7faf8;
-  color: #15201d;
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+/* ============================================================
+   DESIGN TOKENS — Tour Lượng Design System
+   Warm editorial luxury: gold/amber "brand" + neutral "ink"
+   ============================================================ */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     sans-serif;
+  --font-display: "Lora", ui-serif, Georgia, "Times New Roman", serif;
+
+  /* Warm paper background */
+  --color-cream: #faf7f2;
+  --color-cream-deep: #f3ede3;
+
+  /* Brand — refined gold/amber */
+  --color-brand-50: #fbf7ef;
+  --color-brand-100: #f5ecd8;
+  --color-brand-200: #ecd8ac;
+  --color-brand-300: #e0bf76;
+  --color-brand-400: #d4a44c;
+  --color-brand-500: #c2882f;
+  --color-brand-600: #a56e22;
+  --color-brand-700: #855619;
+  --color-brand-800: #6b4516;
+  --color-brand-900: #553814;
+
+  /* Ink — warm neutral slate for text/surfaces */
+  --color-ink-50: #f8f7f5;
+  --color-ink-100: #efece8;
+  --color-ink-200: #ddd9d2;
+  --color-ink-300: #bcb6ac;
+  --color-ink-400: #908a80;
+  --color-ink-500: #6c665d;
+  --color-ink-600: #514c45;
+  --color-ink-700: #393430;
+  --color-ink-800: #272320;
+  --color-ink-900: #161311;
+
+  /* Radii */
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+
+  /* Elevation */
+  --shadow-soft: 0 10px 40px -16px rgb(22 19 17 / 0.18);
+  --shadow-lift: 0 28px 64px -24px rgb(22 19 17 / 0.32);
+  --shadow-glass: 0 18px 50px -20px rgb(22 19 17 / 0.28);
 }
 
-#root {
-  min-height: 100vh;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+/* ============================================================
+   BASE
+   ============================================================ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-cream font-sans text-ink-700 antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display text-ink-900;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: var(--color-brand-200);
+    color: var(--color-ink-900);
+  }
+
+  /* Refined scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-ink-300) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--color-ink-300);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-out forwards;
+/* ============================================================
+   COMPONENT PRIMITIVES — reusable, consistent
+   ============================================================ */
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-7xl px-6 lg:px-8;
+  }
+
+  /* Eyebrow: small uppercase label with a leading rule */
+  .eyebrow {
+    @apply inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.28em] text-brand-600;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply h-px w-9 bg-brand-500;
+  }
+  .eyebrow-center::before {
+    @apply hidden;
+  }
+
+  /* Section heading system */
+  .section-title {
+    @apply font-display text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl lg:text-[2.75rem] lg:leading-tight;
+  }
+  .section-subtitle {
+    @apply mt-4 max-w-2xl text-base leading-relaxed text-ink-500;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cream disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply bg-brand-500 text-white shadow-soft hover:bg-brand-600 hover:shadow-lift;
+  }
+  .btn-dark {
+    @apply bg-ink-900 text-white shadow-soft hover:bg-ink-800 hover:shadow-lift;
+  }
+  .btn-outline {
+    @apply border border-ink-200 bg-white text-ink-800 hover:border-brand-400 hover:text-brand-600;
+  }
+  .btn-ghost {
+    @apply text-ink-600 hover:text-brand-600;
+  }
+  .btn-lg {
+    @apply px-8 py-4 text-base;
+  }
+
+  /* Cards */
+  .card {
+    @apply rounded-3xl bg-white shadow-soft ring-1 ring-ink-900/[0.04];
+  }
+  .card-hover {
+    @apply transition duration-500 hover:-translate-y-1.5 hover:shadow-lift;
+  }
+
+  /* Form fields */
+  .input-field {
+    @apply w-full rounded-2xl border border-ink-200 bg-white px-5 py-4 text-sm font-medium text-ink-800 outline-none transition placeholder:text-ink-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-500/10;
+  }
+  .field-label {
+    @apply mb-2 block text-xs font-semibold uppercase tracking-wider text-ink-500;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold;
+  }
+  .badge-light {
+    @apply bg-white/95 text-ink-800 shadow-sm ring-1 ring-ink-900/[0.06] backdrop-blur;
+  }
+  .badge-brand {
+    @apply bg-brand-500 text-white shadow-sm;
+  }
+  .badge-ink {
+    @apply bg-ink-900 text-white shadow-sm;
+  }
+  .badge-danger {
+    @apply bg-red-500 text-white shadow-sm;
+  }
+
+  /* Nav link with animated underline */
+  .nav-link {
+    @apply relative text-sm font-medium text-ink-600 transition-colors duration-300 hover:text-ink-900;
+  }
+  .nav-link::after {
+    content: "";
+    @apply absolute -bottom-1 left-0 h-px w-0 bg-brand-500 transition-all duration-300;
+  }
+  .nav-link:hover::after,
+  .nav-link-active::after {
+    @apply w-full;
+  }
+  .nav-link-active {
+    @apply text-brand-600;
+  }
 }
 
-button,
-input,
-select,
-textarea {
-  font: inherit;
+/* ============================================================
+   MOTION
+   ============================================================ */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+.skeleton {
+  @apply relative overflow-hidden bg-ink-100;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(255 255 255 / 0.65),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+.animate-float {
+  animation: float-slow 7s ease-in-out infinite;
 }
