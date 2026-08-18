@@ -13,9 +13,9 @@ if (aiKey) {
     const ai = new GoogleGenerativeAI(aiKey);
     // CHÚ Ý SỬA LỖI: Sử dụng 'gemini-2.5-flash' để sửa triệt để lỗi 404 API Not Found
     aiModel = ai.getGenerativeModel({ model: 'gemini-2.5-flash' });
-    console.log('✔ Đã khởi tạo thành công Google Gemini AI Model (gemini-2.5-flash)!');
+    console.log('Đã khởi tạo thành công Google Gemini AI Model (gemini-2.5-flash)!');
 } else {
-    console.warn('⚠ Chưa có GEMINI_API_KEY trong .env. Vui lòng thêm key để sử dụng AI!');
+    console.warn('Chưa có GEMINI_API_KEY trong .env. Vui lòng thêm key để sử dụng AI!');
 }
 
 /**

@@ -14,10 +14,10 @@ async function connectMongoDB() {
         const client = new MongoClient(mongoUri);
         await client.connect();
         db = client.db(dbName);
-        console.log('✔ Kết nối cơ sở dữ liệu MongoDB Compass thành công!');
+        console.log('Kết nối cơ sở dữ liệu MongoDB Compass thành công!');
         return db;
     } catch (error) {
-        console.error('✘ Lỗi kết nối MongoDB:', error.message);
+        console.error('Lỗi kết nối MongoDB:', error.message);
         throw error;
     }
 }
