@@ -1,23 +1,30 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getTourById } from '../api/tourService'
+import { getTourReviews, createReview } from '../api/reviewService'
 import { formatCurrency } from '../utils/formatters'
 import { FALLBACK_TOUR_IMAGE, getImageUrl } from '../utils/imageUrl'
 import { Icon } from '../components/icons'
+import { useAuth } from '../context/AuthContext'
 
 export default function TourDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { isAuthenticated } = useAuth()
   const [tour, setTour] = useState(null)
   const [loading, setLoading] = useState(true)
   const [adults, setAdults] = useState(1)
   const [children, setChildren] = useState(0)
   const [mainImage, setMainImage] = useState(null)
   const [selectedTab, setSelectedTab] = useState('overview')
-
-  useEffect(() => {
-    fetchTourDetail()
-  }, [id])
+  const [reviews, setReviews] = useState([])
+  const [avgRating, setAvgRating] = useState(0)
+  const [reviewTotal, setReviewTotal] = useState(0)
+  const [rating, setRating] = useState(0)
+  const [hoverRating, setHoverRating] = useState(0)
+  const [comment, setComment] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [reviewMsg, setReviewMsg] = useState(null)
 
   useEffect(() => {
     if (tour) {
@@ -35,6 +42,50 @@ export default function TourDetailPage() {
       setTour(null)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchReviews = async () => {
+    try {
+      const data = await getTourReviews(id)
+      setReviews(data.items || [])
+      setAvgRating(data.avgRating || 0)
+      setReviewTotal(data.total || 0)
+    } catch (error) {
+      console.error('Fetch reviews error:', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchTourDetail()
+  }, [id])
+
+  useEffect(() => {
+    if (id) fetchReviews()
+  }, [id])
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault()
+    if (!isAuthenticated) {
+      setReviewMsg({ type: 'error', text: 'Vui lòng đăng nhập để đánh giá tour' })
+      return
+    }
+    if (!rating) {
+      setReviewMsg({ type: 'error', text: 'Vui lòng chọn số sao' })
+      return
+    }
+    try {
+      setSubmitting(true)
+      setReviewMsg(null)
+      await createReview({ tourId: id, rating, comment })
+      setRating(0)
+      setComment('')
+      setReviewMsg({ type: 'success', text: 'Cảm ơn bạn đã đánh giá tour!' })
+      fetchReviews()
+    } catch (error) {
+      setReviewMsg({ type: 'error', text: error.message || 'Không thể gửi đánh giá' })
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -102,6 +153,7 @@ export default function TourDetailPage() {
     { id: 'overview', label: 'Tổng quan' },
     { id: 'itinerary', label: 'Lịch trình' },
     { id: 'highlights', label: 'Nổi bật' },
+    { id: 'reviews', label: `Đánh giá (${reviewTotal})` },
   ]
 
   const highlights = [
@@ -138,7 +190,7 @@ export default function TourDetailPage() {
         <div className="absolute right-6 top-6 flex flex-wrap justify-end gap-3">
           <span className="badge badge-light">{categoryName}</span>
           <span className="badge badge-brand">
-            <Icon name="star" className="h-3.5 w-3.5" /> 4.8/5
+            <Icon name="star" className="h-3.5 w-3.5" /> {(avgRating || 4.8).toFixed(1)}/5
           </span>
         </div>
 
@@ -293,6 +345,135 @@ export default function TourDetailPage() {
                         </div>
                       </div>
                     ))}
+                  </div>
+                )}
+
+                {selectedTab === 'reviews' && (
+                  <div className="space-y-8">
+                    <div>
+                      <h3 className="font-display text-3xl font-semibold text-ink-900">Đánh giá tour</h3>
+                      <p className="mt-1 text-ink-500">
+                        Điểm trung bình: <span className="font-bold text-brand-600">{avgRating.toFixed(1)}</span> / 5 ·{' '}
+                        {reviewTotal} lượt đánh giá
+                      </p>
+                    </div>
+
+                    {/* Form đánh giá */}
+                    <form onSubmit={handleSubmitReview} className="rounded-2xl border border-brand-200 bg-brand-50 p-6">
+                      <p className="mb-4 text-sm font-bold uppercase tracking-wider text-brand-900">
+                        {isAuthenticated ? 'Chia sẻ trải nghiệm của bạn' : 'Bạn muốn đánh giá tour này?'}
+                      </p>
+
+                      <div className="mb-4">
+                        <p className="mb-2 text-sm font-semibold text-ink-700">Chọn số sao</p>
+                        <div className="flex gap-1">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <button
+                              key={star}
+                              type="button"
+                              onClick={() => setRating(star)}
+                              onMouseEnter={() => setHoverRating(star)}
+                              onMouseLeave={() => setHoverRating(0)}
+                              className="transition-transform hover:scale-110"
+                              aria-label={`${star} sao`}
+                            >
+                              <Icon
+                                name="star"
+                                className={`h-8 w-8 ${
+                                  star <= (hoverRating || rating) ? 'text-brand-500' : 'text-ink-300'
+                                }`}
+                                fill={star <= (hoverRating || rating) ? 'currentColor' : 'none'}
+                              />
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <textarea
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        rows="3"
+                        placeholder="Viết nhận xét của bạn về tour..."
+                        className="w-full rounded-2xl border border-ink-200 bg-white px-4 py-3 text-sm text-ink-800 outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
+                      />
+
+                      {reviewMsg && (
+                        <p
+                          className={`mt-3 text-sm font-semibold ${
+                            reviewMsg.type === 'success' ? 'text-green-700' : 'text-red-600'
+                          }`}
+                        >
+                          {reviewMsg.text}
+                        </p>
+                      )}
+
+                      <div className="mt-4 flex items-center justify-end gap-3">
+                        {!isAuthenticated && (
+                          <button
+                            type="button"
+                            onClick={() => navigate('/login')}
+                            className="px-4 py-2 text-sm font-semibold text-brand-600 hover:underline"
+                          >
+                            Đăng nhập
+                          </button>
+                        )}
+                        <button
+                          type="submit"
+                          disabled={submitting || !isAuthenticated}
+                          className="btn btn-primary px-6 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {submitting ? 'Đang gửi...' : 'Gửi đánh giá'}
+                        </button>
+                      </div>
+                    </form>
+
+                    {/* Danh sách đánh giá */}
+                    {reviews.length === 0 ? (
+                      <div className="rounded-2xl border border-ink-200 bg-white p-8 text-center">
+                        <p className="text-ink-500">
+                          Chưa có đánh giá nào cho tour này. Hãy là người đầu tiên đánh giá!
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        {reviews.map((review) => (
+                          <div key={review.ReviewID} className="rounded-2xl border border-ink-200 bg-white p-6">
+                            <div className="mb-3 flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <span className="grid h-10 w-10 place-items-center rounded-full bg-brand-500 font-bold text-white">
+                                  {(review.UserName || 'K').charAt(0).toUpperCase()}
+                                </span>
+                                <div>
+                                  <p className="font-semibold text-ink-900">{review.UserName}</p>
+                                  <p className="text-xs text-ink-400">
+                                    {new Date(review.CreatedAt).toLocaleDateString('vi-VN', {
+                                      day: '2-digit',
+                                      month: '2-digit',
+                                      year: 'numeric',
+                                    })}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex gap-0.5">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                  <Icon
+                                    key={star}
+                                    name="star"
+                                    className={`h-4 w-4 ${star <= review.Rating ? 'text-brand-500' : 'text-ink-200'}`}
+                                    fill={star <= review.Rating ? 'currentColor' : 'none'}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                            {review.Comment ? (
+                              <p className="text-sm leading-relaxed text-ink-600">{review.Comment}</p>
+                            ) : (
+                              <p className="text-sm italic text-ink-400">(Không có nhận xét)</p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

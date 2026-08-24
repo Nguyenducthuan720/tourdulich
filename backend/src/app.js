@@ -15,6 +15,7 @@ const adminRoutes = require("./routes/admin");
 const bookingsRoutes = require("./routes/bookings");
 const usersRoutes = require("./routes/users");
 const aiRoutes = require("./routes/ai");
+const reviewsRoutes = require("./routes/reviews");
 
 connectDB();
 connectMongoDB();
@@ -37,6 +38,7 @@ app.use("/api/bookings", bookingsRoutes);
 app.use("/api/admin/bookings", bookingsRoutes);
 app.use("/api/users", usersRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/reviews", reviewsRoutes);
 
 const PORT = process.env.PORT || 5000;
 
