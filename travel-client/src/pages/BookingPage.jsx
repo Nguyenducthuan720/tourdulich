@@ -6,15 +6,15 @@ import { useAuth } from '../context/AuthContext'
 import { fallbackTours } from '../data/mockData'
 
 const ROOM_OPTIONS = [
-  { id: 'Standard', title: 'Phòng Tiêu Chuẩn', desc: 'Diện tích 25m2, đầy đủ tiện nghi cơ bản.', price: 0, icon: '🛏️' },
-  { id: 'Deluxe', title: 'Phòng Deluxe', desc: 'Diện tích 35m2, ban công view đẹp, bồn tắm.', price: 500000, icon: '✨' },
-  { id: 'Suite', title: 'Phòng VIP / Suite', desc: 'Diện tích 50m2, phòng khách riêng, dịch vụ 24/7.', price: 1500000, icon: '👑' }
+  { id: 'Standard', title: 'Phòng Tiêu Chuẩn', desc: 'Diện tích 25m2, đầy đủ tiện nghi cơ bản.', price: 0 },
+  { id: 'Deluxe', title: 'Phòng Deluxe', desc: 'Diện tích 35m2, ban công view đẹp, bồn tắm.', price: 500000},
+  { id: 'Suite', title: 'Phòng VIP / Suite', desc: 'Diện tích 50m2, phòng khách riêng, dịch vụ 24/7.', price: 1500000}
 ]
 
 const PAYMENT_METHODS = [
-  { id: 'Chuyển khoản', title: 'Chuyển khoản ngân hàng', desc: 'Thanh toán qua quét mã QR hoặc chuyển khoản', icon: '🏦' },
-  { id: 'Thẻ tín dụng', title: 'Thẻ Visa / Master', desc: 'Thanh toán bảo mật qua cổng thanh toán', icon: '💳' },
-  { id: 'Ví điện tử', title: 'Momo / ZaloPay', desc: 'Thanh toán nhanh chóng bằng ví điện tử', icon: '📱' }
+  { id: 'Chuyển khoản', title: 'Chuyển khoản ngân hàng', desc: 'Thanh toán qua quét mã QR hoặc chuyển khoản'},
+  { id: 'Thẻ tín dụng', title: 'Thẻ Visa / Master', desc: 'Thanh toán bảo mật qua cổng thanh toán'},
+  { id: 'Ví điện tử', title: 'Momo / ZaloPay', desc: 'Thanh toán nhanh chóng bằng ví điện tử'}
 ]
 
 export default function BookingPage() {
