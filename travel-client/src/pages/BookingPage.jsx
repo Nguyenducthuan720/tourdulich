@@ -4,17 +4,86 @@ import { getTourById } from '../api/tourService'
 import { createBooking, getFlights } from '../api/bookingService'
 import { useAuth } from '../context/AuthContext'
 import { fallbackTours } from '../data/mockData'
+import { Icon } from '../components/icons'
+
+function SvgIcon({ children, className = 'w-8 h-8' }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      {children}
+    </svg>
+  )
+}
+
+const ROOM_ICON = (
+  <>
+    <path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6" />
+    <path d="M3 14h18v4" />
+    <path d="M3 18v2M21 18v2" />
+    <circle cx="7" cy="11" r="1.5" />
+  </>
+)
+const SUITE_ICON = (
+  <>
+    <path d="M12 3l1.8 5.4L19 9.2l-5.2 1.8L12 16l-1.8-5L5 9.2l5.2-1.8L12 3Z" />
+    <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15Z" />
+  </>
+)
+const BANK_ICON = (
+  <>
+    <path d="M3 21h18" />
+    <path d="M4 21V10l8-5 8 5v11" />
+    <path d="M8 21v-5h8v5" />
+    <path d="M9 10h.01M15 10h.01" />
+  </>
+)
+const CARD_ICON = (
+  <>
+    <rect x="2" y="5" width="20" height="14" rx="2" />
+    <path d="M2 10h20" />
+    <path d="M6 14h4" />
+  </>
+)
+const WALLET_ICON = (
+  <>
+    <path d="M3 7h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" />
+    <path d="M3 7l2-3h11" />
+    <circle cx="17" cy="13" r="1.5" />
+  </>
+)
+const BED_DOUBLE_ICON = (
+  <>
+    <path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6" />
+    <path d="M3 14h18v4" />
+    <path d="M3 18v2M21 18v2" />
+  </>
+)
+const BED_TWIN_ICON = (
+  <>
+    <path d="M3 18v-6a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6" />
+    <path d="M13 17v-5a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v5" />
+    <path d="M3 18v2M21 18v2" />
+  </>
+)
 
 const ROOM_OPTIONS = [
-  { id: 'Standard', title: 'Phòng Tiêu Chuẩn', desc: 'Diện tích 25m2, đầy đủ tiện nghi cơ bản.', price: 0 },
-  { id: 'Deluxe', title: 'Phòng Deluxe', desc: 'Diện tích 35m2, ban công view đẹp, bồn tắm.', price: 500000},
-  { id: 'Suite', title: 'Phòng VIP / Suite', desc: 'Diện tích 50m2, phòng khách riêng, dịch vụ 24/7.', price: 1500000}
+  { id: 'Standard', title: 'Phòng Tiêu Chuẩn', desc: 'Diện tích 25m2, đầy đủ tiện nghi cơ bản.', price: 0, icon: <SvgIcon className="w-8 h-8 text-brand-500">{ROOM_ICON}</SvgIcon> },
+  { id: 'Deluxe', title: 'Phòng Deluxe', desc: 'Diện tích 35m2, ban công view đẹp, bồn tắm.', price: 500000, icon: <SvgIcon className="w-8 h-8 text-brand-500">{ROOM_ICON}</SvgIcon> },
+  { id: 'Suite', title: 'Phòng VIP / Suite', desc: 'Diện tích 50m2, phòng khách riêng, dịch vụ 24/7.', price: 1500000, icon: <SvgIcon className="w-8 h-8 text-brand-500">{SUITE_ICON}</SvgIcon> }
 ]
 
 const PAYMENT_METHODS = [
-  { id: 'Chuyển khoản', title: 'Chuyển khoản ngân hàng', desc: 'Thanh toán qua quét mã QR hoặc chuyển khoản'},
-  { id: 'Thẻ tín dụng', title: 'Thẻ Visa / Master', desc: 'Thanh toán bảo mật qua cổng thanh toán'},
-  { id: 'Ví điện tử', title: 'Momo / ZaloPay', desc: 'Thanh toán nhanh chóng bằng ví điện tử'}
+  { id: 'Chuyển khoản', title: 'Chuyển khoản ngân hàng', desc: 'Thanh toán qua quét mã QR hoặc chuyển khoản', icon: <SvgIcon className="w-7 h-7 text-brand-600">{BANK_ICON}</SvgIcon> },
+  { id: 'Thẻ tín dụng', title: 'Thẻ Visa / Master', desc: 'Thanh toán bảo mật qua cổng thanh toán', icon: <SvgIcon className="w-7 h-7 text-brand-600">{CARD_ICON}</SvgIcon> },
+  { id: 'Ví điện tử', title: 'Momo / ZaloPay', desc: 'Thanh toán nhanh chóng bằng ví điện tử', icon: <SvgIcon className="w-7 h-7 text-brand-600">{WALLET_ICON}</SvgIcon> }
 ]
 
 export default function BookingPage() {
@@ -259,8 +328,10 @@ export default function BookingPage() {
                               </svg>
                             </div>
                           )}
-                          <div className="flex items-start gap-5">
-                            <div className="text-4xl">{room.icon}</div>
+                            <div className="flex items-start gap-5">
+                              <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-brand-50">
+                                {room.icon}
+                              </div>
                             <div className="flex-1">
                               <h4 className="text-lg font-bold text-ink-900 mb-2">{room.title}</h4>
                               <p className="text-sm text-ink-600 mb-3">{room.desc}</p>
@@ -282,14 +353,18 @@ export default function BookingPage() {
                         bedType === 'Double' ? 'border-brand-500 bg-brand-50 shadow-md' : 'border-ink-200 hover:border-brand-200'
                       }`}>
                         <input type="radio" name="bedType" className="hidden" checked={bedType === 'Double'} onChange={() => setBedType('Double')} />
-                        <p className="text-3xl mb-2"></p>
+                        <div className="mx-auto mb-2 grid h-12 w-12 place-items-center rounded-xl bg-brand-100 text-brand-600">
+                          <SvgIcon className="w-6 h-6">{BED_DOUBLE_ICON}</SvgIcon>
+                        </div>
                         <p className={`font-bold ${bedType === 'Double' ? 'text-brand-700' : 'text-ink-700'}`}>Giường đôi lớn</p>
                       </label>
                       <label className={`cursor-pointer rounded-2xl border-2 p-5 text-center transition-all duration-300 ${
                         bedType === 'Twin' ? 'border-brand-500 bg-brand-50 shadow-md' : 'border-ink-200 hover:border-brand-200'
                       }`}>
                         <input type="radio" name="bedType" className="hidden" checked={bedType === 'Twin'} onChange={() => setBedType('Twin')} />
-                        <p className="text-3xl mb-2"></p>
+                        <div className="mx-auto mb-2 grid h-12 w-12 place-items-center rounded-xl bg-brand-100 text-brand-600">
+                          <SvgIcon className="w-6 h-6">{BED_TWIN_ICON}</SvgIcon>
+                        </div>
                         <p className={`font-bold ${bedType === 'Twin' ? 'text-brand-700' : 'text-ink-700'}`}>2 Giường đơn</p>
                       </label>
                     </div>
@@ -334,9 +409,9 @@ export default function BookingPage() {
                                   }`}
                                 >
                                   <div className="flex items-center gap-4">
-                                    <div className={`w-14 h-14 flex items-center justify-center rounded-2xl text-2xl ${parseInt(flightId) === f.FlightID ? 'bg-sky-200' : 'bg-ink-100'}`}>
-                                      
-                                    </div>
+                                  <div className={`w-14 h-14 flex items-center justify-center rounded-2xl text-2xl ${parseInt(flightId) === f.FlightID ? 'bg-sky-200' : 'bg-ink-100'}`}>
+                                    <Icon name="plane" className="h-7 w-7 text-sky-600" />
+                                  </div>
                                     <div>
                                       <p className="font-bold text-ink-900 text-lg flex items-center gap-2 mb-1">
                                         {f.AirlineName} 
@@ -454,7 +529,6 @@ export default function BookingPage() {
                             />
                             <div className="text-3xl">{method.icon}</div>
                             <div className="flex-1">
-                              <h4 className="font-bold text-ink-900 text-base">{method.title}</h4>
                               <p className="text-sm text-ink-600 mt-1">{method.desc}</p>
                             </div>
                           </label>
@@ -525,6 +599,17 @@ export default function BookingPage() {
                       <p className="text-xs text-ink-500 font-bold uppercase tracking-wider mb-1">Thời gian</p>
                       <p className="font-bold text-ink-800">{duration}</p>
                     </div>
+                  </div>
+                </div>
+
+                <div className="mb-5 flex items-center justify-between rounded-2xl bg-cream p-5 border-2 border-ink-200">
+                  <div>
+                    <p className="text-xs text-ink-500 font-bold uppercase tracking-wider mb-1">Ngày khởi hành</p>
+                    <p className="font-bold text-ink-800">{new Date(bookingDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs text-ink-500 font-bold uppercase tracking-wider mb-1">Thanh toán</p>
+                    <p className="font-bold text-ink-800">{paymentMethod}</p>
                   </div>
                 </div>
 

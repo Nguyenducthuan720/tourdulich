@@ -18,9 +18,8 @@ export default function SearchBox({ onSearch, variant = 'default' }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className={`grid gap-3 rounded-3xl border border-white/40 bg-white/95 p-3 shadow-glass backdrop-blur-xl md:grid-cols-[1.2fr_1.2fr_1fr_auto] md:gap-2 md:p-2.5 ${
-        floating ? '-mt-16 relative z-20' : ''
-      }`}
+      className={`grid gap-3 rounded-3xl border border-white/40 bg-white/95 p-3 shadow-glass backdrop-blur-xl md:grid-cols-[1.2fr_1.2fr_1fr_auto] md:gap-2 md:p-2.5 ${floating ? '-mt-16 relative z-20' : ''
+        }`}
     >
       <label className="flex items-center gap-3 rounded-2xl bg-ink-50 px-5 py-3.5 transition focus-within:bg-white focus-within:ring-4 focus-within:ring-brand-500/10 md:py-4">
         <Icon name="search" className="h-5 w-5 shrink-0 text-brand-500" />

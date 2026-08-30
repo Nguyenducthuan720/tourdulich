@@ -141,9 +141,8 @@ export default function HomePage() {
               <button
                 key={dest.DestinationID}
                 onClick={() => handleDestinationClick(dest)}
-                className={`group relative overflow-hidden rounded-3xl shadow-soft ring-1 ring-ink-900/[0.04] transition duration-500 hover:-translate-y-1.5 hover:shadow-lift ${
-                  idx === 0 ? 'h-[420px] md:col-span-2 md:row-span-2' : 'h-[210px]'
-                }`}
+                className={`group relative overflow-hidden rounded-3xl shadow-soft ring-1 ring-ink-900/[0.04] transition duration-500 hover:-translate-y-1.5 hover:shadow-lift ${idx === 0 ? 'h-[420px] md:col-span-2 md:row-span-2' : 'h-[210px]'
+                  }`}
               >
                 <img
                   src={getImageUrl(dest.ImageURL, FALLBACK_DESTINATION_IMAGE)}
@@ -158,9 +157,8 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-ink-900/85 via-ink-900/15 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 right-0 p-6 text-left">
                   <h3
-                    className={`font-display font-semibold text-white drop-shadow ${
-                      idx === 0 ? 'text-3xl' : 'text-xl'
-                    }`}
+                    className={`font-display font-semibold text-white drop-shadow ${idx === 0 ? 'text-3xl' : 'text-xl'
+                      }`}
                   >
                     {dest.DestinationName}
                   </h3>

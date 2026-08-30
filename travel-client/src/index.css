@@ -80,10 +80,12 @@
     scrollbar-width: thin;
     scrollbar-color: var(--color-ink-300) transparent;
   }
+
   *::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
+
   *::-webkit-scrollbar-thumb {
     background: var(--color-ink-300);
     border-radius: 999px;
@@ -104,10 +106,12 @@
   .eyebrow {
     @apply inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.28em] text-brand-600;
   }
+
   .eyebrow::before {
     content: "";
     @apply h-px w-9 bg-brand-500;
   }
+
   .eyebrow-center::before {
     @apply hidden;
   }
@@ -116,6 +120,7 @@
   .section-title {
     @apply font-display text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl lg:text-[2.75rem] lg:leading-tight;
   }
+
   .section-subtitle {
     @apply mt-4 max-w-2xl text-base leading-relaxed text-ink-500;
   }
@@ -124,18 +129,23 @@
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cream disabled:cursor-not-allowed disabled:opacity-50;
   }
+
   .btn-primary {
     @apply bg-brand-500 text-white shadow-soft hover:bg-brand-600 hover:shadow-lift;
   }
+
   .btn-dark {
     @apply bg-ink-900 text-white shadow-soft hover:bg-ink-800 hover:shadow-lift;
   }
+
   .btn-outline {
     @apply border border-ink-200 bg-white text-ink-800 hover:border-brand-400 hover:text-brand-600;
   }
+
   .btn-ghost {
     @apply text-ink-600 hover:text-brand-600;
   }
+
   .btn-lg {
     @apply px-8 py-4 text-base;
   }
@@ -144,6 +154,7 @@
   .card {
     @apply rounded-3xl bg-white shadow-soft ring-1 ring-ink-900/[0.04];
   }
+
   .card-hover {
     @apply transition duration-500 hover:-translate-y-1.5 hover:shadow-lift;
   }
@@ -152,6 +163,7 @@
   .input-field {
     @apply w-full rounded-2xl border border-ink-200 bg-white px-5 py-4 text-sm font-medium text-ink-800 outline-none transition placeholder:text-ink-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-500/10;
   }
+
   .field-label {
     @apply mb-2 block text-xs font-semibold uppercase tracking-wider text-ink-500;
   }
@@ -160,15 +172,19 @@
   .badge {
     @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold;
   }
+
   .badge-light {
     @apply bg-white/95 text-ink-800 shadow-sm ring-1 ring-ink-900/[0.06] backdrop-blur;
   }
+
   .badge-brand {
     @apply bg-brand-500 text-white shadow-sm;
   }
+
   .badge-ink {
     @apply bg-ink-900 text-white shadow-sm;
   }
+
   .badge-danger {
     @apply bg-red-500 text-white shadow-sm;
   }
@@ -177,14 +193,17 @@
   .nav-link {
     @apply relative text-sm font-medium text-ink-600 transition-colors duration-300 hover:text-ink-900;
   }
+
   .nav-link::after {
     content: "";
     @apply absolute -bottom-1 left-0 h-px w-0 bg-brand-500 transition-all duration-300;
   }
+
   .nav-link:hover::after,
   .nav-link-active::after {
     @apply w-full;
   }
+
   .nav-link-active {
     @apply text-brand-600;
   }
@@ -198,11 +217,13 @@
     opacity: 0;
     transform: translateY(18px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 .animate-fade-up {
   animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -212,32 +233,35 @@
     transform: translateX(100%);
   }
 }
+
 .skeleton {
   @apply relative overflow-hidden bg-ink-100;
 }
+
 .skeleton::after {
   content: "";
   position: absolute;
   inset: 0;
   transform: translateX(-100%);
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgb(255 255 255 / 0.65),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgb(255 255 255 / 0.65),
+      transparent);
   animation: shimmer 1.5s infinite;
 }
 
 @keyframes float-slow {
+
   0%,
   100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-14px);
   }
 }
+
 .animate-float {
   animation: float-slow 7s ease-in-out infinite;
 }

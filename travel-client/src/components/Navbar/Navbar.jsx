@@ -101,10 +101,9 @@ export default function Navbar() {
                 to={item.to}
                 end={item.end}
                 className={({ isActive }) =>
-                  `rounded-xl px-4 py-3 text-sm font-medium transition ${
-                    isActive
-                      ? 'bg-brand-50 text-brand-700'
-                      : 'text-ink-700 hover:bg-white'
+                  `rounded-xl px-4 py-3 text-sm font-medium transition ${isActive
+                    ? 'bg-brand-50 text-brand-700'
+                    : 'text-ink-700 hover:bg-white'
                   }`
                 }
                 onClick={() => setOpen(false)}
@@ -116,10 +115,9 @@ export default function Navbar() {
               <NavLink
                 to="/admin"
                 className={({ isActive }) =>
-                  `rounded-xl px-4 py-3 text-sm font-medium transition ${
-                    isActive
-                      ? 'bg-brand-50 text-brand-700'
-                      : 'text-ink-700 hover:bg-white'
+                  `rounded-xl px-4 py-3 text-sm font-medium transition ${isActive
+                    ? 'bg-brand-50 text-brand-700'
+                    : 'text-ink-700 hover:bg-white'
                   }`
                 }
                 onClick={() => setOpen(false)}

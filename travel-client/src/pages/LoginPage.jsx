@@ -37,11 +37,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-cream px-4 py-10">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-cream via-cream to-brand-50 px-4 py-10">
       <div className="grid w-full max-w-5xl overflow-hidden rounded-[2rem] bg-white shadow-lift ring-1 ring-ink-900/[0.05] md:grid-cols-2">
         {/* Brand panel */}
-        <aside className="relative hidden flex-col justify-between bg-ink-900 p-10 text-white md:flex">
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-700/30 via-transparent to-transparent"></div>
+        <aside className="relative hidden flex-col justify-between overflow-hidden bg-gradient-to-br from-brand-500 via-brand-600 to-brand-800 p-10 text-white md:flex">
+          <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-brand-900/20"></div>
+          <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-white/10 blur-2xl"></div>
+          <div className="absolute -bottom-20 -left-10 h-56 w-56 rounded-full bg-brand-400/30 blur-3xl"></div>
           <div className="relative flex items-center gap-3">
             <span className="grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-brand-400 to-brand-600 font-display text-lg font-bold">
               T
@@ -50,15 +52,15 @@ export default function LoginPage() {
           </div>
 
           <div className="relative">
-            <p className="eyebrow mb-4 text-brand-300">Chào mừng trở lại</p>
+            <p className="eyebrow mb-4 text-white/80">Chào mừng trở lại</p>
             <h2 className="font-display text-4xl font-semibold leading-tight">
               Tiếp nối hành trình
-              <span className="block italic text-brand-300">của bạn</span>
+              <span className="block italic text-white/90">của bạn</span>
             </h2>
             <ul className="mt-8 space-y-4">
               {features.map((f) => (
-                <li key={f} className="flex items-center gap-3 text-sm text-ink-200">
-                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand-500/20 text-brand-300">
+                <li key={f} className="flex items-center gap-3 text-sm text-white/80">
+                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-white/20 text-white">
                     <Icon name="check" className="h-3.5 w-3.5" />
                   </span>
                   {f}
@@ -67,7 +69,7 @@ export default function LoginPage() {
             </ul>
           </div>
 
-          <p className="relative text-xs text-ink-400">
+          <p className="relative text-xs text-white/60">
             © 2026 Tour Lượng. All rights reserved.
           </p>
         </aside>
@@ -143,7 +145,7 @@ export default function LoginPage() {
           </div>
 
           <div className="mt-6 rounded-2xl border border-brand-200 bg-brand-50 p-4">
-            <p className="text-xs font-semibold text-brand-900">✦ Tài khoản trải nghiệm</p>
+            <p className="text-xs font-semibold text-brand-900">Tài khoản trải nghiệm</p>
             <p className="mt-1 text-xs text-brand-800">Email: admin@tourdulich.com</p>
             <p className="text-xs text-brand-800">Mật khẩu: admin@123456</p>
           </div>
