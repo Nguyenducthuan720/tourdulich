@@ -143,11 +143,27 @@ router.get("/my", verifyToken, async (req, res) => {
         b.BookingDate as date, 
         b.TotalAmount as total, 
         b.Status as status, 
+        t.TourID as tourId,
         t.TourName as tourTitle, 
-        bd.Quantity as guests 
+        t.Destination as destination,
+        t.Duration as duration,
+        t.ImageURL as image,
+        bd.Quantity as guests,
+        bd.UnitPrice as unitPrice,
+        fb.PassengerName as passengerName,
+        fb.SeatNumber as seatNumber,
+        fb.TicketType as ticketType,
+        f.AirlineName as airline,
+        f.FlightNumber as flightNumber,
+        a1.City as departureCity,
+        a2.City as arrivalCity
       FROM Bookings b 
       JOIN BookingDetails bd ON b.BookingID = bd.BookingID 
       JOIN Tours t ON bd.TourID = t.TourID 
+      LEFT JOIN FlightBookings fb ON b.BookingID = fb.BookingID
+      LEFT JOIN Flights f ON fb.FlightID = f.FlightID
+      LEFT JOIN Airports a1 ON f.DepartureAirport = a1.AirportCode
+      LEFT JOIN Airports a2 ON f.ArrivalAirport = a2.AirportCode
       WHERE b.UserID = @uid 
       ORDER BY b.BookingDate DESC
     `;
