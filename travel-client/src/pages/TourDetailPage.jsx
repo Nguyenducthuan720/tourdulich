@@ -282,7 +282,7 @@ export default function TourDetailPage() {
                       </div>
                       <div className="rounded-2xl border border-brand-200 bg-brand-50 p-6">
                         <p className="mb-2 text-sm font-semibold text-brand-900">Giá từ</p>
-                        <p className="text-xl font-bold text-ink-900">{formatCurrency(price)}</p>
+                        <p className="amount text-xl font-bold text-ink-900">{formatCurrency(price)}</p>
                       </div>
                       <div className="rounded-2xl border border-ink-200 bg-ink-50 p-6">
                         <p className="mb-2 text-sm font-semibold text-ink-600">Còn lại</p>
@@ -492,11 +492,11 @@ export default function TourDetailPage() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <p className="text-[0.7rem] font-semibold uppercase tracking-wider text-ink-500">Người lớn</p>
-                      <p className="font-display text-2xl font-bold leading-tight text-brand-600 tabular-nums break-words">{formatCurrency(price)}</p>
+                      <p className="amount font-display text-2xl font-bold leading-tight text-brand-600">{formatCurrency(price)}</p>
                     </div>
                     <div className="min-w-0 text-right">
                       <p className="text-[0.7rem] font-semibold uppercase tracking-wider text-ink-500">Trẻ em (≤11)</p>
-                      <p className="font-display text-2xl font-bold leading-tight text-brand-500 tabular-nums break-words">{formatCurrency(childPrice)}</p>
+                      <p className="amount font-display text-2xl font-bold leading-tight text-brand-500">{formatCurrency(childPrice)}</p>
                     </div>
                   </div>
                   <p className="mt-4 border-t border-brand-200 pt-4 text-xs text-ink-500">
@@ -513,7 +513,7 @@ export default function TourDetailPage() {
                     <div className="mb-2 flex items-center justify-between">
                       <div>
                         <p className="text-base font-bold text-ink-900">Người lớn</p>
-                        <p className="text-xs text-ink-500">{formatCurrency(price)} / người</p>
+                        <p className="amount text-xs text-ink-500">{formatCurrency(price)} / người</p>
                       </div>
                       <div className="flex items-center gap-3 rounded-2xl bg-ink-50 p-2">
                         <button
@@ -539,7 +539,7 @@ export default function TourDetailPage() {
                         <p className="text-base font-bold text-ink-900">
                           Trẻ em <span className="text-xs font-normal text-ink-500">(≤11 tuổi)</span>
                         </p>
-                        <p className="text-xs font-semibold text-brand-600">{formatCurrency(childPrice)} / trẻ em</p>
+                        <p className="amount text-xs font-semibold text-brand-600">{formatCurrency(childPrice)} / trẻ em</p>
                       </div>
                       <div className="flex items-center gap-3 rounded-2xl bg-ink-50 p-2">
                         <button
@@ -564,18 +564,18 @@ export default function TourDetailPage() {
                   {adults > 0 && (
                     <div className="flex items-center justify-between gap-3 text-base">
                       <span className="font-medium text-ink-700">Người lớn × {adults}</span>
-                      <span className="min-w-0 text-right font-bold text-ink-900 tabular-nums break-words">{formatCurrency(price * adults)}</span>
+                      <span className="amount text-right font-bold text-ink-900">{formatCurrency(price * adults)}</span>
                     </div>
                   )}
                   {children > 0 && (
                     <div className="flex items-center justify-between gap-3 text-base">
                       <span className="font-medium text-ink-700">Trẻ em × {children}</span>
-                      <span className="min-w-0 text-right font-bold text-brand-600 tabular-nums break-words">{formatCurrency(childPrice * children)}</span>
+                      <span className="amount text-right font-bold text-brand-600">{formatCurrency(childPrice * children)}</span>
                     </div>
                   )}
                   <div className="flex items-center justify-between gap-3 border-t border-ink-200 pt-3">
                     <span className="text-base font-bold text-ink-700">Tổng cộng ({totalGuests} khách)</span>
-                    <span className="min-w-0 text-right font-display text-2xl font-bold leading-tight text-ink-900 tabular-nums break-words">{formatCurrency(totalPrice)}</span>
+                    <span className="amount text-right font-display text-2xl font-bold leading-tight text-ink-900">{formatCurrency(totalPrice)}</span>
                   </div>
                 </div>
 

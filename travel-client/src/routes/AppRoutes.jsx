@@ -69,13 +69,17 @@ export const router = createBrowserRouter([
         path: 'flight-booking',
         element: <ProtectedRoute><FlightBookingPage /></ProtectedRoute>,
       },
-      {
+{
         path: 'profile',
         element: (
           <ProtectedRoute>
             <ProfilePage />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: 'about',
+        element: <AboutPage />,
       },
     ],
   },
@@ -86,10 +90,6 @@ export const router = createBrowserRouter([
   {
     path: '/register',
     element: <RegisterPage />,
-  },
-  {
-    path: '/about',
-    element: <AboutPage />,
   },
   {
     path: '/admin',

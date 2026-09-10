@@ -50,7 +50,7 @@ function BookingDetailModal({ booking, onClose, onContact }) {
                   {booking.destination && <span className="inline-flex items-center gap-1"><Icon name="pin" className="h-3.5 w-3.5" /> {booking.destination}</span>}
                 </p>
               </div>
-              <span className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-bold ${STATUS_CLASS[status] || 'bg-ink-100 text-ink-800'}`}>
+              <span className={`shrink-0 whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-bold ${STATUS_CLASS[status] || 'bg-ink-100 text-ink-800'}`}>
                 {STATUS_LABEL[status] || status}
               </span>
             </div>
@@ -69,7 +69,7 @@ function BookingDetailModal({ booking, onClose, onContact }) {
             </div>
             <div>
               <p className="text-xs font-bold uppercase tracking-wider text-ink-500">Đơn giá / người</p>
-              <p className="mt-1 font-bold text-ink-900">
+              <p className="amount mt-1 font-bold text-ink-900">
                 {Number(booking.unitPrice || 0).toLocaleString('vi-VN')} VNĐ
               </p>
             </div>
@@ -110,7 +110,7 @@ function BookingDetailModal({ booking, onClose, onContact }) {
 
           <div className="flex items-center justify-between rounded-2xl bg-gradient-to-r from-brand-500 to-brand-600 p-5 text-white">
             <span className="text-base font-bold">Tổng thanh toán</span>
-            <span className="text-2xl font-bold">{Number(booking.total || booking.Total).toLocaleString('vi-VN')} VNĐ</span>
+            <span className="amount text-2xl font-bold">{Number(booking.total || booking.Total).toLocaleString('vi-VN')} VNĐ</span>
           </div>
         </div>
 
@@ -308,7 +308,7 @@ export default function MyBookingsPage() {
                     <div className="border-t md:border-t-0 md:border-l border-ink-200 bg-cream p-8 md:w-56 flex flex-col justify-between">
                       <div>
                         <p className="text-sm text-ink-600 mb-1">Tổng tiền</p>
-                        <p className="text-2xl font-bold text-brand-600">
+                        <p className="amount text-2xl font-bold text-brand-600">
                           {Number(booking.total || booking.Total || 0).toLocaleString('vi-VN')} VNĐ
                         </p>
                       </div>

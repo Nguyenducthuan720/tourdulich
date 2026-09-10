@@ -76,6 +76,26 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Lấy danh sách tất cả chuyến bay để hiển thị lên Form Frontend
+router.get("/flights", async (req, res) => {
+  try {
+    const query = `
+      SELECT f.*, 
+             a1.AirportName as DepartureAirportName, a1.City as DepartureCity,
+             a2.AirportName as ArrivalAirportName, a2.City as ArrivalCity
+      FROM Flights f
+      JOIN Airports a1 ON f.DepartureAirport = a1.AirportCode
+      JOIN Airports a2 ON f.ArrivalAirport = a2.AirportCode
+      WHERE f.AvailableSeats > 0 AND f.Status = 1
+    `;
+    const result = await new sql.Request().query(query);
+    res.json(result.recordset);
+  } catch (error) {
+    console.error("Get flights error:", error);
+    res.status(500).json({ message: "Lỗi không lấy được danh sách chuyến bay" });
+  }
+});
+
 // Lấy chi tiết tour - GET /api/tours/:id
 router.get("/:id", async (req, res) => {
   try {
@@ -97,14 +117,21 @@ router.get("/:id", async (req, res) => {
 
     const tour = result.recordset[0];
 
-    // Lấy thêm các ảnh phụ của tour
-    const imagesQuery = "SELECT ImageURL FROM TourImages WHERE TourID = @id";
-    const imagesResult = await request.query(imagesQuery);
-    tour.images = imagesResult.recordset
-      .map(img => img.ImageURL)
-      .map(resolveLocalTourImageUrl)
-      .filter(Boolean)
-      .filter(localImageExists);
+    // Lấy thêm các ảnh phụ của tour (bắng TourImages có thể chưa tồn tại ở DB cũ)
+    let images = [];
+    try {
+      const imagesQuery = "SELECT ImageURL FROM TourImages WHERE TourID = @id";
+      const imagesResult = await request.query(imagesQuery);
+      images = imagesResult.recordset
+        .map(img => img.ImageURL)
+        .map(resolveLocalTourImageUrl)
+        .filter(Boolean)
+        .filter(localImageExists);
+    } catch (imageError) {
+      console.warn("TourImages not available, skipping gallery:", imageError.message);
+    }
+
+    tour.images = images;
 
     res.json(tour);
   } catch (error) {
@@ -229,25 +256,6 @@ router.delete("/:id", verifyToken, verifyAdmin, async (req, res) => {
   } catch (error) {
     console.error("Delete tour error:", error);
     res.status(500).json({ message: "Lỗi server" });
-  }
-});
-// Lấy danh sách tất cả chuyến bay để hiển thị lên Form Frontend
-router.get("/flights", async (req, res) => {
-  try {
-    const query = `
-      SELECT f.*, 
-             a1.AirportName as DepartureAirportName, a1.City as DepartureCity,
-             a2.AirportName as ArrivalAirportName, a2.City as ArrivalCity
-      FROM Flights f
-      JOIN Airports a1 ON f.DepartureAirport = a1.AirportCode
-      JOIN Airports a2 ON f.ArrivalAirport = a2.AirportCode
-      WHERE f.AvailableSeats > 0 AND f.Status = 1
-    `;
-    const result = await new sql.Request().query(query);
-    res.json(result.recordset);
-  } catch (error) {
-    console.error("Get flights error:", error);
-    res.status(500).json({ message: "Lỗi không lấy được danh sách chuyến bay" });
   }
 });
 

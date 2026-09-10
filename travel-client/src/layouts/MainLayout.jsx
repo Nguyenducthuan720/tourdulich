@@ -8,7 +8,7 @@ export default function MainLayout() {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-[#f7faf8]">
+    <div className="min-h-screen bg-cream">
       <Navbar />
       <main>
         <Outlet />

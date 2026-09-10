@@ -3,7 +3,9 @@ export function formatCurrency(value = 0) {
     style: 'currency',
     currency: 'VND',
     maximumFractionDigits: 0,
-  }).format(value)
+  })
+    .format(value)
+    .replace(/\s/g, '\u00A0')
 }
 
 export function formatDate(value) {

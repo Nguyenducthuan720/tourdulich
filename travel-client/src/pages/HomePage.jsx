@@ -78,32 +78,62 @@ export default function HomePage() {
     <div className="min-h-screen bg-cream">
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1920&q=80"
-            alt="Hero"
-            className="h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-ink-900/80 via-ink-900/55 to-ink-900/85"></div>
-          <div className="absolute inset-0 bg-gradient-to-tr from-brand-900/30 to-transparent"></div>
-        </div>
-
-        <div className="container-x relative z-10 pb-28 pt-24 lg:pt-32">
-          <div className="max-w-3xl">
-            <p className="mb-5 inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-brand-200 backdrop-blur-sm">
-              <IconDot />
-              Premium Travel Experience
-            </p>
-            <h1 className="font-display text-5xl font-semibold leading-[1.08] tracking-tight text-white lg:text-7xl">
-              Khám phá thế giới
-              <span className="block italic text-brand-300">theo cách của bạn</span>
-            </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-100/90">
-              Hơn 18 hành trình cao cấp trong và ngoài nước — dịch vụ đẳng cấp,
-              lịch trình tinh tế và giá trị đích thực cho mỗi chuyến đi.
-            </p>
+        {/* Split-screen collage: Việt Nam (trái) / Thế giới (phải) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 sm:auto-rows-[680px]">
+          <div className="group relative h-[360px] overflow-hidden sm:h-full">
+            <img
+              src="https://images.unsplash.com/photo-1528127269322-539801943592?w=1600&q=80"
+              alt="Vịnh Hạ Long"
+              className="h-full w-full object-cover transition duration-[1200ms] ease-out group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-ink-900/85 via-ink-900/25 to-ink-900/10"></div>
           </div>
 
+          <div className="group relative h-[360px] overflow-hidden sm:h-full">
+            <img
+              src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1600&q=80"
+              alt="Núi Phú Sỹ"
+              className="h-full w-full object-cover transition duration-[1200ms] ease-out group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-ink-900/80 via-ink-900/20 to-ink-900/10"></div>
+          </div>
+        </div>
+
+        {/* Cinematic scrim đảm bảo chữ đọc được */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink-900/50 via-transparent to-ink-900/60"></div>
+
+        {/* Nhãn hai nửa */}
+        <div className="absolute inset-x-0 top-6 z-20 flex items-start justify-between px-6">
+          <span className="rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white backdrop-blur-md">
+            Việt Nam · Vịnh Hạ Long
+          </span>
+          <span className="rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white backdrop-blur-md">
+            Thế giới · Núi Phú Sỹ
+          </span>
+        </div>
+
+        {/* Typography center-left */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 pt-28 lg:pt-36">
+          <div className="container-x">
+            <div className="max-w-3xl">
+              <p className="mb-5 inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-brand-200 backdrop-blur-sm">
+                <IconDot />
+                Premium Travel Experience
+              </p>
+              <h1 className="font-display text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl">
+                Khám phá thế giới
+                <span className="block italic text-brand-200">theo cách của bạn</span>
+              </h1>
+              <p className="mt-6 hidden max-w-xl text-base leading-relaxed text-ink-100/90 md:block lg:text-lg">
+                Hơn 18 hành trình cao cấp trong và ngoài nước — dịch vụ đẳng cấp,
+                lịch trình tinh tế và giá trị đích thực cho mỗi chuyến đi.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Floating search */}
+        <div className="container-x absolute inset-x-0 bottom-0 z-30 pb-8">
           <SearchBox onSearch={handleSearch} variant="floating" />
         </div>
       </section>

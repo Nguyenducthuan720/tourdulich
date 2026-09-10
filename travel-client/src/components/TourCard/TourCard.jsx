@@ -69,17 +69,17 @@ export default function TourCard({ tour }) {
         </p>
 
         <div className="mt-auto flex items-end justify-between gap-3 border-t border-ink-100 pt-5">
-          <div>
+          <div className="min-w-0">
             <p className="text-[0.7rem] font-semibold uppercase tracking-wider text-ink-400">
               Giá từ
             </p>
-            <p className="font-display text-2xl font-bold text-brand-600">
+            <p className="amount font-display text-2xl font-bold leading-tight text-brand-600">
               {formatCurrency(price)}
             </p>
           </div>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-ink-900 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 group-hover:bg-brand-500">
+          <span className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-ink-900 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 group-hover:bg-brand-500">
             Chi tiết
-            <Icon name="arrowRight" className="h-4 w-4" />
+            <Icon name="arrowRight" className="h-4 w-4 shrink-0" />
           </span>
         </div>
       </div>

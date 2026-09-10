@@ -60,14 +60,31 @@
     @apply bg-cream font-sans text-ink-700 antialiased;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    /* Chữ số đồng đều — tránh giá/giờ bị "nhảy" khi thay đổi */
+    font-variant-numeric: tabular-nums;
   }
 
   h1,
   h2,
   h3,
-  h4 {
+  h4,
+  h5,
+  h6 {
     @apply font-display text-ink-900;
     text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Form controls đồng bộ font với body (tránh chữ tựa nhỏ/lệch) */
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    letter-spacing: inherit;
   }
 
   ::selection {
@@ -127,7 +144,7 @@
 
   /* Buttons */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cream disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 py-3 text-sm font-semibold transition duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cream disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-primary {
@@ -150,6 +167,12 @@
     @apply px-8 py-4 text-base;
   }
 
+  /* Giá/tiền: 1 dòng duy nhất, số cố định, quá dài thì cắt gọn (không nhảy dòng) */
+  .amount {
+    @apply whitespace-nowrap tabular-nums;
+    overflow: hidden;
+  }
+
   /* Cards */
   .card {
     @apply rounded-3xl bg-white shadow-soft ring-1 ring-ink-900/[0.04];
@@ -170,7 +193,7 @@
 
   /* Badges */
   .badge {
-    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold;
+    @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-semibold;
   }
 
   .badge-light {

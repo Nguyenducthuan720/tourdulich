@@ -1,5 +1,8 @@
 /.agents
 /ADMIN-SETUP.md
 /INSERT-DATA.sql
-/UPDATE-ADMIN-PASSWORD.sqlbackend/.env
+/FIX-MISSING-TABLES.sql
+/backend/.env
+/travel-client/.env
+/node_modules
 

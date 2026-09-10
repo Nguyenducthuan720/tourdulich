@@ -48,7 +48,7 @@ function StatCard({ icon, label, value, accent = 'brand' }) {
       </div>
       <div className="min-w-0">
         <p className="text-xs font-semibold uppercase tracking-wider text-ink-400">{label}</p>
-        <p className="font-display text-2xl font-bold leading-tight text-ink-900">{value}</p>
+        <p className="amount font-display text-2xl font-bold leading-tight text-ink-900">{value}</p>
       </div>
     </div>
   )

@@ -17,31 +17,37 @@ const usersRoutes = require("./routes/users");
 const aiRoutes = require("./routes/ai");
 const reviewsRoutes = require("./routes/reviews");
 
-connectDB();
-connectMongoDB();
-app.use(cors());
-app.use(express.json());
-app.use("/images", express.static(path.join(__dirname, "images")));
+connectDB()
+    .then(() => {
+        connectMongoDB();
+        app.use(cors());
+        app.use(express.json());
+        app.use("/images", express.static(path.join(__dirname, "images")));
 
-app.get("/", (req, res) => {
-    res.send("Travel Booking API Running...");
-});
+        app.get("/", (req, res) => {
+            res.send("Travel Booking API Running...");
+        });
 
-// Mount routes
-app.use("/api/auth", authRoutes);
-app.use("/api/categories", categoriesRoutes);
-app.use("/api/destinations", destinationsRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/tours", toursRoutes);
-app.use("/api/admin/tours", toursRoutes);
-app.use("/api/bookings", bookingsRoutes);
-app.use("/api/admin/bookings", bookingsRoutes);
-app.use("/api/users", usersRoutes);
-app.use("/api/ai", aiRoutes);
-app.use("/api/reviews", reviewsRoutes);
+        // Mount routes
+        app.use("/api/auth", authRoutes);
+        app.use("/api/categories", categoriesRoutes);
+        app.use("/api/destinations", destinationsRoutes);
+        app.use("/api/admin", adminRoutes);
+        app.use("/api/tours", toursRoutes);
+        app.use("/api/admin/tours", toursRoutes);
+        app.use("/api/bookings", bookingsRoutes);
+        app.use("/api/admin/bookings", bookingsRoutes);
+        app.use("/api/users", usersRoutes);
+        app.use("/api/ai", aiRoutes);
+        app.use("/api/reviews", reviewsRoutes);
 
-const PORT = process.env.PORT || 5000;
+        const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    })
+    .catch((err) => {
+        console.error("[DB] Dừng khởi động backend vì không kết nối được SQL Server:", err.message);
+        process.exit(1);
+    });

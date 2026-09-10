@@ -335,7 +335,7 @@ export default function BookingPage() {
                             <div className="flex-1">
                               <h4 className="text-lg font-bold text-ink-900 mb-2">{room.title}</h4>
                               <p className="text-sm text-ink-600 mb-3">{room.desc}</p>
-                              <p className="text-base font-bold text-brand-700">
+                              <p className="amount text-base font-bold text-brand-700">
                                 {room.price === 0 ? 'Miễn phí phụ thu' : `Phụ thu: +${room.price.toLocaleString()} VNĐ / người`}
                               </p>
                             </div>
@@ -429,7 +429,7 @@ export default function BookingPage() {
                                   </div>
                                   <div className="sm:text-right border-t sm:border-t-0 pt-3 sm:pt-0">
                                     <p className="text-xs text-ink-500 mb-1 font-semibold uppercase tracking-wider">Phụ thu</p>
-                                    <p className="font-bold text-2xl text-sky-600">+{Number(f.Price).toLocaleString()}đ</p>
+                                    <p className="amount font-bold text-2xl text-sky-600">+{Number(f.Price).toLocaleString()}đ</p>
                                     <p className="text-xs text-ink-400 font-medium">/ khách</p>
                                   </div>
                                 </div>
@@ -637,30 +637,30 @@ export default function BookingPage() {
                 <div className="mb-6 space-y-3 text-base">
                   <div className="flex justify-between text-ink-700">
                     <span>Giá tour người lớn × {adults}</span>
-                    <span className="font-bold">{(basePrice * adults).toLocaleString()} VNĐ</span>
+                    <span className="amount font-bold">{(basePrice * adults).toLocaleString()} VNĐ</span>
                   </div>
                   {children > 0 && (
                     <div className="flex justify-between text-brand-700">
                       <span>Giá tour trẻ em × {children} <span className="text-xs">(giảm 30%)</span></span>
-                      <span className="font-bold">{(childPrice * children).toLocaleString()} VNĐ</span>
+                      <span className="amount font-bold">{(childPrice * children).toLocaleString()} VNĐ</span>
                     </div>
                   )}
                   {roomSurcharge > 0 && (
                     <div className="flex justify-between text-ink-700">
                       <span>Phụ thu phòng × {totalGuests}</span>
-                      <span className="font-bold">{(roomSurcharge * totalGuests).toLocaleString()} VNĐ</span>
+                      <span className="amount font-bold">{(roomSurcharge * totalGuests).toLocaleString()} VNĐ</span>
                     </div>
                   )}
                   {isCombo && flightPrice > 0 && (
                     <div className="flex justify-between text-sky-700">
                       <span>Vé máy bay × {totalGuests}</span>
-                      <span className="font-bold">{(flightPrice * totalGuests).toLocaleString()} VNĐ</span>
+                      <span className="amount font-bold">{(flightPrice * totalGuests).toLocaleString()} VNĐ</span>
                     </div>
                   )}
                   <div className="pt-4 mt-4 border-t-2 border-ink-200">
                     <div className="flex justify-between items-end">
                       <span className="text-ink-900 font-bold text-lg">Tổng thanh toán</span>
-                      <span className="text-3xl font-bold text-brand-600">
+                      <span className="amount text-3xl font-bold text-brand-600">
                         {totalPrice.toLocaleString()} VNĐ
                       </span>
                     </div>

@@ -140,7 +140,7 @@ export default function AdminBookings() {
                     {new Date(booking.BookingDate).toLocaleDateString('vi-VN')}
                   </td>
                   <td className="px-6 py-4 font-bold text-ink-800">
-                    {booking.TotalAmount?.toLocaleString?.()}đ
+                    <span className="amount">{booking.TotalAmount?.toLocaleString?.()}đ</span>
                   </td>
                   <td className="px-6 py-4">
                     <select

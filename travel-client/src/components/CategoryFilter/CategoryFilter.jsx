@@ -39,12 +39,12 @@ export default function CategoryFilter({ onCategorySelect, selectedCategory }) {
         <div className="flex flex-wrap gap-2.5 lg:flex-col lg:flex-nowrap">
           <button
             onClick={() => handleCategoryClick(null)}
-            className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition ${selectedCategory === null
+            className={`inline-flex items-center gap-2 whitespace-nowrap rounded-full px-5 py-3 text-sm font-semibold transition ${selectedCategory === null
                 ? 'bg-brand-500 text-white shadow-soft'
                 : 'bg-ink-50 text-ink-700 hover:bg-ink-100'
               }`}
           >
-            <Icon name="spark" className="h-4 w-4" />
+            <Icon name="spark" className="h-4 w-4 shrink-0" />
             Tất cả tour
           </button>
           {categories.map((category) => {
@@ -53,7 +53,7 @@ export default function CategoryFilter({ onCategorySelect, selectedCategory }) {
               <button
                 key={category.CategoryID}
                 onClick={() => handleCategoryClick(category.CategoryID)}
-                className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition ${active
+                className={`inline-flex items-center gap-2 whitespace-nowrap rounded-full px-5 py-3 text-sm font-semibold transition ${active
                     ? 'bg-brand-500 text-white shadow-soft'
                     : 'bg-ink-50 text-ink-700 hover:bg-ink-100'
                   }`}
