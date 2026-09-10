@@ -1,5 +1,4 @@
 import apiClient from './client'
-import { fallbackBookings } from '../data/mockData'
 
 const readList = (payload) => payload?.items || payload?.data?.items || payload?.data || payload || []
 const readOne = (payload) => payload?.data || payload
@@ -30,15 +29,5 @@ export async function getMyBookings() {
   } catch (error) {
     console.error('Get my bookings error:', error)
     return []
-  }
-}
-
-export async function getAllBookings() {
-  try {
-    const response = await apiClient.get('/admin/bookings')
-    return readList(response.data)
-  } catch (error) {
-    console.error('Get all bookings error:', error)
-    return fallbackBookings
   }
 }

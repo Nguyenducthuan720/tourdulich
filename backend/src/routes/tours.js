@@ -148,7 +148,7 @@ router.post("/", verifyToken, verifyAdmin, async (req, res) => {
       location,
       price,
       duration,
-      category,
+      categoryId,
       seats,
       description,
       image,
@@ -158,7 +158,7 @@ router.post("/", verifyToken, verifyAdmin, async (req, res) => {
 
     const query = `
       INSERT INTO Tours (TourName, Destination, Price, Duration, CategoryID, AvailableSeats, Description, ImageURL)
-      VALUES (@title, @location, @price, @duration, @category, @seats, @description, @image);
+      VALUES (@title, @location, @price, @duration, @categoryId, @seats, @description, @image);
       SELECT SCOPE_IDENTITY() as TourID;
     `;
 
@@ -167,7 +167,7 @@ router.post("/", verifyToken, verifyAdmin, async (req, res) => {
     request.input("location", sql.VarChar, location);
     request.input("price", sql.Numeric(15, 2), price);
     request.input("duration", sql.VarChar, duration);
-    request.input("category", sql.VarChar, category);
+    request.input("categoryId", sql.Int, categoryId);
     request.input("seats", sql.Int, seats);
     request.input("description", sql.VarChar, description);
     request.input("image", sql.VarChar, image);
@@ -181,7 +181,7 @@ router.post("/", verifyToken, verifyAdmin, async (req, res) => {
       location,
       price,
       duration,
-      category,
+      categoryId,
       seats,
       description,
       image,
@@ -196,7 +196,7 @@ router.post("/", verifyToken, verifyAdmin, async (req, res) => {
 router.put("/:id", verifyToken, verifyAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, location, price, duration, category, seats, description, image } = req.body;
+    const { title, location, price, duration, categoryId, seats, description, image } = req.body;
 
     const query = `
       UPDATE Tours SET 
@@ -204,7 +204,7 @@ router.put("/:id", verifyToken, verifyAdmin, async (req, res) => {
         Destination = @location,
         Price = @price,
         Duration = @duration,
-        CategoryID = @category,
+        CategoryID = @categoryId,
         AvailableSeats = @seats,
         Description = @description,
         ImageURL = @image
@@ -217,7 +217,7 @@ router.put("/:id", verifyToken, verifyAdmin, async (req, res) => {
     request.input("location", sql.VarChar, location);
     request.input("price", sql.Numeric(15, 2), price);
     request.input("duration", sql.VarChar, duration);
-    request.input("category", sql.VarChar, category);
+    request.input("categoryId", sql.Int, categoryId);
     request.input("seats", sql.Int, seats);
     request.input("description", sql.VarChar, description);
     request.input("image", sql.VarChar, image);
@@ -230,7 +230,7 @@ router.put("/:id", verifyToken, verifyAdmin, async (req, res) => {
       location,
       price,
       duration,
-      category,
+      categoryId,
       seats,
       description,
       image,

@@ -13,7 +13,7 @@ const navItems = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
-  const { isAuthenticated, isAdmin, logout, user } = useAuth()
+  const { isAuthenticated, logout, user } = useAuth()
 
   const linkClass = ({ isActive }) =>
     `nav-link ${isActive ? 'nav-link-active' : ''}`
@@ -43,11 +43,6 @@ export default function Navbar() {
               {item.label}
             </NavLink>
           ))}
-          {isAdmin && (
-            <NavLink to="/admin" className={linkClass}>
-              Admin
-            </NavLink>
-          )}
         </div>
 
         {/* Right Actions */}
@@ -110,21 +105,7 @@ export default function Navbar() {
               >
                 {item.label}
               </NavLink>
-            ))}
-            {isAdmin && (
-              <NavLink
-                to="/admin"
-                className={({ isActive }) =>
-                  `rounded-xl px-4 py-3 text-sm font-medium transition ${isActive
-                    ? 'bg-brand-50 text-brand-700'
-                    : 'text-ink-700 hover:bg-white'
-                  }`
-                }
-                onClick={() => setOpen(false)}
-              >
-                Admin
-              </NavLink>
-            )}
+            )            )}
 
             <div className="mt-4 border-t border-ink-900/[0.06] pt-4">
               {isAuthenticated ? (

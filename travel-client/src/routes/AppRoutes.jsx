@@ -1,6 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import MainLayout from '../layouts/MainLayout'
-import AdminLayout from '../layouts/AdminLayout'
 import { useAuth } from '../context/AuthContext'
 
 // Pages
@@ -13,11 +12,6 @@ import LoginPage from '../pages/LoginPage'
 import RegisterPage from '../pages/RegisterPage'
 import ProfilePage from '../pages/ProfilePage'
 import AboutPage from '../pages/AboutPage'
-import AdminDashboard from '../pages/admin/AdminDashboard'
-import AdminTours from '../pages/admin/AdminTours'
-import AdminUsers from '../pages/admin/AdminUsers'
-import AdminBookings from '../pages/admin/AdminBookings'
-import AdminReviews from '../pages/admin/AdminReviews'
 import NotFoundPage from '../pages/NotFoundPage'
 
 // Protected Route Component
@@ -69,7 +63,7 @@ export const router = createBrowserRouter([
         path: 'flight-booking',
         element: <ProtectedRoute><FlightBookingPage /></ProtectedRoute>,
       },
-{
+      {
         path: 'profile',
         element: (
           <ProtectedRoute>
@@ -90,37 +84,6 @@ export const router = createBrowserRouter([
   {
     path: '/register',
     element: <RegisterPage />,
-  },
-  {
-    path: '/admin',
-    element: (
-      <ProtectedRoute requiredRole="admin">
-        <AdminLayout />
-      </ProtectedRoute>
-    ),
-    errorElement: <NotFoundPage />,
-    children: [
-      {
-        index: true,
-        element: <AdminDashboard />,
-      },
-      {
-        path: 'tours',
-        element: <AdminTours />,
-      },
-      {
-        path: 'users',
-        element: <AdminUsers />,
-      },
-      {
-        path: 'bookings',
-        element: <AdminBookings />,
-      },
-      {
-        path: 'reviews',
-        element: <AdminReviews />,
-      },
-    ],
   },
   {
     path: '*',

@@ -28,7 +28,8 @@ export default function LoginPage() {
     try {
       setLoading(true)
       const user = await login({ email, password })
-      navigate(user?.role?.toLowerCase() === 'admin' ? '/admin' : '/')
+      const adminUrl = import.meta.env.VITE_ADMIN_URL || 'http://localhost:5176'
+      navigate(user?.role?.toLowerCase() === 'admin' ? adminUrl : '/')
     } catch (err) {
       setError(err.message || 'Đăng nhập thất bại. Vui lòng kiểm tra email và mật khẩu')
     } finally {
@@ -142,12 +143,6 @@ export default function LoginPage() {
             <Link to="/register" className="font-semibold text-brand-600 hover:text-brand-700">
               Đăng ký ngay
             </Link>
-          </div>
-
-          <div className="mt-6 rounded-2xl border border-brand-200 bg-brand-50 p-4">
-            <p className="text-xs font-semibold text-brand-900">Tài khoản trải nghiệm</p>
-            <p className="mt-1 text-xs text-brand-800">Email: admin@tourdulich.com</p>
-            <p className="text-xs text-brand-800">Mật khẩu: admin@123456</p>
           </div>
         </div>
       </div>
