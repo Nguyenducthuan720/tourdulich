@@ -40,35 +40,72 @@ router.get("/", async (req, res) => {
   try {
     const { keyword = "", location = "", categoryId = "" } = req.query;
 
-    let query = `
-      SELECT t.*, c.CategoryName 
-      FROM Tours t 
-      LEFT JOIN Categories c ON t.CategoryID = c.CategoryID 
-      WHERE 1=1
-    `;
-    const request = new sql.Request();
+    // Pagination params
+    let page = parseInt(req.query.page, 10) || 1;
+    let limit = parseInt(req.query.limit, 10) || 20;
+    const MAX_LIMIT = 200;
+    if (isNaN(page) || page < 1) page = 1;
+    if (isNaN(limit) || limit < 1) limit = 20;
+    if (limit > MAX_LIMIT) limit = MAX_LIMIT;
+    const offset = (page - 1) * limit;
+
+    // Build WHERE clauses and prepare two requests (count + data)
+    let where = " WHERE 1=1";
+    const countRequest = new sql.Request();
+    const dataRequest = new sql.Request();
 
     if (categoryId) {
-      query += " AND t.CategoryID = @categoryId";
-      request.input("categoryId", sql.Int, categoryId);
+      where += " AND t.CategoryID = @categoryId";
+      countRequest.input("categoryId", sql.Int, categoryId);
+      dataRequest.input("categoryId", sql.Int, categoryId);
     }
 
     if (keyword) {
-      query += " AND (t.TourName LIKE @keyword OR t.Description LIKE @keyword OR c.CategoryName LIKE @keyword)";
-      request.input("keyword", sql.NVarChar, `%${keyword}%`);
+      where += " AND (t.TourName LIKE @keyword OR t.Description LIKE @keyword OR c.CategoryName LIKE @keyword)";
+      countRequest.input("keyword", sql.NVarChar, `%${keyword}%`);
+      dataRequest.input("keyword", sql.NVarChar, `%${keyword}%`);
     }
 
     if (location) {
-      query += " AND (t.Destination LIKE @location OR t.DepartureLocation LIKE @location OR t.TourName LIKE @location)";
-      request.input("location", sql.NVarChar, `%${location}%`);
+      where += " AND (t.Destination LIKE @location OR t.DepartureLocation LIKE @location OR t.TourName LIKE @location)";
+      countRequest.input("location", sql.NVarChar, `%${location}%`);
+      dataRequest.input("location", sql.NVarChar, `%${location}%`);
     }
 
-    query += " ORDER BY t.TourName";
+    // Total count for pagination metadata
+    const countQuery = `
+      SELECT COUNT(*) as total
+      FROM Tours t
+      LEFT JOIN Categories c ON t.CategoryID = c.CategoryID
+      ${where}
+    `;
+    const countResult = await countRequest.query(countQuery);
+    const totalItems = countResult.recordset[0]?.total || 0;
+    const totalPages = Math.ceil(totalItems / limit);
 
-    const result = await request.query(query);
+    // Data query with OFFSET/FETCH for SQL Server
+    const dataQuery = `
+      SELECT t.*, c.CategoryName
+      FROM Tours t
+      LEFT JOIN Categories c ON t.CategoryID = c.CategoryID
+      ${where}
+      ORDER BY t.TourName
+      OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
+    `;
+
+    dataRequest.input("offset", sql.Int, offset);
+    dataRequest.input("limit", sql.Int, limit);
+
+    const result = await dataRequest.query(dataQuery);
 
     res.json({
       items: result.recordset,
+      meta: {
+        totalItems,
+        totalPages,
+        page,
+        limit,
+      },
     });
   } catch (error) {
     console.error("Get tours error:", error);
