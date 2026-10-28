@@ -1,0 +1,290 @@
+.vivu-tour-page { --tour-ink:#131b2e; --tour-muted:#5d6b70; --tour-teal:#005a71; --tour-line:#dce3e8; background:#faf8ff; color:var(--tour-ink); padding:22px 0 72px; }
+.vivu-tour-container { width:min(1240px,calc(100% - 48px)); margin:0 auto; }
+.vivu-tour-page *, .vivu-tour-page *::before, .vivu-tour-page *::after { box-sizing:border-box; }
+.vivu-tour-page h1,.vivu-tour-page h2,.vivu-tour-page h3,.vivu-tour-page h4,.vivu-tour-page p { margin-top:0; }
+.vivu-tour-page h1,.vivu-tour-page h2,.vivu-tour-page h3,.vivu-tour-page h4 { color:var(--tour-ink); font-family:'Plus Jakarta Sans',sans-serif; letter-spacing:0; }
+.vivu-tour-breadcrumb { display:flex; flex-wrap:wrap; gap:9px; align-items:center; margin-bottom:18px; color:#657277; font-size:10px; }
+.vivu-tour-breadcrumb a { color:inherit; text-decoration:none; }
+.vivu-tour-breadcrumb a:hover,.vivu-tour-breadcrumb>span:last-child { color:var(--tour-teal); }
+.vivu-tour-heading { padding-bottom:17px; border-bottom:1px solid var(--tour-line); }
+.vivu-tour-tags { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.vivu-tour-tag { display:inline-flex; align-items:center; min-height:25px; padding:0 9px; border-radius:4px; background:#e8f3f5; color:var(--tour-teal); font-size:9px; font-weight:700; }
+.vivu-tour-tag-hot { background:#fff3d8; color:#805300; }
+.vivu-tour-code { color:#657277; font-size:9px; }
+.vivu-tour-title-row { display:flex; align-items:flex-start; justify-content:space-between; gap:24px; margin:12px 0 10px; }
+.vivu-tour-title-row h1 { max-width:940px; margin:0; font-size:clamp(25px,3.2vw,38px); font-weight:800; line-height:1.2; }
+.vivu-tour-title-actions { display:flex; gap:7px; flex:0 0 auto; }
+.vivu-tour-title-actions button { min-height:36px; padding:0 10px; border:1px solid var(--tour-line); border-radius:5px; background:white; color:#3e4f54; cursor:pointer; font:inherit; font-size:11px; }
+.vivu-tour-title-actions button.is-saved { color:#b33e42; }
+.vivu-tour-share-message { margin:0 0 8px; color:var(--tour-teal); font-size:10px; }
+.vivu-tour-meta { display:flex; flex-wrap:wrap; gap:10px 22px; color:#4b5a5f; font-size:11px; }
+.vivu-tour-meta>span,.vivu-tour-rating { display:inline-flex; gap:5px; align-items:center; }
+.vivu-tour-rating { color:inherit; text-decoration:none; }
+.vivu-tour-rating>span { color:#bd851f; }
+.vivu-tour-rating small { color:var(--tour-muted); }
+.vivu-tour-gallery { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(240px,1fr); gap:10px; height:420px; margin:18px 0 25px; overflow:hidden; border-radius:8px; }
+.vivu-tour-gallery-main,.vivu-tour-gallery-thumb { position:relative; overflow:hidden; padding:0; border:0; background:#dae5e7; cursor:pointer; }
+.vivu-tour-gallery-main img,.vivu-tour-gallery-thumb img { width:100%; height:100%; object-fit:cover; transition:transform .5s; }
+.vivu-tour-gallery-main:hover img,.vivu-tour-gallery-thumb:hover img { transform:scale(1.035); }
+.vivu-tour-gallery-main { min-width:0; text-align:left; }
+.vivu-gallery-caption { position:absolute; bottom:15px; left:15px; max-width:calc(100% - 30px); padding:8px 10px; border-radius:4px; background:rgb(19 27 46 / 72%); color:white; font-size:10px; }
+.vivu-tour-gallery-side { position:relative; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:10px; min-width:0; }
+.vivu-tour-gallery-note { display:grid; grid-column:1/-1; grid-row:1/-1; align-content:center; gap:11px; padding:18px; background:#dceced; color:var(--tour-teal); }
+.vivu-tour-gallery-note span { font-size:9px; font-weight:800; letter-spacing:1px; }
+.vivu-tour-gallery-note strong { font-size:20px; line-height:1.2; }
+.vivu-tour-gallery-all { position:absolute; right:10px; bottom:10px; padding:8px 10px; border:0; border-radius:4px; background:white; color:var(--tour-ink); cursor:pointer; font:inherit; font-size:9px; font-weight:700; }
+.vivu-tour-layout { display:grid; grid-template-columns:minmax(0,1fr) 320px; align-items:start; gap:28px; }
+.vivu-tour-content { min-width:0; }
+.vivu-tour-section-nav { position:sticky; z-index:10; top:72px; display:flex; gap:4px; overflow-x:auto; margin-bottom:16px; padding:7px 0; border-bottom:1px solid var(--tour-line); background:rgb(250 248 255 / 95%); backdrop-filter:blur(10px); }
+.vivu-tour-section-nav a { flex:0 0 auto; padding:8px 11px; border-radius:4px; color:#506166; font-size:10px; text-decoration:none; }
+.vivu-tour-section-nav a:hover { background:#eaf3f5; color:var(--tour-teal); }
+.vivu-tour-section { scroll-margin-top:132px; margin-bottom:16px; padding:22px; border:1px solid var(--tour-line); border-radius:8px; background:white; }
+.vivu-tour-section-title { display:flex; align-items:flex-start; gap:12px; margin-bottom:17px; }
+.vivu-tour-section-icon { display:grid; width:34px; height:34px; flex:0 0 34px; place-items:center; border-radius:5px; background:#e9f4f5; color:var(--tour-teal); font-size:17px; }
+.vivu-tour-eyebrow { color:var(--tour-teal); font-size:9px; font-weight:800; letter-spacing:1.3px; }
+.vivu-tour-section-title h2 { margin:5px 0 0; font-size:19px; line-height:1.35; }
+.vivu-tour-section-title p { margin:4px 0 0; color:var(--tour-muted); font-size:10px; }
+.vivu-tour-description { color:#4d5c61; font-size:12px; line-height:1.8; }
+.vivu-tour-highlights { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+.vivu-tour-highlights article { display:flex; gap:10px; padding:12px; border:1px solid #e1e9eb; border-radius:5px; background:#f7fafb; }
+.vivu-tour-highlights article>span { display:grid; width:23px; height:23px; flex:0 0 23px; place-items:center; border-radius:50%; background:#dcefed; color:#18724d; font-size:11px; font-weight:800; }
+.vivu-tour-highlights h3 { margin:2px 0 5px; font-size:11px; }
+.vivu-tour-highlights p { margin:0; color:var(--tour-muted); font-size:10px; line-height:1.65; }
+.vivu-tour-itinerary { position:relative; display:grid; gap:12px; padding-left:15px; border-left:1px solid #b6d2d6; }
+.vivu-tour-itinerary article { position:relative; display:flex; gap:12px; padding:13px; border:1px solid var(--tour-line); border-radius:5px; background:#f7f9fb; }
+.vivu-tour-day { display:grid; width:31px; height:31px; flex:0 0 31px; place-items:center; margin-left:-29px; border-radius:50%; background:var(--tour-teal); color:white; font-size:9px; font-weight:800; }
+.vivu-tour-itinerary h3 { margin:2px 0 6px; font-size:12px; }
+.vivu-tour-itinerary p { margin:0; color:var(--tour-muted); font-size:10px; line-height:1.7; }
+.vivu-tour-service-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.vivu-tour-service-grid>div { padding:14px; border:1px solid var(--tour-line); border-radius:5px; background:#f7f9fb; }
+.vivu-tour-service-grid h3 { margin-bottom:10px; color:#18724d; font-size:12px; }
+.vivu-tour-service-grid h3 span { margin-right:7px; }
+.vivu-tour-service-grid h3.not-included { color:#a74444; }
+.vivu-tour-service-grid ul { display:grid; gap:8px; margin:0; padding-left:16px; color:var(--tour-muted); font-size:10px; line-height:1.6; }
+.vivu-tour-policy-copy { display:grid; gap:10px; }
+.vivu-tour-policy-copy p { margin:0; padding:12px; border:1px solid var(--tour-line); border-radius:5px; background:#f7f9fb; color:var(--tour-muted); font-size:10px; line-height:1.75; }
+.vivu-tour-review-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; padding-bottom:14px; border-bottom:1px solid var(--tour-line); }
+.vivu-tour-review-heading .vivu-tour-section-title { margin:0; }
+.vivu-tour-rating-total { display:grid; justify-items:end; gap:2px; }
+.vivu-tour-rating-total strong { color:var(--tour-teal); font-size:22px; }
+.vivu-tour-rating-total span { color:#b57b19; font-size:10px; }
+.vivu-tour-rating-total small { color:var(--tour-muted); font-size:9px; }
+.vivu-tour-review-form { display:grid; gap:10px; margin:15px 0; padding:15px; border:1px solid var(--tour-line); border-radius:5px; background:#f7f9fb; }
+.vivu-tour-review-form>div:first-child { display:grid; gap:4px; }
+.vivu-tour-review-form>div:first-child strong { font-size:11px; }
+.vivu-tour-review-form>div:first-child small { color:var(--tour-muted); font-size:9px; }
+.vivu-tour-star-picker { display:flex; gap:2px; }
+.vivu-tour-star-picker button { padding:0 3px; border:0; background:none; color:#bbc3c5; cursor:pointer; font-size:23px; }
+.vivu-tour-star-picker button.selected { color:#bd851f; }
+.vivu-tour-review-form textarea { width:100%; padding:10px; border:1px solid var(--tour-line); border-radius:5px; background:white; font:inherit; font-size:11px; resize:vertical; }
+.vivu-tour-review-submit { display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-end; gap:9px; }
+.vivu-tour-review-submit p { flex:1 1 100%; margin:0; font-size:10px; }
+.vivu-tour-review-submit p.error { color:#a74444; }
+.vivu-tour-review-submit p.success { color:#18724d; }
+.vivu-tour-review-submit button:not(.vivu-tour-text-button) { min-height:36px; padding:0 14px; border:0; border-radius:4px; background:var(--tour-teal); color:white; cursor:pointer; font:inherit; font-size:10px; font-weight:700; }
+.vivu-tour-review-submit button:disabled { opacity:.55; cursor:not-allowed; }
+.vivu-tour-text-button { border:0; background:transparent; color:var(--tour-teal); cursor:pointer; font:inherit; font-size:10px; }
+.vivu-tour-review-list { display:grid; }
+.vivu-tour-review-list article { display:flex; gap:10px; padding:13px 0; border-top:1px solid var(--tour-line); }
+.vivu-review-avatar { display:grid; width:34px; height:34px; flex:0 0 34px; place-items:center; border-radius:50%; background:#e3f1f3; color:var(--tour-teal); font-size:11px; font-weight:800; }
+.vivu-tour-review-body { flex:1; min-width:0; }
+.vivu-tour-review-meta { display:flex; flex-wrap:wrap; align-items:center; gap:5px 10px; }
+.vivu-tour-review-meta strong { font-size:10px; }
+.vivu-tour-review-meta time { color:var(--tour-muted); font-size:9px; }
+.vivu-tour-review-meta>span { margin-left:auto; color:#b57b19; font-size:10px; }
+.vivu-tour-review-meta i { color:#cbd1d2; font-style:normal; }
+.vivu-tour-review-body>p { margin:6px 0 0; color:var(--tour-muted); font-size:10px; line-height:1.7; }
+.vivu-tour-no-reviews { margin:16px 0 0; color:var(--tour-muted); font-size:11px; }
+.vivu-tour-booking { position:sticky; top:94px; padding:18px; border:1px solid var(--tour-line); border-radius:8px; background:white; box-shadow:0 12px 32px rgb(19 27 46 / 8%); }
+.vivu-tour-price { display:flex; align-items:center; justify-content:space-between; gap:10px; padding-bottom:14px; border-bottom:1px solid var(--tour-line); }
+.vivu-tour-price>div { display:flex; flex-wrap:wrap; align-items:baseline; gap:3px 7px; }
+.vivu-tour-price small { width:100%; color:var(--tour-muted); font-size:9px; }
+.vivu-tour-price strong { color:var(--tour-teal); font-size:21px; }
+.vivu-tour-price>div>span { color:var(--tour-muted); font-size:9px; }
+.vivu-tour-price-badge { padding:5px 7px; border:1px solid #f1d590; border-radius:4px; background:#fff5dc; color:#845900; font-size:8px; font-weight:800; }
+.vivu-tour-date { display:grid; gap:7px; padding:13px 0; border-bottom:1px solid var(--tour-line); }
+.vivu-tour-date>label { font-size:10px; font-weight:700; }
+.vivu-tour-date>div { display:grid; grid-template-columns:26px 1fr; align-items:center; gap:2px 6px; padding:9px; border:1px solid var(--tour-line); border-radius:5px; }
+.vivu-tour-date>div>span { grid-row:span 2; color:var(--tour-teal); }
+.vivu-tour-date strong { font-size:10px; }
+.vivu-tour-date small { color:var(--tour-muted); font-size:8px; }
+.vivu-tour-passengers { display:grid; gap:12px; padding:13px 0; border-bottom:1px solid var(--tour-line); }
+.vivu-tour-passengers>h3 { margin:0; font-size:11px; }
+.vivu-tour-passengers>div { display:flex; align-items:center; justify-content:space-between; gap:6px; }
+.vivu-tour-passengers>div>span { display:grid; gap:3px; }
+.vivu-tour-passengers>div>span>strong { font-size:10px; }
+.vivu-tour-passengers>div>span>small { color:var(--tour-muted); font-size:8px; }
+.vivu-tour-passengers>div>span>strong>small { color:var(--tour-muted); font-weight:500; }
+.vivu-tour-counter { display:flex; align-items:center; gap:5px; padding:3px; border-radius:5px; background:#edf1f2; }
+.vivu-tour-counter button { display:grid; width:27px; height:27px; place-items:center; border:0; border-radius:4px; background:white; color:var(--tour-teal); cursor:pointer; font:inherit; font-size:16px; }
+.vivu-tour-counter button:disabled { color:#9aa5a7; cursor:not-allowed; }
+.vivu-tour-counter output { width:18px; text-align:center; font-size:10px; font-weight:700; }
+.vivu-tour-total { display:grid; gap:4px; margin:13px 0; padding:11px; border-radius:5px; background:#eef5f5; }
+.vivu-tour-total span { font-size:9px; font-weight:700; }
+.vivu-tour-total strong { color:var(--tour-teal); font-size:19px; }
+.vivu-tour-total small { color:var(--tour-muted); font-size:8px; }
+.vivu-tour-book-button { display:flex; width:100%; min-height:45px; align-items:center; justify-content:center; gap:12px; border:0; border-radius:5px; background:var(--tour-teal); color:white; cursor:pointer; font:inherit; font-size:12px; font-weight:800; }
+.vivu-tour-book-button:hover { background:#004454; }
+.vivu-tour-book-button>span { font-size:17px; }
+.vivu-tour-consult { display:block; margin:10px 0; color:var(--tour-teal); font-size:9px; font-weight:700; text-align:center; text-decoration:none; }
+.vivu-tour-limited { margin:0 0 10px; color:#a74444; font-size:9px; text-align:center; }
+.vivu-tour-trust { display:grid; gap:6px; padding-top:11px; border-top:1px solid var(--tour-line); color:var(--tour-muted); font-size:8px; }
+.vivu-tour-empty { display:grid; justify-items:center; gap:12px; padding:100px 20px; text-align:center; }
+.vivu-tour-empty h1 { margin:0; font-size:28px; }
+.vivu-tour-empty p { color:var(--tour-muted); }
+.vivu-tour-loading { min-height:75vh; padding:38px 0; }
+@media (max-width:980px) { .vivu-tour-layout { grid-template-columns:minmax(0,1fr) 285px; gap:18px; } .vivu-tour-gallery { height:360px; } }
+@media (max-width:760px) { .vivu-tour-container { width:min(100% - 32px,620px); } .vivu-tour-page { padding-top:16px; } .vivu-tour-title-row { flex-direction:column; gap:10px; } .vivu-tour-title-row h1 { font-size:27px; } .vivu-tour-meta { gap:8px 14px; font-size:10px; } .vivu-tour-gallery { grid-template-columns:1fr; grid-template-rows:250px 110px; height:370px; } .vivu-tour-gallery-side { grid-template-columns:repeat(4,minmax(0,1fr)); grid-template-rows:1fr; } .vivu-tour-gallery-note { padding:8px; } .vivu-tour-gallery-note strong { font-size:12px; } .vivu-tour-gallery-all { right:6px; bottom:6px; padding:5px 7px; font-size:8px; } .vivu-tour-layout { grid-template-columns:1fr; } .vivu-tour-booking { position:static; grid-row:1; } .vivu-tour-content { grid-row:2; } .vivu-tour-section { padding:16px; } .vivu-tour-highlights,.vivu-tour-service-grid { grid-template-columns:1fr; } .vivu-tour-section-nav { top:60px; } }
+
+@media (min-width:761px) {
+	.vivu-tour-container { width:min(1320px,calc(100% - 64px)); }
+	.vivu-tour-page { padding-top:28px; }
+	.vivu-tour-breadcrumb { margin-bottom:24px; font-size:13px; }
+	.vivu-tour-tags { gap:10px; }
+	.vivu-tour-tag { min-height:32px; padding:0 12px; font-size:12px; }
+	.vivu-tour-code { font-size:12px; }
+	.vivu-tour-title-row { margin:18px 0 14px; }
+	.vivu-tour-title-row h1 { font-size:clamp(34px,3.2vw,48px); }
+	.vivu-tour-title-actions button { min-height:42px; padding:0 14px; font-size:13px; }
+	.vivu-tour-meta { gap:12px 25px; font-size:14px; }
+	.vivu-tour-gallery { height:500px; gap:12px; margin:24px 0 34px; }
+	.vivu-tour-gallery-side { gap:12px; }
+	.vivu-gallery-caption { bottom:20px; left:20px; padding:10px 13px; font-size:13px; }
+	.vivu-tour-gallery-note { padding:24px; }
+	.vivu-tour-gallery-note span { font-size:11px; }
+	.vivu-tour-gallery-note strong { font-size:28px; }
+	.vivu-tour-gallery-all { right:14px; bottom:14px; padding:10px 13px; font-size:12px; }
+	.vivu-tour-layout { grid-template-columns:minmax(0,1fr) 370px; gap:36px; }
+	.vivu-tour-section-nav { gap:8px; padding:10px 0; }
+	.vivu-tour-section-nav a { padding:10px 15px; font-size:13px; }
+	.vivu-tour-section { margin-bottom:20px; padding:30px; }
+	.vivu-tour-section-title { gap:15px; margin-bottom:22px; }
+	.vivu-tour-section-icon { width:42px; height:42px; flex-basis:42px; font-size:21px; }
+	.vivu-tour-eyebrow { font-size:11px; }
+	.vivu-tour-section-title h2 { font-size:25px; }
+	.vivu-tour-section-title p { font-size:13px; }
+	.vivu-tour-description { font-size:15px; line-height:1.85; }
+	.vivu-tour-highlights { gap:12px; }
+	.vivu-tour-highlights article { gap:13px; padding:17px; }
+	.vivu-tour-highlights article>span { width:30px; height:30px; flex-basis:30px; font-size:14px; }
+	.vivu-tour-highlights h3 { margin:2px 0 7px; font-size:15px; }
+	.vivu-tour-highlights p { font-size:13px; line-height:1.7; }
+	.vivu-tour-itinerary { gap:15px; padding-left:18px; }
+	.vivu-tour-itinerary article { gap:16px; padding:18px; }
+	.vivu-tour-day { width:38px; height:38px; flex-basis:38px; margin-left:-37px; font-size:11px; }
+	.vivu-tour-itinerary h3 { font-size:16px; }
+	.vivu-tour-itinerary p { font-size:13px; line-height:1.75; }
+	.vivu-tour-service-grid { gap:16px; }
+	.vivu-tour-service-grid>div { padding:19px; }
+	.vivu-tour-service-grid h3 { font-size:16px; }
+	.vivu-tour-service-grid ul { gap:10px; font-size:13px; line-height:1.7; }
+	.vivu-tour-policy-copy p { padding:17px; font-size:13px; line-height:1.8; }
+	.vivu-tour-rating-total strong { font-size:30px; }
+	.vivu-tour-rating-total span { font-size:14px; }
+	.vivu-tour-rating-total small { font-size:12px; }
+	.vivu-tour-review-form { gap:13px; margin:20px 0; padding:19px; }
+	.vivu-tour-review-form>div:first-child strong { font-size:14px; }
+	.vivu-tour-review-form>div:first-child small { font-size:12px; }
+	.vivu-tour-star-picker button { font-size:29px; }
+	.vivu-tour-review-form textarea { padding:13px; font-size:13px; }
+	.vivu-tour-review-submit button:not(.vivu-tour-text-button) { min-height:42px; padding:0 18px; font-size:13px; }
+	.vivu-tour-review-submit p,.vivu-tour-text-button { font-size:12px; }
+	.vivu-tour-review-list article { gap:13px; padding:17px 0; }
+	.vivu-review-avatar { width:42px; height:42px; flex-basis:42px; font-size:14px; }
+	.vivu-tour-review-meta { gap:7px 13px; }
+	.vivu-tour-review-meta strong { font-size:13px; }
+	.vivu-tour-review-meta time { font-size:11px; }
+	.vivu-tour-review-meta>span { font-size:13px; }
+	.vivu-tour-review-body>p { font-size:13px; }
+	.vivu-tour-booking { top:104px; padding:23px; }
+	.vivu-tour-price { padding-bottom:19px; }
+	.vivu-tour-price small { font-size:12px; }
+	.vivu-tour-price strong { font-size:27px; }
+	.vivu-tour-price>div>span { font-size:12px; }
+	.vivu-tour-price-badge { padding:7px 9px; font-size:10px; }
+	.vivu-tour-date { gap:10px; padding:17px 0; }
+	.vivu-tour-date>label,.vivu-tour-passengers>h3 { font-size:14px; }
+	.vivu-tour-date>div { grid-template-columns:30px 1fr; padding:12px; }
+	.vivu-tour-date strong { font-size:13px; }
+	.vivu-tour-date small { font-size:11px; }
+	.vivu-tour-passengers { gap:15px; padding:17px 0; }
+	.vivu-tour-passengers>div>span>strong { font-size:13px; }
+	.vivu-tour-passengers>div>span>small { font-size:11px; }
+	.vivu-tour-counter { gap:7px; padding:4px; }
+	.vivu-tour-counter button { width:32px; height:32px; font-size:19px; }
+	.vivu-tour-counter output { width:21px; font-size:13px; }
+	.vivu-tour-total { gap:6px; margin:17px 0; padding:15px; }
+	.vivu-tour-total span { font-size:12px; }
+	.vivu-tour-total strong { font-size:24px; }
+	.vivu-tour-total small { font-size:10px; }
+	.vivu-tour-book-button { min-height:52px; font-size:15px; }
+	.vivu-tour-consult { margin:13px 0; font-size:12px; }
+	.vivu-tour-limited { font-size:12px; }
+	.vivu-tour-trust { gap:8px; padding-top:14px; font-size:11px; }
+}
+
+@media (max-width:760px) {
+	.vivu-tour-container { width:calc(100% - 36px); }
+	.vivu-tour-breadcrumb { gap:7px; margin-bottom:15px; font-size:12px; }
+	.vivu-tour-tags { gap:6px; }
+	.vivu-tour-tag { min-height:28px; padding:0 9px; font-size:10px; }
+	.vivu-tour-code { font-size:10px; }
+	.vivu-tour-title-row { margin:14px 0 12px; }
+	.vivu-tour-title-row h1 { font-size:clamp(25px,7vw,31px); line-height:1.22; }
+	.vivu-tour-title-actions button { min-height:38px; padding:0 12px; font-size:12px; }
+	.vivu-tour-meta { gap:8px 13px; font-size:12px; }
+	.vivu-tour-gallery { grid-template-rows:260px 118px; height:390px; gap:8px; margin:17px 0 22px; }
+	.vivu-tour-gallery-side { gap:8px; }
+	.vivu-tour-gallery-note { padding:12px; }
+	.vivu-tour-gallery-note span { font-size:9px; }
+	.vivu-tour-gallery-note strong { font-size:18px; }
+	.vivu-gallery-caption { bottom:10px; left:10px; padding:7px 9px; font-size:10px; }
+	.vivu-tour-layout { gap:12px; }
+	.vivu-tour-booking { padding:18px; }
+	.vivu-tour-price strong { font-size:24px; }
+	.vivu-tour-date>label,.vivu-tour-passengers>h3 { font-size:13px; }
+	.vivu-tour-date strong { font-size:12px; }
+	.vivu-tour-date small { font-size:10px; }
+	.vivu-tour-passengers>div>span>strong { font-size:12px; }
+	.vivu-tour-passengers>div>span>small { font-size:10px; }
+	.vivu-tour-total span { font-size:11px; }
+	.vivu-tour-total strong { font-size:22px; }
+	.vivu-tour-book-button { min-height:49px; font-size:14px; }
+	.vivu-tour-consult { font-size:11px; }
+	.vivu-tour-trust { font-size:10px; }
+	.vivu-tour-section-nav { top:58px; gap:2px; margin-inline:-18px; padding:8px 18px; }
+	.vivu-tour-section-nav a { padding:9px 10px; font-size:11px; }
+	.vivu-tour-section { margin-bottom:13px; padding:18px; scroll-margin-top:110px; }
+	.vivu-tour-section-title { gap:10px; margin-bottom:15px; }
+	.vivu-tour-section-icon { width:32px; height:32px; flex-basis:32px; font-size:15px; }
+	.vivu-tour-eyebrow { font-size:9px; }
+	.vivu-tour-section-title h2 { font-size:18px; }
+	.vivu-tour-section-title p { font-size:11px; }
+	.vivu-tour-description { font-size:13px; line-height:1.75; }
+	.vivu-tour-highlights { gap:8px; }
+	.vivu-tour-highlights article { gap:9px; padding:11px; }
+	.vivu-tour-highlights article>span { width:24px; height:24px; flex-basis:24px; }
+	.vivu-tour-highlights h3 { font-size:12px; }
+	.vivu-tour-highlights p { font-size:11px; }
+	.vivu-tour-itinerary article { gap:10px; padding:11px; }
+	.vivu-tour-day { width:29px; height:29px; flex-basis:29px; margin-left:-27px; font-size:9px; }
+	.vivu-tour-itinerary h3 { font-size:13px; }
+	.vivu-tour-itinerary p { font-size:11px; }
+	.vivu-tour-service-grid { gap:9px; }
+	.vivu-tour-service-grid>div { padding:12px; }
+	.vivu-tour-service-grid h3 { font-size:13px; }
+	.vivu-tour-service-grid ul { font-size:11px; }
+	.vivu-tour-policy-copy p { padding:11px; font-size:11px; }
+	.vivu-tour-rating-total strong { font-size:23px; }
+	.vivu-tour-rating-total span { font-size:10px; }
+	.vivu-tour-rating-total small { font-size:9px; }
+	.vivu-tour-review-form { padding:12px; }
+	.vivu-tour-review-form>div:first-child strong { font-size:12px; }
+	.vivu-tour-review-form>div:first-child small { font-size:10px; }
+	.vivu-tour-star-picker button { font-size:25px; }
+	.vivu-tour-review-form textarea { font-size:12px; }
+	.vivu-tour-review-meta strong { font-size:11px; }
+	.vivu-tour-review-meta time { font-size:10px; }
+	.vivu-tour-review-meta>span { font-size:11px; }
+	.vivu-tour-review-body>p { font-size:11px; }
+}

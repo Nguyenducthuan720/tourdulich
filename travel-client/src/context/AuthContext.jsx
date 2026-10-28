@@ -40,6 +40,15 @@ export function AuthProvider({ children }) {
     setUser(null)
   }
 
+  // Cập nhật user đang đăng nhập (dùng sau khi sửa hồ sơ) để Navbar/header đổi ngay
+  const updateUser = (partial) => {
+    setUser((current) => {
+      const next = { ...(current || {}), ...partial }
+      localStorage.setItem('travel_user', JSON.stringify(next))
+      return next
+    })
+  }
+
   const value = useMemo(
     () => ({
       user,
@@ -48,6 +57,7 @@ export function AuthProvider({ children }) {
       login,
       logout,
       register,
+      updateUser,
     }),
     [user],
   )

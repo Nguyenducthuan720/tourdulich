@@ -1,0 +1,316 @@
+.vivu-checkout-page { min-height:70vh; padding:0 0 72px; background:#f3f6f7; color:#131b2e; }
+.vivu-checkout-page > .mx-auto { max-width:1240px; }
+.vivu-checkout-header { margin:0 0 22px; padding:28px 0 16px; border-bottom:1px solid #dce3e8; }
+.vivu-checkout-brand-row { display:flex; align-items:center; justify-content:space-between; gap:15px; margin-bottom:22px; }
+.vivu-checkout-brand { display:flex; align-items:center; gap:9px; color:#005a71; text-decoration:none; }
+.vivu-checkout-brand>span:first-child { display:grid; width:36px; height:36px; place-items:center; border-radius:5px; background:#005a71; color:white; font-size:16px; font-weight:800; }
+.vivu-checkout-brand>span:last-child { display:grid; gap:3px; }
+.vivu-checkout-brand strong { font-size:13px; font-weight:800; }
+.vivu-checkout-brand small,.vivu-checkout-ssl { color:#657277; font-size:8px; }
+.vivu-checkout-ssl { padding:7px 9px; border:1px solid #dce3e8; border-radius:5px; background:white; color:#18724d; font-weight:700; }
+.vivu-checkout-title-row { display:flex; align-items:center; justify-content:space-between; gap:24px; margin-bottom:22px; }
+.vivu-checkout-overline { margin-bottom:7px; color:#005a71; font-size:9px; font-weight:800; letter-spacing:1.4px; }
+.vivu-checkout-title-row h1 { margin:0; font-family:'Plus Jakarta Sans',sans-serif; font-size:30px; font-weight:800; line-height:1.2; }
+.vivu-checkout-intro { margin:7px 0 0; color:#5d6b70; font-size:11px; }
+.vivu-checkout-support { display:grid; gap:3px; padding:9px 13px; border:1px solid #dce3e8; border-radius:6px; background:white; color:#647276; font-size:9px; text-decoration:none; }
+.vivu-checkout-support strong { color:#005a71; font-size:13px; }
+.vivu-checkout-contact-card { padding:15px; border:1px solid #dce3e8; border-radius:6px; background:#f7f9fa; }
+.vivu-checkout-contact-title { display:flex; align-items:center; gap:9px; padding-bottom:11px; border-bottom:1px solid #dce3e8; }
+.vivu-checkout-contact-title>span:first-child { display:grid; width:27px; height:27px; place-items:center; border-radius:5px; background:#deefec; color:#18724d; font-size:12px; }
+.vivu-checkout-contact-title>div { display:grid; gap:3px; }
+.vivu-checkout-contact-title>div strong { font-size:11px; }
+.vivu-checkout-contact-title>div small,.vivu-checkout-contact-fields small { color:#657277; font-size:9px; }
+.vivu-checkout-verified { margin-left:auto; padding:5px 7px; border-radius:4px; background:#e8f6ef; color:#23724b; font-size:8px; font-weight:800; }
+.vivu-checkout-contact-fields { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding-top:12px; }
+.vivu-checkout-contact-fields>div { display:grid; gap:5px; min-width:0; }
+.vivu-checkout-contact-fields strong { overflow-wrap:anywhere; font-size:10px; }
+.vivu-checkout-header > .relative { max-width:850px; margin:0 auto; }
+.vivu-checkout-header > .relative > .flex.items-center.justify-between { gap:8px; }
+.vivu-checkout-header > .relative > .flex.items-center.justify-between > .flex.items-center.gap-3 { gap:9px; }
+.vivu-checkout-header > .relative .w-12.h-12 { width:36px; height:36px; flex:0 0 36px; font-size:12px; }
+.vivu-checkout-header > .relative .flex-1.h-2 { height:2px; margin-inline:8px; }
+.vivu-checkout-header > .relative .text-base { font-size:10px; }
+.vivu-checkout-header > .relative .text-sm { font-size:9px; }
+.vivu-checkout-grid { align-items:start; }
+.vivu-checkout-grid,.vivu-checkout-grid>div,.vivu-checkout-form-panel,.vivu-checkout-summary { min-width:0; }
+.vivu-checkout-form-panel * { min-width:0; }
+.vivu-checkout-form-panel,.vivu-checkout-summary { border:1px solid #dce3e8; border-radius:8px; background:white; box-shadow:0 8px 24px rgb(19 27 46 / 5%); }
+.vivu-checkout-form-panel { padding:23px; }
+.vivu-checkout-form-panel h2 { font-family:'Plus Jakarta Sans',sans-serif; font-size:18px; }
+.vivu-checkout-form-panel h3 { font-size:13px; }
+.vivu-checkout-form-panel .rounded-2xl,.vivu-checkout-form-panel .rounded-xl,.vivu-checkout-summary .rounded-2xl { border-radius:6px; }
+.vivu-checkout-form-panel .border-2 { border-width:1px; }
+.vivu-checkout-form-panel input:not([type=checkbox]):not([type=radio]),.vivu-checkout-form-panel textarea { border-radius:5px; font-size:12px; }
+.vivu-checkout-form-panel .text-lg { font-size:13px; }
+.vivu-checkout-form-panel .text-sm { font-size:11px; }
+.vivu-checkout-form-panel .p-8 { padding:20px; }
+.vivu-checkout-form-panel .p-6 { padding:15px; }
+.vivu-checkout-form-panel .p-5 { padding:13px; }
+.vivu-checkout-form-panel .btn,.vivu-checkout-page button { border-radius:5px; }
+.vivu-checkout-page .vivu-checkout-summary { top:96px; border-width:1px; }
+.vivu-checkout-summary .p-6 { padding:18px; }
+.vivu-checkout-summary .text-2xl { font-size:18px; }
+.vivu-checkout-summary .text-3xl { font-size:22px; }
+.vivu-checkout-summary .text-lg { font-size:12px; }
+.vivu-checkout-summary .text-base { font-size:11px; }
+.vivu-checkout-summary .text-sm { font-size:10px; }
+.vivu-checkout-summary .btn { min-height:44px; border-radius:5px; }
+.vivu-checkout-page .bg-brand-500 { background-color:#005a71; }
+.vivu-checkout-page .hover\:bg-brand-600:hover { background-color:#004454; }
+.vivu-checkout-page .text-brand-600,.vivu-checkout-page .text-brand-700 { color:#005a71; }
+
+.vivu-payment-page { min-height:70vh; padding:0 0 70px; background:#f3f6f7; color:#131b2e; font-family:'Plus Jakarta Sans',sans-serif; }
+.vivu-payment-topbar { display:flex; min-height:70px; align-items:center; justify-content:space-between; gap:16px; padding:10px max(24px,calc((100vw - 1240px)/2)); border-bottom:1px solid #dce3e8; background:white; }
+.vivu-payment-brand { display:flex; align-items:center; gap:10px; color:#005a71; text-decoration:none; }
+.vivu-payment-brand>span:first-child { display:grid; width:38px; height:38px; place-items:center; border-radius:5px; background:#005a71; color:white; font-size:17px; font-weight:800; }
+.vivu-payment-brand>span:last-child { display:grid; gap:3px; }
+.vivu-payment-brand strong { font-size:14px; font-weight:800; }
+.vivu-payment-brand small { color:#657277; font-size:8px; }
+.vivu-payment-security { display:flex; align-items:center; gap:7px; color:#18724d; font-size:10px; font-weight:700; }
+.vivu-payment-progress { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); max-width:930px; margin:0 auto; padding:18px 24px; }
+.vivu-payment-progress-step { position:relative; display:grid; grid-template-columns:32px 1fr; align-items:center; gap:1px 8px; min-width:0; color:#778387; }
+.vivu-payment-progress-step:not(:last-child)::after { position:absolute; top:15px; left:38px; right:9px; height:1px; background:#d4dddf; content:''; }
+.vivu-payment-progress-step>span { z-index:1; display:grid; width:30px; height:30px; grid-row:span 2; place-items:center; border:1px solid #d4dddf; border-radius:50%; background:#f6f8f8; font-size:10px; font-weight:800; }
+.vivu-payment-progress-step small { align-self:end; font-size:8px; }
+.vivu-payment-progress-step strong { overflow:hidden; color:#536166; font-size:9px; text-overflow:ellipsis; white-space:nowrap; }
+.vivu-payment-progress-step.complete>span,.vivu-payment-progress-step.current>span { border-color:#005a71; background:#005a71; color:white; }
+.vivu-payment-progress-step.complete::after { background:#005a71; }
+.vivu-payment-progress-step.current small,.vivu-payment-progress-step.current strong { color:#005a71; font-weight:800; }
+.vivu-payment-state { width:min(100% - 32px,780px); margin:0 auto; }
+.vivu-provider-card { width:100%; max-width:690px; overflow:hidden; border:1px solid #dce3e8; border-radius:8px; background:white; box-shadow:0 12px 36px rgb(19 27 46 / 7%); text-align:left; }
+.vivu-provider-card h1,.vivu-provider-card h2 { font-family:'Plus Jakarta Sans',sans-serif; letter-spacing:0; }
+.vivu-provider-card .rounded-2xl,.vivu-provider-card .rounded-xl { border-radius:6px; }
+.vivu-provider-card .p-6 { padding:20px; }
+.vivu-provider-card .text-2xl { font-size:18px; }
+.vivu-provider-card .text-sm { font-size:11px; }
+.vivu-provider-card .text-xs { font-size:9px; }
+.vivu-provider-heading { background:#005a71 !important; }
+.vivu-provider-card .bg-cream { background:#f2f5f6; }
+.vivu-provider-card .btn { min-height:42px; border-radius:5px; }
+.vivu-payment-state .max-w-lg,.vivu-payment-state .max-w-md { max-width:690px; }
+.vivu-payment-page .vivu-payment-state .card { border-radius:8px; }
+.vivu-payment-state .animate-spin { border-top-color:#005a71; }
+@media (max-width:900px) { .vivu-checkout-page>.mx-auto { max-width:760px; } .vivu-checkout-grid { grid-template-columns:1fr; } .vivu-checkout-summary { position:static; grid-row:1; } .vivu-checkout-grid>div:first-child { grid-row:2; } }
+@media (max-width:640px) { .vivu-checkout-page { padding-bottom:42px; } .vivu-checkout-title-row { align-items:flex-start; flex-direction:column; gap:12px; } .vivu-checkout-title-row h1 { font-size:25px; } .vivu-checkout-header { padding-top:22px; } .vivu-checkout-header .hidden.sm\:block { display:none; } .vivu-checkout-header>.relative .text-base { font-size:8px; } .vivu-checkout-form-panel { padding:15px; } .vivu-checkout-form-panel .p-8 { padding:15px; } .vivu-checkout-form-panel .p-6 { padding:12px; } .vivu-checkout-form-panel .grid-cols-2 { grid-template-columns:1fr; } .vivu-checkout-form-panel .flex.gap-4.pt-6 { flex-direction:column; } .vivu-payment-topbar { min-height:60px; padding-inline:16px; } .vivu-payment-security span { display:none; } .vivu-payment-progress { padding:14px 12px; } .vivu-payment-progress-step { grid-template-columns:28px 1fr; gap:2px 5px; }
+  .vivu-payment-progress-step>span { width:26px; height:26px; font-size:9px; }
+  .vivu-payment-progress-step:not(:last-child)::after { top:13px; left:32px; right:5px; }
+  .vivu-payment-progress-step small { font-size:7px; }
+  .vivu-payment-progress-step strong { max-width:70px; font-size:8px; }
+  .vivu-checkout-contact-fields { grid-template-columns:1fr; }
+  .vivu-provider-card .p-8 { padding:18px; }
+}
+
+@media (min-width:901px) {
+  .vivu-checkout-page { padding-bottom:90px; }
+  .vivu-checkout-page>.mx-auto { max-width:1320px; }
+  .vivu-checkout-header { margin-bottom:30px; padding:30px 0 20px; }
+  .vivu-checkout-title-row h1 { font-size:36px; }
+  .vivu-checkout-overline { font-size:11px; }
+  .vivu-checkout-intro { font-size:14px; }
+  .vivu-checkout-support { padding:12px 17px; font-size:11px; }
+  .vivu-checkout-support strong { font-size:16px; }
+  .vivu-checkout-grid { grid-template-columns:minmax(0,1.75fr) minmax(340px,.9fr); gap:30px; }
+  .vivu-checkout-form-panel { padding:30px; }
+  .vivu-checkout-form-panel h2 { font-size:23px; }
+  .vivu-checkout-form-panel h3 { font-size:16px; }
+  .vivu-checkout-form-panel .text-lg { font-size:15px; }
+  .vivu-checkout-form-panel .text-sm { font-size:13px; }
+  .vivu-checkout-form-panel .text-xs { font-size:11px; }
+  .vivu-checkout-form-panel input:not([type=checkbox]):not([type=radio]),.vivu-checkout-form-panel textarea { min-height:48px; padding:12px 14px; font-size:14px; }
+  .vivu-checkout-form-panel .p-8 { padding:24px; }
+  .vivu-checkout-form-panel .p-6 { padding:19px; }
+  .vivu-checkout-form-panel .p-5 { padding:17px; }
+  .vivu-checkout-form-panel .p-4 { padding:15px; }
+  .vivu-checkout-form-panel .vivu-checkout-contact-card { padding:19px; }
+  .vivu-checkout-contact-title>div strong { font-size:14px; }
+  .vivu-checkout-contact-title>div small,.vivu-checkout-contact-fields small { font-size:11px; }
+  .vivu-checkout-contact-title>span:first-child { width:34px; height:34px; font-size:15px; }
+  .vivu-checkout-verified { font-size:10px; }
+  .vivu-checkout-contact-fields { gap:18px; padding-top:16px; }
+  .vivu-checkout-contact-fields strong { font-size:13px; }
+  .vivu-checkout-form-panel .btn { min-height:50px; font-size:14px; }
+  .vivu-checkout-summary { top:105px; }
+  .vivu-checkout-summary .p-6 { padding:23px; }
+  .vivu-checkout-summary .text-2xl { font-size:22px; }
+  .vivu-checkout-summary .text-3xl { font-size:28px; }
+  .vivu-checkout-summary .text-lg { font-size:15px; }
+  .vivu-checkout-summary .text-base { font-size:13px; }
+  .vivu-checkout-summary .text-sm { font-size:12px; }
+  .vivu-checkout-summary .text-xs { font-size:10px; }
+  .vivu-checkout-summary .btn { min-height:50px; font-size:14px; }
+  .vivu-payment-page { padding-bottom:86px; }
+  .vivu-payment-security { justify-content:flex-end; max-width:1320px; margin:0 auto; padding:12px 0 0; font-size:12px; }
+  .vivu-payment-progress { max-width:1040px; padding:25px 32px; }
+  .vivu-payment-progress-step { grid-template-columns:38px 1fr; gap:2px 11px; }
+  .vivu-payment-progress-step>span { width:36px; height:36px; font-size:12px; }
+  .vivu-payment-progress-step:not(:last-child)::after { top:18px; left:45px; right:11px; }
+  .vivu-payment-progress-step small { font-size:10px; }
+  .vivu-payment-progress-step strong { font-size:12px; }
+  .vivu-payment-state { width:min(100% - 48px,920px); }
+  .vivu-provider-card { max-width:820px; }
+  .vivu-provider-card .p-6 { padding:28px; }
+  .vivu-provider-card .p-8 { padding:32px; }
+  .vivu-provider-card .text-2xl { font-size:24px; }
+  .vivu-provider-card .text-sm { font-size:14px; }
+  .vivu-provider-card .text-xs { font-size:12px; }
+  .vivu-provider-card .text-lg { font-size:17px; }
+  .vivu-provider-card img { max-width:280px; max-height:280px; }
+  .vivu-provider-card .btn { min-height:50px; font-size:14px; }
+}
+
+@media (max-width:900px) {
+  .vivu-checkout-page>.mx-auto { max-width:760px; }
+  .vivu-checkout-form-panel .text-sm { font-size:12px; }
+  .vivu-checkout-summary .text-sm { font-size:11px; }
+  .vivu-payment-security { max-width:760px; margin:0 auto; padding:10px 20px 0; }
+}
+
+@media (max-width:640px) {
+  .vivu-checkout-page { padding-bottom:44px; }
+  .vivu-checkout-page>.mx-auto { padding-inline:18px; }
+  .vivu-checkout-title-row h1 { font-size:27px; }
+  .vivu-checkout-intro { font-size:13px; line-height:1.6; }
+  .vivu-checkout-form-panel { padding:17px; }
+  .vivu-checkout-form-panel h2 { font-size:19px; }
+  .vivu-checkout-form-panel h3 { font-size:14px; }
+  .vivu-checkout-form-panel .text-lg { font-size:14px; }
+  .vivu-checkout-form-panel .text-sm { font-size:12px; }
+  .vivu-checkout-form-panel .text-xs { font-size:10px; }
+  .vivu-checkout-form-panel input:not([type=checkbox]):not([type=radio]),.vivu-checkout-form-panel textarea { font-size:14px; }
+  .vivu-checkout-summary .text-2xl { font-size:20px; }
+  .vivu-checkout-summary .text-3xl { font-size:24px; }
+  .vivu-checkout-summary .text-lg { font-size:13px; }
+  .vivu-checkout-summary .text-base { font-size:12px; }
+  .vivu-checkout-summary .text-sm { font-size:11px; }
+  .vivu-checkout-summary .text-xs { font-size:10px; }
+  .vivu-payment-security { width:100%; padding:9px 17px 0; font-size:10px; }
+  .vivu-payment-progress { width:100%; padding:15px 13px; }
+  .vivu-payment-progress { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .vivu-payment-progress-step { grid-template-columns:28px 1fr; gap:2px 5px; }
+  .vivu-payment-progress-step { min-height:48px; padding:7px; border:1px solid #dce3e8; border-radius:5px; background:white; }
+  .vivu-payment-progress-step>span { width:27px; height:27px; }
+  .vivu-payment-progress-step::after { display:none; }
+  .vivu-payment-progress-step small { font-size:9px; }
+  .vivu-payment-progress-step strong { max-width:none; font-size:11px; }
+  .vivu-checkout-grid { width:100%; grid-template-columns:minmax(0,1fr); }
+  .vivu-checkout-grid>div { width:100%; max-width:100%; }
+  .vivu-checkout-form-panel { overflow:hidden; }
+  .vivu-checkout-form-panel .grid { min-width:0; }
+  .vivu-checkout-form-panel .grid>* { min-width:0; }
+  .vivu-checkout-form-panel p,.vivu-checkout-form-panel h2,.vivu-checkout-form-panel h3,.vivu-checkout-form-panel h4 { overflow-wrap:anywhere; }
+  .vivu-payment-state { width:calc(100% - 28px); padding-top:10px; }
+  .vivu-provider-card .p-6 { padding:17px; }
+  .vivu-provider-card .p-8 { padding:20px; }
+  .vivu-provider-card .text-2xl { font-size:20px; }
+  .vivu-provider-card .text-sm { font-size:12px; }
+  .vivu-provider-card .text-xs { font-size:10px; }
+  .vivu-provider-card .btn { min-height:46px; font-size:13px; }
+}
+
+/* One continuous order surface: room, bed, and summary stay together. */
+.vivu-checkout-grid {
+  display:grid;
+  gap:0 !important;
+  overflow:visible;
+  border:1px solid #dce3e8;
+  border-radius:8px;
+  background:white;
+  box-shadow:0 10px 30px rgb(19 27 46 / 6%);
+}
+
+.vivu-checkout-form-panel,
+.vivu-checkout-summary {
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+}
+
+.vivu-checkout-summary {
+  border-left:1px solid #dce3e8 !important;
+}
+
+.vivu-checkout-summary > .h-2 { display:none; }
+
+.vivu-room-choice-list {
+  gap:0 !important;
+  overflow:hidden;
+  border:1px solid #dce3e8;
+  border-radius:6px;
+  background:white;
+}
+
+.vivu-room-choice {
+  border:0 !important;
+  border-bottom:1px solid #e3e9ec !important;
+  border-radius:0 !important;
+  background:white;
+  box-shadow:none !important;
+}
+
+.vivu-room-choice:last-child { border-bottom:0 !important; }
+.vivu-room-choice:hover { background:#f7fafb; }
+.vivu-room-choice.border-brand-500 { background:#eff7f7; }
+.vivu-room-choice .rounded-2xl { border-radius:5px; }
+
+.vivu-bed-choice-section {
+  padding-top:4px;
+  border-top:0 !important;
+}
+
+.vivu-bed-choice-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:4px !important;
+  padding:4px;
+  border:1px solid #dce3e8;
+  border-radius:6px;
+  background:#f0f3f4;
+}
+
+.vivu-bed-choice {
+  display:grid;
+  min-height:48px;
+  grid-template-columns:24px 1fr;
+  align-items:center;
+  justify-items:start;
+  gap:8px;
+  padding:10px 12px !important;
+  border:1px solid transparent !important;
+  border-radius:4px !important;
+  background:transparent;
+  text-align:left !important;
+  box-shadow:none !important;
+}
+
+.vivu-bed-choice.border-brand-500 { border-color:#dce3e8 !important; background:white !important; box-shadow:0 1px 4px rgb(19 27 46 / 8%) !important; }
+.vivu-bed-choice > div { width:24px !important; height:24px !important; margin:0 !important; background:transparent !important; color:#005a71 !important; }
+.vivu-bed-choice p { margin:0; font-size:12px; }
+
+@media (min-width:1024px) {
+  .vivu-checkout-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .vivu-checkout-grid > div:first-child { grid-column:span 2; }
+  .vivu-checkout-grid > div:last-child { grid-column:span 1; }
+}
+
+@media (max-width:1023px) {
+  .vivu-checkout-grid { grid-template-columns:minmax(0,1fr); }
+  .vivu-checkout-grid > div:first-child { grid-row:1; grid-column:1; }
+  .vivu-checkout-grid > div:last-child { grid-row:2; grid-column:1; }
+  .vivu-checkout-summary { border-top:1px solid #dce3e8 !important; border-left:0 !important; }
+  .vivu-checkout-summary .sticky { position:static; }
+}
+
+@media (max-width:640px) {
+  .vivu-checkout-grid { width:100%; }
+  .vivu-checkout-form-panel { padding:18px !important; }
+  .vivu-checkout-summary .p-6 { padding:18px; }
+  .vivu-room-choice { padding:14px !important; }
+  .vivu-room-choice .h-14 { width:44px; height:44px; }
+  .vivu-room-choice h4 { margin-bottom:5px; font-size:14px; }
+  .vivu-room-choice p { font-size:11px; }
+  .vivu-bed-choice { grid-template-columns:20px 1fr; padding:9px 7px !important; gap:5px; }
+  .vivu-bed-choice p { font-size:10px; }
+  .vivu-bed-choice > div { width:20px !important; height:20px !important; }
+  .vivu-checkout-summary .text-3xl { font-size:21px; }
+}

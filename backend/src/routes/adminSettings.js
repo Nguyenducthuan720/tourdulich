@@ -12,13 +12,28 @@ const defaultSettings = {
   maintenanceMode: false,
 }
 
+// DB stores everything as text; normalise known boolean keys on read
+const toClientValue = (key, value) => {
+  if (key === 'maintenanceMode') {
+    return value === '1' || value === 'true' || value === true
+  }
+  return value
+}
+
+// ...and serialise booleans back to '1' / '0' on write
+const toDbValue = (value) => {
+  if (typeof value === 'boolean') return value ? '1' : '0'
+  if (value === null || value === undefined) return ''
+  return String(value)
+}
+
 router.get("/", verifyToken, verifyAdmin, async (req, res) => {
   try {
     const query = "SELECT [Key], [Value] FROM Settings";
     const result = await new sql.Request().query(query);
     const data = { ...defaultSettings };
     for (const row of result.recordset) {
-      data[row.Key] = row.Value;
+      data[row.Key] = toClientValue(row.Key, row.Value);
     }
     res.json({ success: true, data });
   } catch (error) {
@@ -36,12 +51,14 @@ router.put("/", verifyToken, verifyAdmin, async (req, res) => {
       ELSE
         INSERT INTO Settings ([Key], [Value]) VALUES (@key, @value);
     `;
-    const request = new sql.Request();
+
     for (const [key, value] of Object.entries(settings)) {
-      request.input("key", sql.NVarChar, key);
-      request.input("value", sql.NVarChar, String(value));
-      await request.query(query);
+      await new sql.Request()
+        .input("key", sql.NVarChar(100), key)
+        .input("value", sql.NVarChar(sql.MAX), toDbValue(value))
+        .query(query);
     }
+
     res.json({ success: true, message: "Lưu cài đặt thành công" });
   } catch (error) {
     console.error("Update settings error:", error);

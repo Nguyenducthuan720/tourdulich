@@ -5,6 +5,7 @@ import SearchBox from '../components/SearchBox/SearchBox'
 import CategoryFilter from '../components/CategoryFilter/CategoryFilter'
 import { getDestinations } from '../api/destinationService'
 import { FALLBACK_DESTINATION_IMAGE, getImageUrl } from '../utils/imageUrl'
+import { Link } from 'react-router-dom'
 
 const stats = [
   { value: '18+', label: 'Tour cao cấp' },
@@ -23,51 +24,45 @@ export default function HomePage() {
   const [destinations, setDestinations] = useState([])
 
   useEffect(() => {
-    fetchTours()
-    fetchDestinations()
-  }, [selectedCategory])
+    let active = true
+    getTours({
+      ...(selectedCategory && { categoryId: selectedCategory }),
+      ...(searchKeyword && { keyword: searchKeyword }),
+      ...(searchLocation && { location: searchLocation }),
+    })
+      .then((data) => {
+        if (!active) return
+        setTours(data)
+        setError(null)
+      })
+      .catch((err) => {
+        console.error('Fetch tours error:', err)
+        if (active) setError('Không thể tải danh sách tour. Vui lòng thử lại.')
+      })
+      .finally(() => {
+        if (active) setLoading(false)
+      })
 
-  const fetchDestinations = async () => {
-    try {
-      const data = await getDestinations()
-      setDestinations(data)
-    } catch (err) {
-      console.error('Fetch destinations error:', err)
-    }
-  }
+    return () => { active = false }
+  }, [selectedCategory, searchKeyword, searchLocation])
 
-  const fetchTours = async (params = {}) => {
-    try {
-      setLoading(true)
-      setError(null)
-      const queryParams = {
-        ...params,
-        ...(selectedCategory && { categoryId: selectedCategory }),
-        ...(searchKeyword && { keyword: searchKeyword }),
-        ...(searchLocation && { location: searchLocation }),
-      }
-      const data = await getTours(queryParams)
-      setTours(data)
-    } catch (err) {
-      console.error('Fetch tours error:', err)
-      setError('Không thể tải danh sách tour. Vui lòng thử lại.')
-    } finally {
-      setLoading(false)
-    }
-  }
+  useEffect(() => {
+    getDestinations()
+      .then(setDestinations)
+      .catch((err) => console.error('Fetch destinations error:', err))
+  }, [])
 
-  const handleSearch = (keyword, location) => {
+  const handleSearch = ({ keyword = '', location = '' } = {}) => {
     setSearchKeyword(keyword)
     setSearchLocation(location)
-    fetchTours({ keyword, location })
+    setTimeout(() => {
+      document.getElementById('tours-section')?.scrollIntoView({ behavior: 'smooth' })
+    }, 100)
   }
 
   const handleDestinationClick = (dest) => {
     const searchTerm = dest.DestinationName === 'Hội An' ? 'Hội An' : dest.Province
-    handleSearch('', searchTerm)
-    setTimeout(() => {
-      document.getElementById('tours-section')?.scrollIntoView({ behavior: 'smooth' })
-    }, 100)
+    handleSearch({ location: searchTerm })
   }
 
   const handleCategorySelect = (categoryId) => {
@@ -76,65 +71,24 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-cream">
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        {/* Split-screen collage: Việt Nam (trái) / Thế giới (phải) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 sm:auto-rows-[680px]">
-          <div className="group relative h-[360px] overflow-hidden sm:h-full">
-            <img
-              src="https://images.unsplash.com/photo-1528127269322-539801943592?w=1600&q=80"
-              alt="Vịnh Hạ Long"
-              className="h-full w-full object-cover transition duration-[1200ms] ease-out group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-ink-900/85 via-ink-900/25 to-ink-900/10"></div>
-          </div>
-
-          <div className="group relative h-[360px] overflow-hidden sm:h-full">
-            <img
-              src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1600&q=80"
-              alt="Núi Phú Sỹ"
-              className="h-full w-full object-cover transition duration-[1200ms] ease-out group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-ink-900/80 via-ink-900/20 to-ink-900/10"></div>
-          </div>
+      <section className="vivu-home-hero">
+        <img className="vivu-home-hero-image" src="https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=2200&q=90" alt="Du thuyền trên làn nước xanh ở Vịnh Hạ Long" />
+        <div className="vivu-home-hero-shade"></div>
+        <div className="vivu-home-hero-copy container-x">
+          <p className="vivu-home-eyebrow"><IconDot /> Nền tảng du lịch tin cậy tại Việt Nam</p>
+          <h1>Khám phá Việt Nam<br /><span>& thế giới trọn vẹn.</span></h1>
+          <p className="vivu-home-intro">Tìm một hành trình đáng nhớ, từ tour được tuyển chọn đến những chuyến đi do chính bạn tạo nên.</p>
         </div>
+        <div className="vivu-home-search container-x"><SearchBox onSearch={handleSearch} variant="floating" /></div>
+      </section>
 
-        {/* Cinematic scrim đảm bảo chữ đọc được */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink-900/50 via-transparent to-ink-900/60"></div>
-
-        {/* Nhãn hai nửa */}
-        <div className="absolute inset-x-0 top-6 z-20 flex items-start justify-between px-6">
-          <span className="rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white backdrop-blur-md">
-            Việt Nam · Vịnh Hạ Long
-          </span>
-          <span className="rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white backdrop-blur-md">
-            Thế giới · Núi Phú Sỹ
-          </span>
-        </div>
-
-        {/* Typography center-left */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 pt-28 lg:pt-36">
-          <div className="container-x">
-            <div className="max-w-3xl">
-              <p className="mb-5 inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-brand-200 backdrop-blur-sm">
-                <IconDot />
-                Premium Travel Experience
-              </p>
-              <h1 className="font-display text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl">
-                Khám phá thế giới
-                <span className="block italic text-brand-200">theo cách của bạn</span>
-              </h1>
-              <p className="mt-6 hidden max-w-xl text-base leading-relaxed text-ink-100/90 md:block lg:text-lg">
-                Hơn 18 hành trình cao cấp trong và ngoài nước — dịch vụ đẳng cấp,
-                lịch trình tinh tế và giá trị đích thực cho mỗi chuyến đi.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Floating search */}
-        <div className="container-x absolute inset-x-0 bottom-0 z-30 pb-8">
-          <SearchBox onSearch={handleSearch} variant="floating" />
+      <section className="vivu-services-band">
+        <div className="container-x vivu-service-grid">
+          <Link to="/flights"><span>✈</span><strong>Vé máy bay</strong><small>Tìm chuyến bay</small></Link>
+          <Link to="/cars"><span>↗</span><strong>Thuê xe</strong><small>Đưa đón tận nơi</small></Link>
+          <Link to="/hotels"><span>⌂</span><strong>Khách sạn</strong><small>Chọn nơi nghỉ</small></Link>
+          <Link to="/planner"><span>✦</span><strong>Lịch trình AI</strong><small>Thiết kế chuyến đi</small></Link>
+          <Link to="/community"><span>♡</span><strong>Cộng đồng</strong><small>Chia sẻ trải nghiệm</small></Link>
         </div>
       </section>
 
@@ -151,6 +105,18 @@ export default function HomePage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="container-x py-14 lg:py-16">
+        <div className="vivu-promo-strip">
+          <div>
+            <p className="eyebrow mb-3">ĐI THEO CÁCH CỦA BẠN</p>
+            <h2 className="section-title">Một chuyến đi. Thật nhiều cách để bắt đầu.</h2>
+            <p className="section-subtitle">Dùng trợ lý AI để lên lịch trình riêng, hoặc để chúng tôi chọn sẵn một tour hợp ý bạn.</p>
+            <div className="mt-6 flex flex-wrap gap-3"><Link className="btn btn-primary" to="/planner">Lên lịch trình cùng AI</Link><Link className="btn btn-outline" to="/community">Đọc cảm nhận du khách</Link></div>
+          </div>
+          <img src="https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=1200&q=85" alt="Du khách khám phá một cung đường miền núi" loading="lazy" />
         </div>
       </section>
 
@@ -249,7 +215,7 @@ export default function HomePage() {
                       {tours.length} tour
                     </span>
                   </div>
-                  <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                  <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     {tours.map((tour, i) => (
                       <div
                         key={tour.id || tour.TourID}

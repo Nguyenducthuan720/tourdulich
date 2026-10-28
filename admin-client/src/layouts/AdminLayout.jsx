@@ -12,6 +12,7 @@ const navItems = [
   { to: '/bookings', label: 'Đặt hàng', icon: 'check' },
   { to: '/users', label: 'Users', icon: 'user' },
   { to: '/reviews', label: 'Đánh giá', icon: 'star' },
+  { to: '/ai-insights', label: 'AI Insights', icon: 'chart' },
   { to: '/settings', label: 'Cài đặt', icon: 'spark' },
 ]
 
@@ -35,6 +36,7 @@ export default function AdminLayout() {
     '/bookings': 'Quản lý Đặt hàng',
     '/users': 'Quản lý Users',
     '/reviews': 'Quản lý Đánh giá',
+    '/ai-insights': 'AI Insights',
     '/settings': 'Cài đặt',
   }[location.pathname] || 'Admin'
 

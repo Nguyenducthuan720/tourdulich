@@ -1,10 +1,10 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { createBrowserRouter } from 'react-router-dom'
 import MainLayout from '../layouts/MainLayout'
-import { useAuth } from '../context/AuthContext'
+import ProtectedRoute from './ProtectedRoute'
 
 // Pages
 import HomePage from '../pages/HomePage'
-import TourDetailPage from '../pages/TourDetailPage'
+import TourDetailPage from '../pages/VivuTourDetailPage'
 import BookingPage from '../pages/BookingPage'
 import FlightBookingPage from '../pages/FlightBookingPage'
 import MyBookingsPage from '../pages/MyBookingsPage'
@@ -12,22 +12,10 @@ import LoginPage from '../pages/LoginPage'
 import RegisterPage from '../pages/RegisterPage'
 import ProfilePage from '../pages/ProfilePage'
 import AboutPage from '../pages/AboutPage'
+import PaymentPage from '../pages/PaymentPage'
+import PaymentResult from '../pages/PaymentResult'
 import NotFoundPage from '../pages/NotFoundPage'
-
-// Protected Route Component
-function ProtectedRoute({ children, requiredRole = null }) {
-  const { isAuthenticated, isAdmin } = useAuth()
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />
-  }
-
-  if (requiredRole === 'admin' && !isAdmin) {
-    return <Navigate to="/" replace />
-  }
-
-  return children
-}
+import { CarsRoute, CommunityRoute, FlightsRoute, HotelsRoute, PlannerRoute } from './VivuLazyPages'
 
 export const router = createBrowserRouter([
   {
@@ -39,6 +27,11 @@ export const router = createBrowserRouter([
         index: true,
         element: <HomePage />,
       },
+      { path: 'flights', element: <FlightsRoute /> },
+      { path: 'hotels', element: <HotelsRoute /> },
+      { path: 'cars', element: <CarsRoute /> },
+      { path: 'planner', element: <PlannerRoute /> },
+      { path: 'community', element: <CommunityRoute /> },
       {
         path: 'tours/:id',
         element: <TourDetailPage />,
@@ -74,6 +67,18 @@ export const router = createBrowserRouter([
       {
         path: 'about',
         element: <AboutPage />,
+      },
+      {
+        path: 'payment',
+        element: (
+          <ProtectedRoute>
+            <PaymentPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'payment/result',
+        element: <PaymentResult />,
       },
     ],
   },

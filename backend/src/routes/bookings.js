@@ -63,7 +63,8 @@ router.post("/combo", verifyToken, async (req, res) => {
 
     // 1. Kiểm tra và lấy thông tin Tour + trừ số ghế
     const tourRes = await new sql.Request(transaction)
-      .input("tid", tourId)
+      .input("tid", sql.Int, tourId)
+      .input("guests", sql.Int, guests)
       .query("UPDATE Tours SET AvailableSeats = AvailableSeats - @guests OUTPUT INSERTED.* WHERE TourID = @tid AND AvailableSeats >= @guests");
 
     if (tourRes.recordset.length === 0) throw new Error("Tour đã hết chỗ hoặc không tồn tại!");

@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import { getTourById } from '../api/tourService'
 import { createBooking, getFlights } from '../api/bookingService'
 import { useAuth } from '../context/AuthContext'
 import { fallbackTours } from '../data/mockData'
 import { Icon } from '../components/icons'
+import './VivuCheckout.css'
 
 function SvgIcon({ children, className = 'w-8 h-8' }) {
   return (
@@ -81,10 +82,12 @@ const ROOM_OPTIONS = [
 ]
 
 const PAYMENT_METHODS = [
+  { id: 'vnpay', title: 'VNPay', desc: 'Thanh toán qua cổng VNPay', icon: <SvgIcon className="w-7 h-7 text-brand-600">{CARD_ICON}</SvgIcon> },
+  { id: 'momo', title: 'MoMo', desc: 'Thanh toán qua ví điện tử MoMo', icon: <SvgIcon className="w-7 h-7 text-brand-600">{WALLET_ICON}</SvgIcon> },
   { id: 'Chuyển khoản', title: 'Chuyển khoản ngân hàng', desc: 'Thanh toán qua quét mã QR hoặc chuyển khoản', icon: <SvgIcon className="w-7 h-7 text-brand-600">{BANK_ICON}</SvgIcon> },
-  { id: 'Thẻ tín dụng', title: 'Thẻ Visa / Master', desc: 'Thanh toán bảo mật qua cổng thanh toán', icon: <SvgIcon className="w-7 h-7 text-brand-600">{CARD_ICON}</SvgIcon> },
-  { id: 'Ví điện tử', title: 'Momo / ZaloPay', desc: 'Thanh toán nhanh chóng bằng ví điện tử', icon: <SvgIcon className="w-7 h-7 text-brand-600">{WALLET_ICON}</SvgIcon> }
 ]
+
+const DEFAULT_BOOKING_DATE = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
 
 export default function BookingPage() {
   const { id } = useParams()
@@ -98,15 +101,14 @@ export default function BookingPage() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
+  const submitLockRef = useRef(false)
 
   const [step, setStep] = useState(1)
   
   const adults = parseInt(searchParams.get('adults')) || 1
   const children = parseInt(searchParams.get('children')) || 0
   const totalGuests = adults + children
-  const [bookingDate, setBookingDate] = useState(
-    new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-  )
+  const [bookingDate, setBookingDate] = useState(DEFAULT_BOOKING_DATE)
   const [roomType, setRoomType] = useState('Standard')
   const [bedType, setBedType] = useState('Double')
   const [paymentMethod, setPaymentMethod] = useState('Chuyển khoản')
@@ -123,24 +125,23 @@ export default function BookingPage() {
       navigate('/login')
       return
     }
-    fetchData()
-  }, [id, isAuthenticated, navigate])
-
-  const fetchData = async () => {
-    try {
-      setLoading(true)
-      const tourData = await getTourById(id)
-      setTour(tourData)
-      
-      const flightData = await getFlights()
-      setFlights(flightData)
-    } catch (error) {
-      console.error('Fetch booking data error:', error)
-      setTour(fallbackTours[0])
-    } finally {
-      setLoading(false)
+    let active = true
+    async function loadBookingData() {
+      try {
+        const [tourData, flightData] = await Promise.all([getTourById(id), getFlights()])
+        if (!active) return
+        setTour(tourData)
+        setFlights(flightData)
+      } catch (error) {
+        console.error('Fetch booking data error:', error)
+        if (active) setTour(fallbackTours[0])
+      } finally {
+        if (active) setLoading(false)
+      }
     }
-  }
+    loadBookingData()
+    return () => { active = false }
+  }, [id, isAuthenticated, navigate])
 
   const handleNextStep = () => {
     if (isCombo) {
@@ -169,6 +170,11 @@ export default function BookingPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    // Guard: block accidental double-click / double submit
+    if (submitLockRef.current) return
+    submitLockRef.current = true
+
     setError(null)
     setSuccess(null)
 
@@ -192,14 +198,18 @@ export default function BookingPage() {
         })
       }
 
-      await createBooking(bookingData)
+      const booking = await createBooking(bookingData)
       
-      setSuccess(isCombo ? 'Đặt gói Combo (Tour + Vé máy bay) thành công!' : 'Đặt tour thành công! Vui lòng kiểm tra email để xác nhận')
-      setTimeout(() => {
-        navigate('/my-bookings')
-      }, 2000)
+      const bookingId = booking.id || booking.bookingId || booking.BookingID
+      const total = booking.total || booking.TotalAmount || totalPrice || 0
+
+      const method =
+        paymentMethod === 'vnpay' || paymentMethod === 'momo' ? paymentMethod : 'bank_transfer'
+
+      navigate(`/payment?bookingId=${bookingId}&amount=${total}&method=${method}`)
     } catch (err) {
       setError(err.message || 'Lỗi khi xử lý đặt chỗ')
+      submitLockRef.current = false
     } finally {
       setSubmitting(false)
     }
@@ -246,12 +256,17 @@ export default function BookingPage() {
   const totalPrice = (basePrice + roomSurcharge + flightPrice) * adults + (childPrice + roomSurcharge + flightPrice) * children
 
   return (
-    <div className="min-h-screen bg-cream py-12">
+    <div className="vivu-checkout-page min-h-screen bg-cream py-12">
       <div className="mx-auto max-w-6xl px-4">
-        
-        {/* Wizard Header */}
-        <div className="mb-10">
-          <h1 className="text-4xl font-bold text-ink-900 mb-8">Xác nhận đặt tour</h1>
+        <header className="vivu-checkout-header mb-10">
+          <div className="vivu-checkout-title-row">
+            <div>
+              <p className="vivu-checkout-overline">VIVU TRAVEL · ĐẶT CHỖ AN TOÀN</p>
+              <h1 className="text-4xl font-bold text-ink-900">Hoàn tất hành trình</h1>
+              <p className="vivu-checkout-intro">Rà soát dịch vụ và thông tin trước khi xác nhận đặt tour.</p>
+            </div>
+            <a className="vivu-checkout-support" href="tel:19006868"><span>Hỗ trợ 24/7</span><strong>1900 6868</strong></a>
+          </div>
           
           {/* Progress Bar */}
           <div className="relative">
@@ -275,7 +290,7 @@ export default function BookingPage() {
               <div className="flex items-center gap-3">
                 <div className="hidden sm:block text-right">
                   <p className={`text-sm font-bold ${step >= 2 ? 'text-brand-600' : 'text-ink-500'}`}>Bước 2</p>
-                  <p className={`text-base font-bold ${step >= 2 ? 'text-ink-900' : 'text-ink-500'}`}>Thanh toán</p>
+                  <p className={`text-base font-bold ${step >= 2 ? 'text-ink-900' : 'text-ink-500'}`}>Ngày & thanh toán</p>
                 </div>
                 <div className={`flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg transition-all duration-300 ${
                   step >= 2 ? 'bg-brand-500 text-white shadow-lg' : 'bg-ink-200 text-ink-500'
@@ -285,7 +300,7 @@ export default function BookingPage() {
               </div>
             </div>
           </div>
-        </div>
+        </header>
 
         {success && (
           <div className="mb-6 rounded-2xl bg-emerald-50 border-2 border-emerald-200 p-5 animate-fade-in">
@@ -299,10 +314,10 @@ export default function BookingPage() {
           </div>
         )}
 
-        <div className="grid gap-8 lg:grid-cols-3">
+        <div className="vivu-checkout-grid grid gap-8 lg:grid-cols-3">
           {/* Main Content Area */}
           <div className="lg:col-span-2">
-            <div className="rounded-3xl bg-white p-8 shadow-lg border border-ink-100">
+            <div className="vivu-checkout-form-panel rounded-3xl bg-white p-8 shadow-lg border border-ink-100">
               
               {/* STEP 1: ROOM & FLIGHT SELECTION */}
               {step === 1 && (
@@ -312,12 +327,12 @@ export default function BookingPage() {
                   {/* 1. Hạng phòng */}
                   <div className="space-y-4">
                     <h3 className="text-lg font-bold text-ink-800">1. Hạng phòng khách sạn</h3>
-                    <div className="grid gap-4">
+                    <div className="vivu-room-choice-list grid gap-4">
                       {ROOM_OPTIONS.map((room) => (
                         <div 
                           key={room.id}
                           onClick={() => setRoomType(room.id)}
-                          className={`relative cursor-pointer rounded-2xl border-2 p-5 transition-all duration-300 hover:shadow-lg ${
+                          className={`vivu-room-choice relative cursor-pointer rounded-2xl border-2 p-5 transition-all duration-300 hover:shadow-lg ${
                             roomType === room.id ? 'border-brand-500 bg-brand-50 shadow-md' : 'border-ink-200 hover:border-brand-200'
                           }`}
                         >
@@ -346,10 +361,10 @@ export default function BookingPage() {
                   </div>
 
                   {/* 2. Loại giường */}
-                  <div className="space-y-4 pt-6 border-t-2 border-ink-100">
+                  <div className="vivu-bed-choice-section space-y-4">
                     <h3 className="text-lg font-bold text-ink-800">2. Loại giường (Tùy chọn)</h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      <label className={`cursor-pointer rounded-2xl border-2 p-5 text-center transition-all duration-300 ${
+                    <div className="vivu-bed-choice-grid grid grid-cols-2 gap-4">
+                      <label className={`vivu-bed-choice cursor-pointer rounded-2xl border-2 p-5 text-center transition-all duration-300 ${
                         bedType === 'Double' ? 'border-brand-500 bg-brand-50 shadow-md' : 'border-ink-200 hover:border-brand-200'
                       }`}>
                         <input type="radio" name="bedType" className="hidden" checked={bedType === 'Double'} onChange={() => setBedType('Double')} />
@@ -358,7 +373,7 @@ export default function BookingPage() {
                         </div>
                         <p className={`font-bold ${bedType === 'Double' ? 'text-brand-700' : 'text-ink-700'}`}>Giường đôi lớn</p>
                       </label>
-                      <label className={`cursor-pointer rounded-2xl border-2 p-5 text-center transition-all duration-300 ${
+                      <label className={`vivu-bed-choice cursor-pointer rounded-2xl border-2 p-5 text-center transition-all duration-300 ${
                         bedType === 'Twin' ? 'border-brand-500 bg-brand-50 shadow-md' : 'border-ink-200 hover:border-brand-200'
                       }`}>
                         <input type="radio" name="bedType" className="hidden" checked={bedType === 'Twin'} onChange={() => setBedType('Twin')} />
@@ -492,6 +507,10 @@ export default function BookingPage() {
                   <h2 className="text-2xl font-bold text-ink-900 pb-4 border-b-2 border-ink-100">Thông tin thanh toán</h2>
                   
                   <form onSubmit={handleSubmit} className="space-y-8">
+                    <section className="vivu-checkout-contact-card">
+                      <div className="vivu-checkout-contact-title"><span>✓</span><div><strong>Thông tin người liên hệ</strong><small>Thông tin từ tài khoản Vivu Travel</small></div><span className="vivu-checkout-verified">Đã xác minh</span></div>
+                      <div className="vivu-checkout-contact-fields"><div><small>Họ và tên</small><strong>{user?.name || 'Khách hàng Vivu'}</strong></div><div><small>Email nhận xác nhận</small><strong>{user?.email || 'Chưa có email tài khoản'}</strong></div></div>
+                    </section>
                     <div className="space-y-4">
                       <h3 className="text-lg font-bold text-ink-800">1. Ngày khởi hành</h3>
                       <div className="rounded-2xl bg-cream p-5 border-2 border-ink-200">
@@ -572,7 +591,7 @@ export default function BookingPage() {
 
           {/* Sidebar Summary Card */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24 rounded-3xl bg-white shadow-2xl border-2 border-ink-100 overflow-hidden">
+            <div className="vivu-checkout-summary sticky top-24 rounded-3xl bg-white shadow-2xl border-2 border-ink-100 overflow-hidden">
               <div className="h-2 bg-gradient-to-r from-brand-500 to-brand-600"></div>
               <div className="p-6">
                 <h3 className="mb-6 text-2xl font-bold text-ink-900 border-b-2 border-ink-100 pb-4">Tóm tắt đơn hàng</h3>

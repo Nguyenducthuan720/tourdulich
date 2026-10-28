@@ -10,7 +10,7 @@ router.get("/profile", verifyToken, async (req, res) => {
   try {
     const userId = req.user.userId;
 
-    const query = "SELECT UserID as id, FullName as name, Email as email, Phone as phone, Address as address, Role as role, Status as status, CreatedAt as createdAt FROM Users WHERE UserID = @userId";
+    const query = "SELECT UserID as id, FullName as name, Email as email, Phone as phone, Address as address, Avatar as avatar, Role as role, Status as status, CreatedAt as createdAt FROM Users WHERE UserID = @userId";
     const request = new sql.Request();
     request.input("userId", sql.Int, userId);
     const result = await request.query(query);
@@ -29,7 +29,7 @@ router.get("/profile", verifyToken, async (req, res) => {
 // Cập nhật thông tin cá nhân
 router.put("/profile", verifyToken, async (req, res) => {
   try {
-    const { name, email, phone = "", address = "" } = req.body;
+    const { name, email, phone = "", address = "", avatar } = req.body;
     if (!name?.trim() || !email?.trim()) {
       return res.status(400).json({ message: "Họ tên và email là bắt buộc" });
     }
@@ -40,13 +40,16 @@ router.put("/profile", verifyToken, async (req, res) => {
     request.input("email", sql.VarChar(100), email.trim());
     request.input("phone", sql.VarChar(20), phone.trim());
     request.input("address", sql.NVarChar(255), address.trim());
+    // null => giữ nguyên avatar cũ; chuỗi rỗng => xoá avatar
+    request.input("avatar", sql.NVarChar(sql.MAX), avatar ?? null);
 
     const result = await request.query(`
       UPDATE Users
-      SET FullName = @name, Email = @email, Phone = @phone, Address = @address
+      SET FullName = @name, Email = @email, Phone = @phone, Address = @address,
+          Avatar = CASE WHEN @avatar IS NULL THEN Avatar ELSE @avatar END
       OUTPUT INSERTED.UserID as id, INSERTED.FullName as name, INSERTED.Email as email,
-             INSERTED.Phone as phone, INSERTED.Address as address, INSERTED.Role as role,
-             INSERTED.Status as status, INSERTED.CreatedAt as createdAt
+             INSERTED.Phone as phone, INSERTED.Address as address, INSERTED.Avatar as avatar,
+             INSERTED.Role as role, INSERTED.Status as status, INSERTED.CreatedAt as createdAt
       WHERE UserID = @userId;
     `);
 

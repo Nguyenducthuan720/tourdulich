@@ -16,6 +16,8 @@ const adminCategoriesRoutes = require("./routes/adminCategories");
 const adminDestinationsRoutes = require("./routes/adminDestinations");
 const adminFlightsRoutes = require("./routes/adminFlights");
 const adminSettingsRoutes = require("./routes/adminSettings");
+const adminAIRoutes = require("./routes/adminAI");
+const paymentsRoutes = require("./routes/payments");
 const bookingsRoutes = require("./routes/bookings");
 const usersRoutes = require("./routes/users");
 const aiRoutes = require("./routes/ai");
@@ -26,7 +28,23 @@ connectDB()
         connectMongoDB();
         app.use(cors());
         app.use(express.json());
-        app.use("/images", express.static(path.join(__dirname, "images")));
+        
+        // Custom image serving with fallback
+        const fs = require("fs");
+        const path = require("path");
+        const { pickFallbackImage } = require("./config/imageFallbacks");
+        const imagesDir = path.join(__dirname, "images");
+        
+        app.use("/images", (req, res) => {
+          const relativePath = decodeURIComponent(req.path.replace(/^\/+/, ""));
+          const filePath = path.join(imagesDir, relativePath);
+          
+          if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+            res.sendFile(filePath);
+          } else {
+            res.redirect(pickFallbackImage(relativePath));
+          }
+        });
 
         app.get("/", (req, res) => {
             res.send("Travel Booking API Running...");
@@ -41,6 +59,8 @@ connectDB()
         app.use("/api/admin/destinations", adminDestinationsRoutes);
         app.use("/api/admin/flights", adminFlightsRoutes);
         app.use("/api/admin/settings", adminSettingsRoutes);
+        app.use("/api/admin/ai", adminAIRoutes);
+        app.use("/api/payments", paymentsRoutes);
         app.use("/api/tours", toursRoutes);
         app.use("/api/admin/tours", toursRoutes);
         app.use("/api/bookings", bookingsRoutes);

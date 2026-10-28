@@ -31,7 +31,7 @@ export default function AboutPage() {
             <p className="eyebrow mb-4 text-brand-200">Về chúng tôi</p>
             <h1 className="font-display text-5xl font-semibold tracking-tight text-white lg:text-7xl">
               Câu chuyện
-              <span className="block italic text-brand-300">Tour Lượng</span>
+              <span className="block italic text-brand-300">Vivu Travel</span>
             </h1>
             <p className="mt-6 text-xl text-ink-100/90">
               Kết nối những chuyến đi, tạo nên những kỷ niệm đáng nhớ.
@@ -48,7 +48,7 @@ export default function AboutPage() {
             <h2 className="section-title">Từ đam mê đến sứ mệnh</h2>
             <div className="mt-8 space-y-5 text-lg leading-relaxed text-ink-500">
               <p>
-                Tour Lượng được thành lập từ niềm đam mê du lịch và mong muốn mang
+                Vivu Travel được thành lập từ niềm đam mê du lịch và mong muốn mang
                 đến những trải nghiệm tốt nhất cho khách hàng Việt Nam.
               </p>
               <p>
@@ -56,7 +56,7 @@ export default function AboutPage() {
                 là hành trình khám phá, trải nghiệm và tạo nên những kỷ niệm vô giá.
               </p>
               <p>
-                Với đội ngũ chuyên nghiệp và đối tác uy tín, Tour Lượng cam kết
+                Với đội ngũ chuyên nghiệp và đối tác uy tín, Vivu Travel cam kết
                 dịch vụ đẳng cấp từ khâu tư vấn đến khi kết thúc hành trình.
               </p>
             </div>

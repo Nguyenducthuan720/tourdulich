@@ -204,33 +204,43 @@ export default function MyBookingsPage() {
   const [error, setError] = useState(null)
   const [detailBooking, setDetailBooking] = useState(null)
   const [contactBooking, setContactBooking] = useState(null)
+  const [bookingFilter, setBookingFilter] = useState('Tất cả')
+  const [bookingSearch, setBookingSearch] = useState('')
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login')
       return
     }
-    fetchBookings()
-  }, [isAuthenticated, navigate])
+    let active = true
+    getMyBookings()
+      .then((data) => {
+        if (active) setBookings(data)
+      })
+      .catch((err) => {
+        console.error('Fetch bookings error:', err)
+        if (!active) return
+        setError(err.message)
+        setBookings([])
+      })
+      .finally(() => {
+        if (active) setLoading(false)
+      })
 
-  const fetchBookings = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const data = await getMyBookings()
-      setBookings(data)
-    } catch (err) {
-      console.error('Fetch bookings error:', err)
-      setError(err.message)
-      setBookings([])
-    } finally {
-      setLoading(false)
-    }
-  }
+    return () => { active = false }
+  }, [isAuthenticated, navigate])
 
   if (!isAuthenticated) {
     return null
   }
+
+  const filteredBookings = bookings.filter((booking) => {
+    const title = booking.tourTitle || booking.TourTitle || ''
+    const code = String(booking.id || booking.BookingID || '')
+    const matchesText = `${title} ${code}`.toLocaleLowerCase('vi').includes(bookingSearch.toLocaleLowerCase('vi'))
+    const matchesKind = bookingFilter === 'Tất cả' || (bookingFilter === 'Vé máy bay' ? Boolean(booking.airline) : !booking.airline)
+    return matchesText && matchesKind
+  })
 
   return (
     <div className="min-h-screen bg-cream py-12">
@@ -246,6 +256,20 @@ export default function MyBookingsPage() {
             <p className="text-red-900 font-medium">{error}</p>
           </div>
         )}
+
+        <div className="vivu-booking-toolbar">
+          <div className="vivu-booking-tabs" aria-label="Lọc đơn hàng">
+            {['Tất cả', 'Tour', 'Vé máy bay'].map((filter) => (
+              <button key={filter} type="button" className={bookingFilter === filter ? 'active' : ''} onClick={() => setBookingFilter(filter)}>
+                {filter}
+              </button>
+            ))}
+          </div>
+          <label className="vivu-booking-search">
+            <span className="sr-only">Tìm theo tên tour hoặc mã đặt chỗ</span>
+            <input value={bookingSearch} onChange={(event) => setBookingSearch(event.target.value)} placeholder="Tìm đơn hàng hoặc mã đặt chỗ" />
+          </label>
+        </div>
 
         {loading ? (
           <div className="flex items-center justify-center py-32">
@@ -267,8 +291,9 @@ export default function MyBookingsPage() {
             </button>
           </div>
         ) : (
-          <div className="grid gap-8">
-            {bookings.map((booking) => {
+          <div className="grid gap-5">
+            {filteredBookings.length === 0 && <p className="rounded-lg border border-dashed border-ink-300 bg-white p-8 text-center text-ink-500">Không tìm thấy đơn hàng phù hợp.</p>}
+            {filteredBookings.map((booking) => {
               const status = booking.status || booking.Status
               return (
                 <div key={booking.id || booking.BookingID} className="rounded-3xl bg-white shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300">

@@ -26,6 +26,24 @@ router.get("/", verifyToken, verifyAdmin, async (req, res) => {
 router.post("/", verifyToken, verifyAdmin, async (req, res) => {
   try {
     const { airline, flightNumber, departure, arrival, departureTime, arrivalTime, price, seats, status } = req.body;
+    
+    // Check for duplicate flight (same flight number + departure time)
+    const checkQuery = `
+      SELECT FlightID FROM Flights 
+      WHERE FlightNumber = @flightNumber AND DepartureTime = @departureTime
+    `;
+    const checkResult = await new sql.Request()
+      .input("flightNumber", sql.VarChar, flightNumber)
+      .input("departureTime", sql.DateTime, departureTime)
+      .query(checkQuery);
+    
+    if (checkResult.recordset.length > 0) {
+      return res.status(400).json({ 
+        success: false, 
+        message: `Chuyến bay ${flightNumber} lúc ${departureTime} đã tồn tại` 
+      });
+    }
+    
     const query = `
       INSERT INTO Flights (AirlineName, FlightNumber, DepartureAirport, ArrivalAirport, DepartureTime, ArrivalTime, Price, AvailableSeats, Status)
       VALUES (@airline, @flightNumber, @departure, @arrival, @departureTime, @arrivalTime, @price, @seats, @status);

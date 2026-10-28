@@ -196,12 +196,12 @@ export default function Tours() {
                     </td>
                     <td className="px-6 py-4 text-center">
                       <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider ${
-                        tour.Status === 1
+                        Number(tour.Status) === 1
                           ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                           : 'bg-ink-100 text-ink-500 border border-ink-200'
                       }`}>
-                        <span className={`h-1.5 w-1.5 rounded-full ${tour.Status === 1 ? 'bg-emerald-500' : 'bg-ink-400'}`} />
-                        {tour.Status === 1 ? 'Hiện' : 'Ẩn'}
+                        <span className={`h-1.5 w-1.5 rounded-full ${Number(tour.Status) === 1 ? 'bg-emerald-500' : 'bg-ink-400'}`} />
+                        {Number(tour.Status) === 1 ? 'Hiện' : 'Ẩn'}
                       </span>
                     </td>
                     <td className="px-6 py-4">

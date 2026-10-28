@@ -97,7 +97,8 @@ router.get("/users", verifyToken, verifyAdmin, async (req, res) => {
     const offset = (page - 1) * limit;
 
     let query = `
-      SELECT * FROM Users 
+      SELECT UserID, FullName, Email, Phone, Address, Avatar, Role, Status, CreatedAt
+      FROM Users 
       WHERE FullName LIKE @search OR Email LIKE @search
       ORDER BY UserID DESC
       OFFSET ${offset} ROWS FETCH NEXT ${limit} ROWS ONLY
@@ -171,8 +172,22 @@ router.delete("/users/:id", verifyToken, verifyAdmin, async (req, res) => {
     checkRequest.input("id", sql.Int, id);
     const checkResult = await checkRequest.query(checkQuery);
 
-    if (checkResult.recordset.length > 0 && checkResult.recordset[0].Role === "Admin") {
+    if (checkResult.recordset.length === 0) {
+      return res.status(404).json({ message: "Không tìm thấy user" });
+    }
+
+    if (String(checkResult.recordset[0].Role).toLowerCase() === "admin") {
       return res.status(403).json({ message: "Không thể xóa tài khoản admin" });
+    }
+
+    const bookingCount = await new sql.Request()
+      .input("id", sql.Int, id)
+      .query("SELECT COUNT(*) as total FROM Bookings WHERE UserID = @id");
+
+    if (bookingCount.recordset[0].total > 0) {
+      return res.status(409).json({
+        message: `Không thể xóa: user còn ${bookingCount.recordset[0].total} đơn đặt hàng`,
+      });
     }
 
     const deleteQuery = "DELETE FROM Users WHERE UserID = @id";
@@ -185,6 +200,9 @@ router.delete("/users/:id", verifyToken, verifyAdmin, async (req, res) => {
       message: "Xóa user thành công",
     });
   } catch (error) {
+    if (Number(error?.number) === 547) {
+      return res.status(409).json({ message: "Không thể xóa user vì còn dữ liệu liên quan" });
+    }
     console.error("Delete user error:", error);
     res.status(500).json({ message: "Lỗi server" });
   }
@@ -202,8 +220,9 @@ router.get("/reviews", verifyToken, verifyAdmin, async (req, res) => {
 
     const query = `
       SELECT 
-        r.ReviewID, r.UserID, r.TourID, r.Rating, r.Comment, r.CreatedAt,
-        u.FullName as UserName, t.TourName
+        r.ReviewID, r.UserID, r.TourID, r.Rating, r.Comment,
+        r.CreatedAt, r.CreatedAt as ReviewDate,
+        u.FullName as UserName, u.Email as Email, t.TourName
       FROM Reviews r
       JOIN Users u ON r.UserID = u.UserID
       JOIN Tours t ON r.TourID = t.TourID
@@ -335,16 +354,34 @@ router.delete("/bookings/:id", verifyToken, verifyAdmin, async (req, res) => {
   try {
     const { id } = req.params;
 
-    const query = "DELETE FROM Bookings WHERE BookingID = @id";
-    const request = new sql.Request();
-    request.input("id", sql.Int, id);
-    await request.query(query);
+    // Remove child rows first so no orphans / FK conflicts remain
+    const childTables = ["BookingDetails", "FlightBookings", "Payments", "BookingCosts"];
+    for (const table of childTables) {
+      try {
+        await new sql.Request()
+          .input("id", sql.Int, id)
+          .query(`DELETE FROM ${table} WHERE BookingID = @id`);
+      } catch (childError) {
+        if (Number(childError.number) !== 208) throw childError; // 208 = invalid object name
+      }
+    }
+
+    const result = await new sql.Request()
+      .input("id", sql.Int, id)
+      .query("DELETE FROM Bookings WHERE BookingID = @id");
+
+    if (result.rowsAffected[0] === 0) {
+      return res.status(404).json({ message: "Không tìm thấy booking" });
+    }
 
     res.json({
       success: true,
       message: "Xóa booking thành công",
     });
   } catch (error) {
+    if (Number(error?.number) === 547) {
+      return res.status(409).json({ message: "Không thể xóa booking vì còn dữ liệu liên quan" });
+    }
     console.error("Delete booking error:", error);
     res.status(500).json({ message: "Lỗi server" });
   }

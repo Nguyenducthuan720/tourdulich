@@ -18,6 +18,20 @@ router.get("/", verifyToken, verifyAdmin, async (req, res) => {
 router.post("/", verifyToken, verifyAdmin, async (req, res) => {
   try {
     const { name, image, description } = req.body;
+    
+    // Check for duplicate destination name
+    const checkQuery = "SELECT DestinationID FROM Destinations WHERE LOWER(DestinationName) = LOWER(@name)";
+    const checkResult = await new sql.Request()
+      .input("name", sql.NVarChar, name)
+      .query(checkQuery);
+    
+    if (checkResult.recordset.length > 0) {
+      return res.status(400).json({ 
+        success: false, 
+        message: `Điểm đến "${name}" đã tồn tại` 
+      });
+    }
+    
     const query = `
       INSERT INTO Destinations (DestinationName, ImageURL, Description)
       VALUES (@name, @image, @description);

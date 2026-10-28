@@ -6,7 +6,6 @@ import { useAuth } from '../context/AuthContext';
 
 export default function MainLayout() {
   const { user } = useAuth();
-
   return (
     <div className="min-h-screen bg-cream">
       <Navbar />

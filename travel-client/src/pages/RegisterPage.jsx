@@ -58,15 +58,15 @@ export default function RegisterPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-cream px-4 py-10">
-      <div className="grid w-full max-w-5xl overflow-hidden rounded-[2rem] bg-white shadow-lift ring-1 ring-ink-900/[0.05] md:grid-cols-2">
+      <div className="grid w-full max-w-5xl overflow-hidden rounded-lg bg-white shadow-lift ring-1 ring-ink-900/[0.05] md:grid-cols-2">
         {/* Brand panel */}
-        <aside className="relative hidden flex-col justify-between bg-ink-900 p-10 text-white md:flex">
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-700/30 via-transparent to-transparent"></div>
+        <aside className="vivu-auth-panel relative hidden flex-col justify-between p-10 text-white md:flex">
+          <div className="vivu-auth-shade absolute inset-0"></div>
           <div className="relative flex items-center gap-3">
-            <span className="grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-brand-400 to-brand-600 font-display text-lg font-bold">
-              T
+            <span className="grid h-11 w-11 place-items-center rounded-lg bg-white/15 text-lg font-bold">
+              V
             </span>
-            <span className="font-display text-xl font-semibold">Tour Lượng</span>
+            <span className="text-xl font-extrabold">Vivu Travel</span>
           </div>
 
           <div className="relative">
@@ -88,7 +88,7 @@ export default function RegisterPage() {
           </div>
 
           <p className="relative text-xs text-ink-400">
-            © 2026 Tour Lượng. All rights reserved.
+            © 2026 Vivu Travel. All rights reserved.
           </p>
         </aside>
 
@@ -97,7 +97,7 @@ export default function RegisterPage() {
           <div className="mb-8 text-center md:text-left">
             <h1 className="font-display text-3xl font-semibold text-ink-900">Đăng ký</h1>
             <p className="mt-2 text-sm text-ink-500">
-              Tạo tài khoản để bắt đầu hành trình cùng Tour Lượng.
+              Tạo tài khoản để bắt đầu hành trình cùng Vivu Travel.
             </p>
           </div>
 

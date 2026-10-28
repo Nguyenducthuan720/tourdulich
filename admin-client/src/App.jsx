@@ -9,6 +9,7 @@ const Tours = lazy(() => import('./pages/Tours'))
 const Users = lazy(() => import('./pages/Users'))
 const Bookings = lazy(() => import('./pages/Bookings'))
 const Reviews = lazy(() => import('./pages/Reviews'))
+const AIInsights = lazy(() => import('./pages/AIInsights'))
 const Categories = lazy(() => import('./pages/Categories'))
 const Destinations = lazy(() => import('./pages/Destinations'))
 const Flights = lazy(() => import('./pages/Flights'))
@@ -81,6 +82,7 @@ export const router = createBrowserRouter([
       { path: 'bookings', element: <Bookings /> },
       { path: 'users', element: <Users /> },
       { path: 'reviews', element: <Reviews /> },
+      { path: 'ai-insights', element: <AIInsights /> },
       { path: 'settings', element: <Settings /> },
     ],
   },

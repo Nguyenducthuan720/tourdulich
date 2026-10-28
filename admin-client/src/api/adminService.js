@@ -275,3 +275,46 @@ export async function updateSettings(data) {
     throw error
   }
 }
+
+// ===== AI INSIGHTS =====
+export async function getAIStats() {
+  try {
+    const response = await apiClient.get('/admin/ai/stats')
+    return response.data?.data || {}
+  } catch (error) {
+    console.error('Get AI stats error:', error)
+    throw error
+  }
+}
+
+export async function getAISessions(page = 1, limit = 10, search = '') {
+  try {
+    const response = await apiClient.get('/admin/ai/sessions', {
+      params: { page, limit, search },
+    })
+    return response.data
+  } catch (error) {
+    console.error('Get AI sessions error:', error)
+    throw error
+  }
+}
+
+export async function getAISessionDetail(sessionId) {
+  try {
+    const response = await apiClient.get(`/admin/ai/sessions/${sessionId}`)
+    return response.data?.data
+  } catch (error) {
+    console.error('Get AI session detail error:', error)
+    throw error
+  }
+}
+
+export async function deleteAISession(sessionId) {
+  try {
+    const response = await apiClient.delete(`/admin/ai/sessions/${sessionId}`)
+    return response.data
+  } catch (error) {
+    console.error('Delete AI session error:', error)
+    throw error
+  }
+}

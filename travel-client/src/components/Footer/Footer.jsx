@@ -15,16 +15,15 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3">
-              <span className="grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-brand-400 to-brand-600 font-display text-lg font-bold text-white">
-                T
+                <span className="grid h-11 w-11 place-items-center rounded-lg bg-brand-600 text-lg font-bold text-white">
+                V
               </span>
-              <span className="font-display text-xl font-semibold text-white">
-                Tour Lượng
+              <span className="text-xl font-extrabold text-white">
+                Vivu Travel
               </span>
             </div>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-ink-300">
-              Nền tảng đặt tour trực tuyến hàng đầu — tối ưu lịch trình, vận hành
-              booking hiện đại và dịch vụ đẳng cấp cho mọi hành trình.
+              Một điểm bắt đầu cho tour, vé máy bay, khách sạn và những hành trình được thiết kế riêng.
             </p>
             <div className="mt-6 flex gap-3">
               {socials.map((s) => (
@@ -47,18 +46,18 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3 text-sm text-ink-300">
               {[
-                'Tour cao cấp trong nước',
-                'Tour quốc tế',
-                'Đặt vé máy bay',
-                'Đặt khách sạn',
+                { to: '/', label: 'Tour du lịch' },
+                { to: '/flights', label: 'Vé máy bay' },
+                { to: '/hotels', label: 'Khách sạn & resort' },
+                { to: '/cars', label: 'Thuê xe & đưa đón' },
               ].map((item) => (
-                <li key={item}>
+                <li key={item.to}>
                   <Link
-                    to="/"
+                    to={item.to}
                     className="inline-flex items-center gap-2 transition hover:text-white"
                   >
                     <Icon name="arrowRight" className="h-3.5 w-3.5 text-brand-400" />
-                    {item}
+                    {item.label}
                   </Link>
                 </li>
               ))}
@@ -72,7 +71,8 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3 text-sm text-ink-300">
               {[
-                { to: '/', label: 'Trang chủ' },
+                { to: '/planner', label: 'Lịch trình cùng AI' },
+                { to: '/community', label: 'Cộng đồng du lịch' },
                 { to: '/about', label: 'Về chúng tôi' },
                 { to: '/flight-booking', label: 'Vé máy bay' },
                 { to: '/my-bookings', label: 'Lịch sử đặt tour' },
@@ -113,7 +113,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-center text-sm text-ink-400 md:flex-row md:text-left">
-          <p>© 2026 Tour Lượng. All rights reserved.</p>
+          <p>© 2026 Vivu Travel. All rights reserved.</p>
           <p className="flex items-center gap-2">
             Designed with
             <span className="font-display text-base text-brand-400"> elegance</span>

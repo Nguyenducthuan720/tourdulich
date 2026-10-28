@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext'
 const initialProfile = { name: '', email: '', phone: '', address: '', avatar: '' }
 
 export default function ProfilePage() {
-  const { user } = useAuth()
+  const { user, updateUser } = useAuth()
   const [profile, setProfile] = useState(initialProfile)
   const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' })
   const [loading, setLoading] = useState(true)
@@ -38,14 +38,49 @@ export default function ProfilePage() {
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setAvatarPreview(reader.result)
-        setProfile(current => ({ ...current, avatar: reader.result }))
-      }
-      reader.readAsDataURL(file)
+    if (!file) return
+
+    if (!file.type.startsWith('image/')) {
+      setError('Vui lòng chọn file ảnh')
+      return
     }
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Ảnh phải nhỏ hơn 5MB')
+      return
+    }
+
+    setError('')
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      const img = new Image()
+      img.onload = () => {
+        // Resize về tối đa 256px để tránh lưu ảnh nặng vào database
+        const MAX = 256
+        let { width, height } = img
+        if (width >= height && width > MAX) {
+          height = Math.round((height * MAX) / width)
+          width = MAX
+        } else if (height > MAX) {
+          width = Math.round((width * MAX) / height)
+          height = MAX
+        }
+
+        const canvas = document.createElement('canvas')
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')
+        ctx.drawImage(img, 0, 0, width, height)
+
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.8)
+        setAvatarPreview(dataUrl)
+        setProfile((current) => ({ ...current, avatar: dataUrl }))
+      }
+      img.onerror = () => setError('Không đọc được ảnh')
+      img.src = reader.result
+    }
+    reader.onerror = () => setError('Không đọc được file')
+    reader.readAsDataURL(file)
   }
 
   async function handleProfileSubmit(event) {
@@ -62,7 +97,12 @@ export default function ProfilePage() {
         address: updated.address || '',
         avatar: updated.avatar || ''
       })
-      localStorage.setItem('travel_user', JSON.stringify({ ...user, ...updated }))
+      setAvatarPreview(updated.avatar || '')
+      updateUser({
+        name: updated.name,
+        email: updated.email,
+        avatar: updated.avatar || '',
+      })
       setMessage('Thông tin hồ sơ đã được cập nhật.')
     } catch (err) {
       setError(err.message || 'Cập nhật hồ sơ thất bại')
@@ -109,7 +149,11 @@ export default function ProfilePage() {
   }
 
   const avatarDisplay = avatarPreview || (profile.name || user?.name || 'U').charAt(0).toUpperCase()
-  const isAvatarImage = avatarPreview && avatarPreview.startsWith('data:')
+  const isAvatarImage =
+    Boolean(avatarPreview) &&
+    (avatarPreview.startsWith('data:') ||
+      avatarPreview.startsWith('http') ||
+      avatarPreview.startsWith('/'))
 
   return (
     <main className="min-h-screen bg-cream px-4 py-12 sm:px-6 lg:px-8">
@@ -138,7 +182,7 @@ export default function ProfilePage() {
             </div>
             
             <div className="flex-1">
-              <p className="text-sm font-semibold text-brand-100 mb-1">Tài khoản Tour Lượng</p>
+              <p className="text-sm font-semibold text-brand-100 mb-1">Tài khoản Vivu Travel</p>
               <h1 className="text-3xl lg:text-4xl font-bold mb-2">{profile.name || user?.name || 'Người dùng'}</h1>
               <p className="text-brand-100">{profile.email || user?.email}</p>
             </div>
@@ -286,7 +330,7 @@ export default function ProfilePage() {
                    Lịch sử đặt tour →
                 </Link>
                 <Link 
-                  to="/flight-booking" 
+                  to="/flights" 
                   className="rounded-2xl bg-gradient-to-br from-ink-50 to-ink-100 p-5 text-base font-bold text-ink-700 transition hover:from-brand-50 hover:to-brand-100 hover:text-brand-700 border-2 border-ink-200 hover:border-brand-300"
                 >
                    Đặt vé máy bay →

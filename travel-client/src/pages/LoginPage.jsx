@@ -28,8 +28,16 @@ export default function LoginPage() {
     try {
       setLoading(true)
       const user = await login({ email, password })
-      const adminUrl = import.meta.env.VITE_ADMIN_URL || 'http://localhost:5176'
-      navigate(user?.role?.toLowerCase() === 'admin' ? adminUrl : '/')
+      const isAdmin = user?.role?.toLowerCase() === 'admin'
+
+      if (isAdmin) {
+        const adminUrl = import.meta.env.VITE_ADMIN_URL || 'http://localhost:5176'
+        // Absolute URL -> full page navigation (React Router navigate() only handles in-app paths)
+        window.location.href = adminUrl
+        return
+      }
+
+      navigate('/')
     } catch (err) {
       setError(err.message || 'Đăng nhập thất bại. Vui lòng kiểm tra email và mật khẩu')
     } finally {
@@ -39,17 +47,15 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-cream via-cream to-brand-50 px-4 py-10">
-      <div className="grid w-full max-w-5xl overflow-hidden rounded-[2rem] bg-white shadow-lift ring-1 ring-ink-900/[0.05] md:grid-cols-2">
+      <div className="grid w-full max-w-5xl overflow-hidden rounded-lg bg-white shadow-lift ring-1 ring-ink-900/[0.05] md:grid-cols-2">
         {/* Brand panel */}
-        <aside className="relative hidden flex-col justify-between overflow-hidden bg-gradient-to-br from-brand-500 via-brand-600 to-brand-800 p-10 text-white md:flex">
-          <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-brand-900/20"></div>
-          <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-white/10 blur-2xl"></div>
-          <div className="absolute -bottom-20 -left-10 h-56 w-56 rounded-full bg-brand-400/30 blur-3xl"></div>
+        <aside className="vivu-auth-panel relative hidden flex-col justify-between overflow-hidden p-10 text-white md:flex">
+          <div className="vivu-auth-shade absolute inset-0"></div>
           <div className="relative flex items-center gap-3">
-            <span className="grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-brand-400 to-brand-600 font-display text-lg font-bold">
-              T
+            <span className="grid h-11 w-11 place-items-center rounded-lg bg-white/15 text-lg font-bold">
+              V
             </span>
-            <span className="font-display text-xl font-semibold">Tour Lượng</span>
+            <span className="text-xl font-extrabold">Vivu Travel</span>
           </div>
 
           <div className="relative">
@@ -71,7 +77,7 @@ export default function LoginPage() {
           </div>
 
           <p className="relative text-xs text-white/60">
-            © 2026 Tour Lượng. All rights reserved.
+            © 2026 Vivu Travel. All rights reserved.
           </p>
         </aside>
 

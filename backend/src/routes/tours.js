@@ -38,7 +38,10 @@ function resolveLocalTourImageUrl(imageUrl) {
 // Lấy danh sách tours (public) - GET /api/tours
 router.get("/", async (req, res) => {
   try {
-    const { keyword = "", location = "", categoryId = "" } = req.query;
+    const { keyword = "", location = "", categoryId = "", guests = "", sort = "" } = req.query;
+
+    // Bỏ dấu để "Da Nang" khớp "Đà Nẵng", "Ha Long" khớp "Hạ Long"
+    const AI = "COLLATE SQL_Latin1_General_CP1_CI_AI";
 
     let query = `
       SELECT t.*, c.CategoryName 
@@ -54,16 +57,41 @@ router.get("/", async (req, res) => {
     }
 
     if (keyword) {
-      query += " AND (t.TourName LIKE @keyword OR t.Description LIKE @keyword OR c.CategoryName LIKE @keyword)";
+      query += ` AND (
+        t.TourName ${AI} LIKE @keyword
+        OR t.Description ${AI} LIKE @keyword
+        OR c.CategoryName ${AI} LIKE @keyword
+        OR REPLACE(t.TourName, ' ', '') ${AI} LIKE @keywordCompact
+        OR REPLACE(c.CategoryName, ' ', '') ${AI} LIKE @keywordCompact
+      )`;
       request.input("keyword", sql.NVarChar, `%${keyword}%`);
+      request.input("keywordCompact", sql.NVarChar, `%${String(keyword).replace(/\s+/g, "")}%`);
     }
 
     if (location) {
-      query += " AND (t.Destination LIKE @location OR t.DepartureLocation LIKE @location OR t.TourName LIKE @location)";
+      query += ` AND (
+        t.Destination ${AI} LIKE @location
+        OR t.DepartureLocation ${AI} LIKE @location
+        OR t.TourName ${AI} LIKE @location
+        OR REPLACE(t.Destination, ' ', '') ${AI} LIKE @locationCompact
+        OR REPLACE(t.TourName, ' ', '') ${AI} LIKE @locationCompact
+      )`;
       request.input("location", sql.NVarChar, `%${location}%`);
+      request.input("locationCompact", sql.NVarChar, `%${String(location).replace(/\s+/g, "")}%`);
     }
 
-    query += " ORDER BY t.TourName";
+    const guestCount = parseInt(guests, 10);
+    if (Number.isFinite(guestCount) && guestCount > 0) {
+      query += " AND ISNULL(t.AvailableSeats, 0) >= @guests";
+      request.input("guests", sql.Int, guestCount);
+    }
+
+    const sortMap = {
+      price_asc: "t.Price ASC",
+      price_desc: "t.Price DESC",
+      name: "t.TourName ASC",
+    };
+    query += ` ORDER BY ${sortMap[sort] || "t.TourName"}`;
 
     const result = await request.query(query);
 
@@ -246,14 +274,44 @@ router.delete("/:id", verifyToken, verifyAdmin, async (req, res) => {
   try {
     const { id } = req.params;
 
-    const query = "DELETE FROM Tours WHERE TourID = @id";
-    const request = new sql.Request();
-    request.input("id", sql.Int, id);
+    // Block deletion when the tour is used by bookings (avoid orphaned booking rows)
+    const bookingCheck = await new sql.Request()
+      .input("id", sql.Int, id)
+      .query("SELECT COUNT(*) as total FROM BookingDetails WHERE TourID = @id");
 
-    await request.query(query);
+    if (bookingCheck.recordset[0].total > 0) {
+      return res.status(409).json({
+        message: `Không thể xóa: tour còn ${bookingCheck.recordset[0].total} đơn đặt hàng liên quan`,
+      });
+    }
+
+    // Remove child metadata that belongs to this tour (ignore missing tables)
+    const cleanupTables = ["TourImages", "Schedules", "Reviews", "TourCosts"];
+    for (const table of cleanupTables) {
+      try {
+        await new sql.Request()
+          .input("id", sql.Int, id)
+          .query(`DELETE FROM ${table} WHERE TourID = @id`);
+      } catch (childError) {
+        if (Number(childError.number) !== 208) throw childError; // 208 = invalid object name
+      }
+    }
+
+    const result = await new sql.Request()
+      .input("id", sql.Int, id)
+      .query("DELETE FROM Tours WHERE TourID = @id");
+
+    if (result.rowsAffected[0] === 0) {
+      return res.status(404).json({ message: "Không tìm thấy tour" });
+    }
 
     res.json({ message: "Xóa tour thành công" });
   } catch (error) {
+    if (Number(error?.number) === 547) {
+      return res.status(409).json({
+        message: "Không thể xóa tour vì còn dữ liệu liên quan",
+      });
+    }
     console.error("Delete tour error:", error);
     res.status(500).json({ message: "Lỗi server" });
   }

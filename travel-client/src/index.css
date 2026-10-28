@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 /* ============================================================
@@ -5,47 +6,46 @@
    Warm editorial luxury: gold/amber "brand" + neutral "ink"
    ============================================================ */
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-    sans-serif;
-  --font-display: "Lora", ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 
   /* Warm paper background */
-  --color-cream: #faf7f2;
-  --color-cream-deep: #f3ede3;
+  --color-cream: #faf8ff;
+  --color-cream-deep: #f2f3ff;
 
   /* Brand — refined gold/amber */
-  --color-brand-50: #fbf7ef;
-  --color-brand-100: #f5ecd8;
-  --color-brand-200: #ecd8ac;
-  --color-brand-300: #e0bf76;
-  --color-brand-400: #d4a44c;
-  --color-brand-500: #c2882f;
-  --color-brand-600: #a56e22;
-  --color-brand-700: #855619;
-  --color-brand-800: #6b4516;
-  --color-brand-900: #553814;
+  --color-brand-50: #eaf7fb;
+  --color-brand-100: #d3f1ff;
+  --color-brand-200: #b9eaff;
+  --color-brand-300: #81d1f0;
+  --color-brand-400: #40a9c6;
+  --color-brand-500: #006781;
+  --color-brand-600: #005a71;
+  --color-brand-700: #004d62;
+  --color-brand-800: #003b4d;
+  --color-brand-900: #002b38;
 
   /* Ink — warm neutral slate for text/surfaces */
-  --color-ink-50: #f8f7f5;
-  --color-ink-100: #efece8;
-  --color-ink-200: #ddd9d2;
-  --color-ink-300: #bcb6ac;
-  --color-ink-400: #908a80;
-  --color-ink-500: #6c665d;
-  --color-ink-600: #514c45;
-  --color-ink-700: #393430;
-  --color-ink-800: #272320;
-  --color-ink-900: #161311;
+  --color-ink-50: #f2f3ff;
+  --color-ink-100: #eaedff;
+  --color-ink-200: #dae2fd;
+  --color-ink-300: #bec8cd;
+  --color-ink-400: #89969a;
+  --color-ink-500: #647276;
+  --color-ink-600: #4b585c;
+  --color-ink-700: #3f484c;
+  --color-ink-800: #29363b;
+  --color-ink-900: #131b2e;
 
   /* Radii */
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-  --radius-3xl: 2rem;
+  --radius-xl: 0.5rem;
+  --radius-2xl: 0.625rem;
+  --radius-3xl: 0.75rem;
 
   /* Elevation */
-  --shadow-soft: 0 10px 40px -16px rgb(22 19 17 / 0.18);
-  --shadow-lift: 0 28px 64px -24px rgb(22 19 17 / 0.32);
-  --shadow-glass: 0 18px 50px -20px rgb(22 19 17 / 0.28);
+  --shadow-soft: 0 10px 32px -18px rgb(19 27 46 / 0.2);
+  --shadow-lift: 0 20px 44px -24px rgb(19 27 46 / 0.28);
+  --shadow-glass: 0 16px 42px -22px rgb(19 27 46 / 0.24);
 }
 
 /* ============================================================
@@ -287,4 +287,286 @@
 
 .animate-float {
   animation: float-slow 7s ease-in-out infinite;
+}
+
+/* Vivu Travel UI, adapted from the Stitch screen set. */
+body {
+  background: #faf8ff;
+  font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+.vivu-header {
+  border-color: rgb(19 27 46 / 10%);
+}
+
+.vivu-utility-bar {
+  border-bottom: 1px solid rgb(19 27 46 / 8%);
+  background: #f2f3ff;
+  color: #3f484c;
+}
+
+.vivu-utility-bar a {
+  color: #005a71;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.vivu-desktop-links .nav-link {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.vivu-mark {
+  box-shadow: 0 5px 14px rgb(0 90 113 / 18%);
+}
+
+.vivu-home-hero {
+  position: relative;
+  display: flex;
+  min-height: 610px;
+  align-items: flex-start;
+  overflow: hidden;
+  background: #004b5d;
+}
+
+.vivu-home-hero-image,
+.vivu-home-hero-shade {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.vivu-home-hero-image {
+  object-fit: cover;
+  object-position: center 48%;
+  animation: vivu-hero-enter 1.1s ease-out both;
+}
+
+.vivu-home-hero-shade {
+  background: linear-gradient(90deg, rgb(7 31 42 / 78%) 0%, rgb(7 31 42 / 34%) 58%, rgb(7 31 42 / 5%) 100%), linear-gradient(0deg, rgb(7 31 42 / 62%) 0%, transparent 55%);
+}
+
+.vivu-home-hero-copy {
+  position: relative;
+  z-index: 1;
+  padding-top: 76px;
+  color: white;
+  animation: vivu-copy-enter .65s .1s both;
+}
+
+.vivu-home-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: #d4f3f1;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.vivu-home-eyebrow > span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f4c476;
+}
+
+.vivu-home-hero h1 {
+  max-width: 740px;
+  margin: 0;
+  color: white;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(38px, 5.5vw, 66px);
+  font-weight: 800;
+  line-height: 1.08;
+}
+
+.vivu-home-hero h1 span { color: #bce7e2; }
+
+.vivu-home-intro {
+  max-width: 540px;
+  margin: 19px 0 0;
+  color: rgb(255 255 255 / 88%);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.vivu-home-search {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 28px;
+  left: 0;
+}
+
+.vivu-home-search > * {
+  border: 1px solid rgb(255 255 255 / 65%);
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 16px 46px rgb(4 34 46 / 24%);
+}
+
+.vivu-services-band {
+  border-bottom: 1px solid rgb(19 27 46 / 8%);
+  background: white;
+}
+
+.vivu-service-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.vivu-service-grid a {
+  display: grid;
+  min-height: 74px;
+  grid-template-columns: 38px 1fr;
+  align-content: center;
+  align-items: center;
+  column-gap: 10px;
+  padding: 8px 14px;
+  border-right: 1px solid #e5e9f1;
+  color: #131b2e;
+  text-decoration: none;
+  transition: background .2s, color .2s;
+}
+
+.vivu-service-grid a:last-child { border-right: 0; }
+.vivu-service-grid a:hover { background: #f2f7f8; color: #005a71; }
+.vivu-service-grid a > span { grid-row: span 2; color: #005a71; font-size: 22px; text-align: center; }
+.vivu-service-grid strong { font-size: 12px; }
+.vivu-service-grid small { color: #647276; font-size: 10px; }
+
+.vivu-promo-strip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, .78fr);
+  align-items: center;
+  gap: 42px;
+}
+
+.vivu-promo-strip img {
+  width: 100%;
+  height: 270px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.vivu-promo-strip .section-title { max-width: 640px; font-size: 34px; }
+
+.vivu-promo-strip .btn { border-radius: 6px; }
+
+.vivu-home-hero .font-display { font-family: "Plus Jakarta Sans", sans-serif; }
+
+.vivu-header .nav-link-active { color: #005a71; }
+
+.vivu-header .nav-link::after { background: #005a71; }
+
+.vivu-header .btn { border-radius: 6px; }
+
+.card { border-radius: 8px; }
+
+.input-field { border-radius: 6px; }
+
+.vivu-auth-panel {
+  background: #004b5d url("https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=1200&q=85") center/cover;
+}
+
+.vivu-auth-shade {
+  background: linear-gradient(180deg, rgb(0 45 58 / 44%), rgb(0 38 50 / 82%));
+}
+
+.vivu-overline {
+  color: #005a71;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.vivu-booking-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 22px;
+  padding: 15px;
+  border: 1px solid rgb(19 27 46 / 9%);
+  border-radius: 8px;
+  background: white;
+}
+
+.vivu-booking-tabs { display: flex; gap: 7px; }
+
+.vivu-booking-tabs button {
+  min-height: 36px;
+  padding: 0 13px;
+  border: 1px solid #dce3e9;
+  border-radius: 5px;
+  background: white;
+  color: #4b585c;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.vivu-booking-tabs button.active { border-color: #005a71; background: #005a71; color: white; }
+.vivu-booking-search { width: min(100%, 310px); }
+.vivu-booking-search input { width: 100%; min-height: 38px; border: 1px solid #dce3e9; border-radius: 5px; padding: 0 11px; font-size: 11px; }
+.vivu-payment-result { width: min(100% - 32px, 620px); margin: 0 auto; padding: 36px; text-align: left; }
+.vivu-payment-result.is-success { border: 1px solid #dce3e9; }
+.vivu-payment-check, .vivu-payment-result > .vivu-overline, .vivu-payment-result > h1, .vivu-payment-result > p { display: block; text-align: center; }
+.vivu-payment-check { margin-right: auto; margin-left: auto; }
+.vivu-ticket-summary { margin: 24px 0 14px; border: 1px solid #dce3e9; border-radius: 8px; background: #fff; text-align: left; }
+.vivu-ticket-brand { display: flex; align-items: center; gap: 10px; padding: 15px; border-bottom: 1px dashed #c5d2d4; }
+.vivu-ticket-brand > span:first-child { display: grid; width: 34px; height: 34px; place-items: center; border-radius: 5px; background: #005a71; color: white; font-weight: 800; }
+.vivu-ticket-brand > div { display: grid; gap: 3px; }
+.vivu-ticket-brand strong { color: #005a71; font-size: 11px; }
+.vivu-ticket-brand small, .vivu-ticket-reference small { color: #647276; font-size: 9px; letter-spacing: 1px; }
+.vivu-ticket-status { margin-left: auto; padding: 6px 8px; border-radius: 4px; background: #e8f6ef; color: #23724b; font-size: 8px; font-weight: 800; white-space: nowrap; }
+.vivu-ticket-reference { display: grid; gap: 6px; padding: 17px 20px; }
+.vivu-ticket-reference strong { overflow-wrap: anywhere; font-family: ui-monospace, monospace; font-size: 17px; }
+.vivu-ticket-reference > span { color: #647276; font-size: 10px; }
+.vivu-ticket-perforation { display: flex; align-items: center; justify-content: space-between; }
+.vivu-ticket-perforation > span { width: 16px; height: 16px; border-radius: 50%; background: #faf8ff; }
+.vivu-ticket-perforation > i { flex: 1; border-top: 1px dashed #c5d2d4; }
+.vivu-ticket-summary > p { margin: 0; padding: 13px 20px 16px; color: #647276; font-size: 10px; line-height: 1.6; }
+.vivu-payment-actions { display: flex; justify-content: center; gap: 10px; }
+.vivu-payment-actions .btn, .vivu-order-button { border-radius: 6px; font-size: 11px; }
+.vivu-trip-checklist { display: grid; gap: 8px; margin: 22px 0; padding: 15px; background: #f2f7f7; color: #4b585c; font-size: 10px; }
+.vivu-trip-checklist strong { color: #131b2e; font-size: 11px; }
+.vivu-order-button { width: 100%; }
+
+@media (max-width: 640px) {
+  .vivu-booking-toolbar { align-items: stretch; flex-direction: column; }
+  .vivu-booking-search { width: 100%; }
+  .vivu-payment-result { padding: 24px 18px; }
+  .vivu-payment-actions { flex-direction: column; }
+}
+
+@keyframes vivu-hero-enter {
+  from { transform: scale(1.035); }
+  to { transform: scale(1); }
+}
+
+@keyframes vivu-copy-enter {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 720px) {
+  .vivu-home-hero { min-height: 670px; }
+  .vivu-home-hero-copy { padding-top: 66px; }
+  .vivu-home-hero h1 { font-size: 40px; }
+  .vivu-home-intro { max-width: 360px; font-size: 13px; }
+  .vivu-home-search { bottom: 14px; }
+  .vivu-service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 8px 0; }
+  .vivu-service-grid a { min-height: 66px; padding: 6px; border-bottom: 1px solid #e5e9f1; font-size: 11px; }
+  .vivu-service-grid a:nth-child(2n) { border-right: 0; }
+  .vivu-service-grid a:last-child { grid-column: 1 / -1; border-bottom: 0; }
+  .vivu-promo-strip { grid-template-columns: 1fr; gap: 20px; }
+  .vivu-promo-strip img { height: 210px; }
+  .vivu-promo-strip .section-title { font-size: 28px; }
 }

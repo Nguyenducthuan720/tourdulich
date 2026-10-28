@@ -110,6 +110,12 @@ export function Icon({ name, className = 'h-5 w-5', fill = 'none' }) {
         <path d="m9 18 6-6-6-6" />
       </>
     ),
+    chart: (
+      <>
+        <path d="M3 3v18h18" />
+        <path d="M7 15l3-4 3 3 5-7" />
+      </>
+    ),
   }
 
   return (

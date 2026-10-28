@@ -30,56 +30,56 @@ export default function TourCard({ tour }) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-ink-900/55 via-transparent to-transparent opacity-90"></div>
 
-        <span className="badge badge-light absolute left-4 top-4">
+        <span className="badge badge-light absolute left-3 top-3 text-[0.65rem]">
           {categoryName}
         </span>
-        <span className="badge badge-brand absolute right-4 top-4">
-          <Icon name="star" className="h-3.5 w-3.5" />
+        <span className="badge badge-brand absolute right-3 top-3 text-[0.65rem]">
+          <Icon name="star" className="h-3 w-3" />
           4.8
         </span>
 
         {availableSeats != null && availableSeats < 5 && (
-          <span className="badge badge-danger absolute bottom-4 left-4">
+          <span className="badge badge-danger absolute bottom-3 left-3 text-[0.65rem]">
             Còn {availableSeats} chỗ
           </span>
         )}
       </div>
 
       {/* Body */}
-      <div className="flex flex-1 flex-col p-6">
-        <div className="mb-3 flex items-center gap-4 text-sm font-medium text-ink-500">
+      <div className="flex flex-1 flex-col p-5">
+        <div className="mb-2 flex items-center gap-3 text-xs font-medium text-ink-500">
           <span className="inline-flex items-center gap-1.5">
-            <Icon name="pin" className="h-4 w-4 text-brand-500" />
+            <Icon name="pin" className="h-3.5 w-3.5 text-brand-500" />
             {destination}
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <Icon name="clock" className="h-4 w-4 text-brand-500" />
+            <Icon name="clock" className="h-3.5 w-3.5 text-brand-500" />
             {duration}
           </span>
         </div>
 
-        <h3 className="mb-2 font-display text-xl font-semibold leading-snug text-ink-900 transition-colors duration-300 group-hover:text-brand-600">
+        <h3 className="mb-1.5 font-display text-lg font-semibold leading-snug text-ink-900 transition-colors duration-300 group-hover:text-brand-600">
           <Link to={`/tours/${tourId}`} className="after:absolute after:inset-0">
             {tourName}
           </Link>
         </h3>
 
-        <p className="mb-5 line-clamp-2 flex-1 text-sm leading-relaxed text-ink-500">
+        <p className="mb-4 line-clamp-2 flex-1 text-xs leading-relaxed text-ink-500">
           {description}
         </p>
 
-        <div className="mt-auto flex items-end justify-between gap-3 border-t border-ink-100 pt-5">
+        <div className="mt-auto flex items-end justify-between gap-3 border-t border-ink-100 pt-4">
           <div className="min-w-0">
-            <p className="text-[0.7rem] font-semibold uppercase tracking-wider text-ink-400">
+            <p className="text-[0.65rem] font-semibold uppercase tracking-wider text-ink-400">
               Giá từ
             </p>
-            <p className="amount font-display text-2xl font-bold leading-tight text-brand-600">
+            <p className="amount font-display text-xl font-bold leading-tight text-brand-600">
               {formatCurrency(price)}
             </p>
           </div>
-          <span className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-ink-900 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 group-hover:bg-brand-500">
+          <span className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-ink-900 px-4 py-2 text-xs font-semibold text-white transition-all duration-300 group-hover:bg-brand-500">
             Chi tiết
-            <Icon name="arrowRight" className="h-4 w-4 shrink-0" />
+            <Icon name="arrowRight" className="h-3.5 w-3.5 shrink-0" />
           </span>
         </div>
       </div>
